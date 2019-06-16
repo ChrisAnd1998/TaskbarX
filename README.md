@@ -7,6 +7,8 @@ to get the width of your taskbar and uses SetWindowPos(https://www.pinvoke.net/d
 It uses Dot Net Transitions (https://github.com/UweKeim/dot-net-transitions) for the animations.
 
 
+**Examples**
+
 If you want to move 3 taskbars or more you can try this.
 
 ```vb.net
