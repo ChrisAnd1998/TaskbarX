@@ -313,7 +313,12 @@ Public Class Form1
 
                 If NoneToolStripMenuItem1.Checked = True Then
                 Else
-                    EnableTaskbarTransparancy()
+                    If TransparantToolStripMenuItem.Checked = True Then
+                        EnableTaskbarTransparancy()
+                    End If
+                    If BlurToolStripMenuItem.Checked = True Then
+                        EnableTaskbarTransparancy()
+                    End If
                 End If
 
 
@@ -344,11 +349,11 @@ Public Class Form1
         Dim accent = New AccentPolicy()
         Dim accentStructSize = Marshal.SizeOf(accent)
 
-        accent.AccentState = 4
+
 
 
         If NoneToolStripMenuItem1.Checked = True Then
-            accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
+            ''accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
         End If
 
         If BlurToolStripMenuItem.Checked = True Then
