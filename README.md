@@ -72,3 +72,7 @@ Private Const SWP_NOSIZE As Integer = &H1
     SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
     End Sub
 ```
+
+**Video**
+
+[![Alt text](https://img.youtube.com/vi/H07adcIXg7s/0.jpg)](https://www.youtube.com/watch?v=H07adcIXg7s)
