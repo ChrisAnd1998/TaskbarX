@@ -40,7 +40,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>FalconX16062019.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>

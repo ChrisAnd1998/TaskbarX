@@ -25,19 +25,15 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NoneToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TransparantToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BlurToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.CustomOffsetToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripTextBox2 = New System.Windows.Forms.ToolStripTextBox()
         Me.AnimationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NoneToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AccelerationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CriticalDampingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DecelerationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EaseInEaseOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LinearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripTextBox1 = New System.Windows.Forms.ToolStripTextBox()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -46,6 +42,9 @@ Partial Class Form1
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.CheckBox9 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CheckBox6 = New System.Windows.Forms.CheckBox()
@@ -54,21 +53,56 @@ Partial Class Form1
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.ToolStripTextBox2 = New System.Windows.Forms.ToolStripTextBox()
+        Me.NoneToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AccelerationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CriticalDampingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DecelerationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EaseInEaseOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LinearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripTextBox1 = New System.Windows.Forms.ToolStripTextBox()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem3, Me.AnimationsToolStripMenuItem, Me.ToolStripSeparator1, Me.ToolStripMenuItem2, Me.ToolStripSeparator3, Me.RunAtStartupToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem4, Me.ToolStripMenuItem3, Me.AnimationsToolStripMenuItem, Me.ToolStripSeparator1, Me.ToolStripMenuItem2, Me.ToolStripSeparator3, Me.RunAtStartupToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 126)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 148)
+        '
+        'ToolStripMenuItem4
+        '
+        Me.ToolStripMenuItem4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NoneToolStripMenuItem1, Me.TransparantToolStripMenuItem, Me.BlurToolStripMenuItem})
+        Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(151, 22)
+        Me.ToolStripMenuItem4.Text = "Taskbar Style"
+        '
+        'NoneToolStripMenuItem1
+        '
+        Me.NoneToolStripMenuItem1.Checked = True
+        Me.NoneToolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.NoneToolStripMenuItem1.Name = "NoneToolStripMenuItem1"
+        Me.NoneToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.NoneToolStripMenuItem1.Text = "None"
+        '
+        'TransparantToolStripMenuItem
+        '
+        Me.TransparantToolStripMenuItem.Name = "TransparantToolStripMenuItem"
+        Me.TransparantToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.TransparantToolStripMenuItem.Text = "Transparant"
+        '
+        'BlurToolStripMenuItem
+        '
+        Me.BlurToolStripMenuItem.Name = "BlurToolStripMenuItem"
+        Me.BlurToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.BlurToolStripMenuItem.Text = "Blur"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CustomOffsetToolStripMenuItem, Me.ToolStripTextBox2})
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(151, 22)
         Me.ToolStripMenuItem3.Text = "Position"
         '
         'CustomOffsetToolStripMenuItem
@@ -78,68 +112,12 @@ Partial Class Form1
         Me.CustomOffsetToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.CustomOffsetToolStripMenuItem.Text = "Custom Offset (px)"
         '
-        'ToolStripTextBox2
-        '
-        Me.ToolStripTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.ToolStripTextBox2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.ToolStripTextBox2.Name = "ToolStripTextBox2"
-        Me.ToolStripTextBox2.Size = New System.Drawing.Size(100, 23)
-        Me.ToolStripTextBox2.Text = Global.FalconX2.My.MySettings.Default.px
-        '
         'AnimationsToolStripMenuItem
         '
         Me.AnimationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NoneToolStripMenuItem, Me.AccelerationToolStripMenuItem, Me.CriticalDampingToolStripMenuItem, Me.DecelerationToolStripMenuItem, Me.EaseInEaseOutToolStripMenuItem, Me.LinearToolStripMenuItem, Me.ToolStripSeparator2, Me.ToolStripMenuItem1, Me.ToolStripTextBox1})
         Me.AnimationsToolStripMenuItem.Name = "AnimationsToolStripMenuItem"
-        Me.AnimationsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AnimationsToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
         Me.AnimationsToolStripMenuItem.Text = "Animations"
-        '
-        'NoneToolStripMenuItem
-        '
-        Me.NoneToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim0
-        Me.NoneToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim0f
-        Me.NoneToolStripMenuItem.Name = "NoneToolStripMenuItem"
-        Me.NoneToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.NoneToolStripMenuItem.Text = "None"
-        '
-        'AccelerationToolStripMenuItem
-        '
-        Me.AccelerationToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim1
-        Me.AccelerationToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim1f
-        Me.AccelerationToolStripMenuItem.Name = "AccelerationToolStripMenuItem"
-        Me.AccelerationToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.AccelerationToolStripMenuItem.Text = "Acceleration"
-        '
-        'CriticalDampingToolStripMenuItem
-        '
-        Me.CriticalDampingToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim2
-        Me.CriticalDampingToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim2f
-        Me.CriticalDampingToolStripMenuItem.Name = "CriticalDampingToolStripMenuItem"
-        Me.CriticalDampingToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.CriticalDampingToolStripMenuItem.Text = "CriticalDamping"
-        '
-        'DecelerationToolStripMenuItem
-        '
-        Me.DecelerationToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim3
-        Me.DecelerationToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim3f
-        Me.DecelerationToolStripMenuItem.Name = "DecelerationToolStripMenuItem"
-        Me.DecelerationToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.DecelerationToolStripMenuItem.Text = "Deceleration"
-        '
-        'EaseInEaseOutToolStripMenuItem
-        '
-        Me.EaseInEaseOutToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim4
-        Me.EaseInEaseOutToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim4f
-        Me.EaseInEaseOutToolStripMenuItem.Name = "EaseInEaseOutToolStripMenuItem"
-        Me.EaseInEaseOutToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.EaseInEaseOutToolStripMenuItem.Text = "EaseInEaseOut"
-        '
-        'LinearToolStripMenuItem
-        '
-        Me.LinearToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim6
-        Me.LinearToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim6f
-        Me.LinearToolStripMenuItem.Name = "LinearToolStripMenuItem"
-        Me.LinearToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.LinearToolStripMenuItem.Text = "Linear"
         '
         'ToolStripSeparator2
         '
@@ -153,40 +131,32 @@ Partial Class Form1
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(191, 22)
         Me.ToolStripMenuItem1.Text = "Animation speed (ms)"
         '
-        'ToolStripTextBox1
-        '
-        Me.ToolStripTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.ToolStripTextBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
-        Me.ToolStripTextBox1.Size = New System.Drawing.Size(100, 23)
-        Me.ToolStripTextBox1.Text = Global.FalconX2.My.MySettings.Default.dddddddd
-        '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(148, 6)
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(151, 22)
         Me.ToolStripMenuItem2.Text = "Refresh"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(148, 6)
         '
         'RunAtStartupToolStripMenuItem
         '
         Me.RunAtStartupToolStripMenuItem.Name = "RunAtStartupToolStripMenuItem"
-        Me.RunAtStartupToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.RunAtStartupToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
         Me.RunAtStartupToolStripMenuItem.Text = "Run At Startup"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'NotifyIcon1
@@ -212,6 +182,42 @@ Partial Class Form1
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(200, 100)
         Me.Panel1.TabIndex = 2
+        '
+        'CheckBox9
+        '
+        Me.CheckBox9.AutoSize = True
+        Me.CheckBox9.Checked = Global.FalconX2.My.MySettings.Default.taskbarblur
+        Me.CheckBox9.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbarblur", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.CheckBox9.Location = New System.Drawing.Point(300, 238)
+        Me.CheckBox9.Name = "CheckBox9"
+        Me.CheckBox9.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox9.TabIndex = 13
+        Me.CheckBox9.Text = "CheckBox9"
+        Me.CheckBox9.UseVisualStyleBackColor = True
+        '
+        'CheckBox8
+        '
+        Me.CheckBox8.AutoSize = True
+        Me.CheckBox8.Checked = Global.FalconX2.My.MySettings.Default.taskbartrans
+        Me.CheckBox8.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbartrans", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.CheckBox8.Location = New System.Drawing.Point(300, 215)
+        Me.CheckBox8.Name = "CheckBox8"
+        Me.CheckBox8.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox8.TabIndex = 12
+        Me.CheckBox8.Text = "CheckBox8"
+        Me.CheckBox8.UseVisualStyleBackColor = True
+        '
+        'CheckBox7
+        '
+        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.Checked = Global.FalconX2.My.MySettings.Default.taskbarnone
+        Me.CheckBox7.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbarnone", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.CheckBox7.Location = New System.Drawing.Point(300, 192)
+        Me.CheckBox7.Name = "CheckBox7"
+        Me.CheckBox7.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox7.TabIndex = 11
+        Me.CheckBox7.Text = "CheckBox7"
+        Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'Label3
         '
@@ -305,13 +311,78 @@ Partial Class Form1
         Me.CheckBox1.Text = "CheckBox1"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'ToolStripTextBox2
+        '
+        Me.ToolStripTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ToolStripTextBox2.Name = "ToolStripTextBox2"
+        Me.ToolStripTextBox2.Size = New System.Drawing.Size(100, 23)
+        Me.ToolStripTextBox2.Text = Global.FalconX2.My.MySettings.Default.px
+        '
+        'NoneToolStripMenuItem
+        '
+        Me.NoneToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim0
+        Me.NoneToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim0f
+        Me.NoneToolStripMenuItem.Name = "NoneToolStripMenuItem"
+        Me.NoneToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.NoneToolStripMenuItem.Text = "None"
+        '
+        'AccelerationToolStripMenuItem
+        '
+        Me.AccelerationToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim1
+        Me.AccelerationToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim1f
+        Me.AccelerationToolStripMenuItem.Name = "AccelerationToolStripMenuItem"
+        Me.AccelerationToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.AccelerationToolStripMenuItem.Text = "Acceleration"
+        '
+        'CriticalDampingToolStripMenuItem
+        '
+        Me.CriticalDampingToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim2
+        Me.CriticalDampingToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim2f
+        Me.CriticalDampingToolStripMenuItem.Name = "CriticalDampingToolStripMenuItem"
+        Me.CriticalDampingToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.CriticalDampingToolStripMenuItem.Text = "CriticalDamping"
+        '
+        'DecelerationToolStripMenuItem
+        '
+        Me.DecelerationToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim3
+        Me.DecelerationToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim3f
+        Me.DecelerationToolStripMenuItem.Name = "DecelerationToolStripMenuItem"
+        Me.DecelerationToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.DecelerationToolStripMenuItem.Text = "Deceleration"
+        '
+        'EaseInEaseOutToolStripMenuItem
+        '
+        Me.EaseInEaseOutToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim4
+        Me.EaseInEaseOutToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim4f
+        Me.EaseInEaseOutToolStripMenuItem.Name = "EaseInEaseOutToolStripMenuItem"
+        Me.EaseInEaseOutToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.EaseInEaseOutToolStripMenuItem.Text = "EaseInEaseOut"
+        '
+        'LinearToolStripMenuItem
+        '
+        Me.LinearToolStripMenuItem.Checked = Global.FalconX2.My.MySettings.Default.anim6
+        Me.LinearToolStripMenuItem.CheckState = Global.FalconX2.My.MySettings.Default.anim6f
+        Me.LinearToolStripMenuItem.Name = "LinearToolStripMenuItem"
+        Me.LinearToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.LinearToolStripMenuItem.Text = "Linear"
+        '
+        'ToolStripTextBox1
+        '
+        Me.ToolStripTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
+        Me.ToolStripTextBox1.Size = New System.Drawing.Size(100, 23)
+        Me.ToolStripTextBox1.Text = Global.FalconX2.My.MySettings.Default.dddddddd
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ClientSize = New System.Drawing.Size(230, 279)
+        Me.ClientSize = New System.Drawing.Size(437, 279)
         Me.ControlBox = False
+        Me.Controls.Add(Me.CheckBox9)
+        Me.Controls.Add(Me.CheckBox8)
+        Me.Controls.Add(Me.CheckBox7)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.CheckBox6)
@@ -367,4 +438,11 @@ Partial Class Form1
     Friend WithEvents CustomOffsetToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripTextBox2 As ToolStripTextBox
     Friend WithEvents Label3 As Label
+    Friend WithEvents ToolStripMenuItem4 As ToolStripMenuItem
+    Friend WithEvents NoneToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents TransparantToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BlurToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CheckBox7 As CheckBox
+    Friend WithEvents CheckBox8 As CheckBox
+    Friend WithEvents CheckBox9 As CheckBox
 End Class
