@@ -11,7 +11,7 @@ It uses Dot Net Transitions (https://github.com/UweKeim/dot-net-transitions) for
 
 **Examples**
 
-If you want to move 3 taskbars or more you can try this.
+If you want to get the width's and hwnd from 3 taskbars or more you can try this.
 
 ```vb.net
   Dim desktop As AutomationElement = AutomationElement.RootElement
