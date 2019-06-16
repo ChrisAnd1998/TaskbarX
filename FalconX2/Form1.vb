@@ -104,12 +104,12 @@ Public Class Form1
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
 
-        System.Threading.Thread.Sleep(2000) : Application.DoEvents()
+        System.Threading.Thread.Sleep(1000) : Application.DoEvents()
 
         Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf CalculateLeftOffset)
         t2.Start()
 
-        System.Threading.Thread.Sleep(2000) : Application.DoEvents()
+        System.Threading.Thread.Sleep(1000) : Application.DoEvents()
 
         Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyMoveTaskbar)
         t3.Start()
@@ -172,7 +172,7 @@ Public Class Form1
             Loop
         Catch ex As Exception
             Console.WriteLine("Error Restarting...")
-            restartapp()
+            ConstantlyCalculateWidth()
         End Try
 
     End Sub
