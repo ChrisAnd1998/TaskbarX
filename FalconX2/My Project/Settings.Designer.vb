@@ -317,6 +317,42 @@ Namespace My
                 Me("pos") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property taskbarnone() As Boolean
+            Get
+                Return CType(Me("taskbarnone"),Boolean)
+            End Get
+            Set
+                Me("taskbarnone") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property taskbartrans() As Boolean
+            Get
+                Return CType(Me("taskbartrans"),Boolean)
+            End Get
+            Set
+                Me("taskbartrans") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property taskbarblur() As Boolean
+            Get
+                Return CType(Me("taskbarblur"),Boolean)
+            End Get
+            Set
+                Me("taskbarblur") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
