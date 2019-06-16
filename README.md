@@ -52,3 +52,21 @@ If you want to move 3 taskbars or more you can try this.
             End If
         Next
 ```
+
+SetWindowPos
+
+```vb.net
+Private Const SWP_NOSIZE As Integer = &H1
+    Private Const SWP_NOZORDER As Integer = &H4
+    Private Const SWP_SHOWWINDOW As Integer = &H40
+    Private Const SWP_ASYNCWINDOWPOS As Integer = &H4000
+    Private Const SWP_NOSENDCHANGING As Integer = &H400
+    Private Const SWP_NOACTIVATE As Integer = &H10
+
+
+    Private Declare Auto Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
+    
+    Sub MoveTaskbar()
+    SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+    End Sub
+```
