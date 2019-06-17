@@ -353,6 +353,18 @@ Namespace My
                 Me("taskbarblur") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property taskbaracrylic() As Boolean
+            Get
+                Return CType(Me("taskbaracrylic"),Boolean)
+            End Get
+            Set
+                Me("taskbaracrylic") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
