@@ -42,6 +42,7 @@ Partial Class Form1
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckBox9 = New System.Windows.Forms.CheckBox()
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
@@ -61,6 +62,7 @@ Partial Class Form1
         Me.EaseInEaseOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LinearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripTextBox1 = New System.Windows.Forms.ToolStripTextBox()
+        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -73,7 +75,7 @@ Partial Class Form1
         '
         'ToolStripMenuItem4
         '
-        Me.ToolStripMenuItem4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NoneToolStripMenuItem1, Me.TransparantToolStripMenuItem, Me.BlurToolStripMenuItem})
+        Me.ToolStripMenuItem4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NoneToolStripMenuItem1, Me.TransparantToolStripMenuItem, Me.BlurToolStripMenuItem, Me.ToolStripMenuItem5})
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
         Me.ToolStripMenuItem4.Size = New System.Drawing.Size(151, 22)
         Me.ToolStripMenuItem4.Text = "Taskbar Style"
@@ -183,12 +185,18 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(200, 100)
         Me.Panel1.TabIndex = 2
         '
+        'ToolStripMenuItem5
+        '
+        Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
+        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem5.Text = "Acrylic"
+        '
         'CheckBox9
         '
         Me.CheckBox9.AutoSize = True
         Me.CheckBox9.Checked = Global.FalconX2.My.MySettings.Default.taskbarblur
         Me.CheckBox9.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbarblur", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.CheckBox9.Location = New System.Drawing.Point(300, 238)
+        Me.CheckBox9.Location = New System.Drawing.Point(287, 192)
         Me.CheckBox9.Name = "CheckBox9"
         Me.CheckBox9.Size = New System.Drawing.Size(81, 17)
         Me.CheckBox9.TabIndex = 13
@@ -200,7 +208,7 @@ Partial Class Form1
         Me.CheckBox8.AutoSize = True
         Me.CheckBox8.Checked = Global.FalconX2.My.MySettings.Default.taskbartrans
         Me.CheckBox8.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbartrans", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.CheckBox8.Location = New System.Drawing.Point(300, 215)
+        Me.CheckBox8.Location = New System.Drawing.Point(287, 169)
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(81, 17)
         Me.CheckBox8.TabIndex = 12
@@ -212,7 +220,7 @@ Partial Class Form1
         Me.CheckBox7.AutoSize = True
         Me.CheckBox7.Checked = Global.FalconX2.My.MySettings.Default.taskbarnone
         Me.CheckBox7.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbarnone", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.CheckBox7.Location = New System.Drawing.Point(300, 192)
+        Me.CheckBox7.Location = New System.Drawing.Point(287, 146)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(81, 17)
         Me.CheckBox7.TabIndex = 11
@@ -373,6 +381,18 @@ Partial Class Form1
         Me.ToolStripTextBox1.Size = New System.Drawing.Size(100, 23)
         Me.ToolStripTextBox1.Text = Global.FalconX2.My.MySettings.Default.dddddddd
         '
+        'CheckBox10
+        '
+        Me.CheckBox10.AutoSize = True
+        Me.CheckBox10.Checked = Global.FalconX2.My.MySettings.Default.taskbaracrylic
+        Me.CheckBox10.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX2.My.MySettings.Default, "taskbaracrylic", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.CheckBox10.Location = New System.Drawing.Point(287, 215)
+        Me.CheckBox10.Name = "CheckBox10"
+        Me.CheckBox10.Size = New System.Drawing.Size(87, 17)
+        Me.CheckBox10.TabIndex = 14
+        Me.CheckBox10.Text = "CheckBox10"
+        Me.CheckBox10.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -380,6 +400,7 @@ Partial Class Form1
         Me.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ClientSize = New System.Drawing.Size(437, 279)
         Me.ControlBox = False
+        Me.Controls.Add(Me.CheckBox10)
         Me.Controls.Add(Me.CheckBox9)
         Me.Controls.Add(Me.CheckBox8)
         Me.Controls.Add(Me.CheckBox7)
@@ -445,4 +466,6 @@ Partial Class Form1
     Friend WithEvents CheckBox7 As CheckBox
     Friend WithEvents CheckBox8 As CheckBox
     Friend WithEvents CheckBox9 As CheckBox
+    Friend WithEvents ToolStripMenuItem5 As ToolStripMenuItem
+    Friend WithEvents CheckBox10 As CheckBox
 End Class
