@@ -151,6 +151,9 @@ Public Class Form1
             ToolStripMenuItem5.Checked = True
         End If
 
+        Dim t0 As System.Threading.Thread = New System.Threading.Thread(AddressOf TTBissuefix)
+        t0.Start()
+
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
 
@@ -335,7 +338,35 @@ Public Class Form1
         Loop
     End Sub
 
+    Sub TTBissuefix()
+        Do
+            Try
+
+
+
+
+                If NoneToolStripMenuItem1.Checked = True Then
+                Else
+                    If TransparantToolStripMenuItem.Checked = True Then
+                        Process.GetProcessesByName("TranslucentTB")(0).Kill()
+                    End If
+                    If BlurToolStripMenuItem.Checked = True Then
+                        Process.GetProcessesByName("TranslucentTB")(0).Kill()
+                    End If
+                    If ToolStripMenuItem5.Checked = True Then
+                        Process.GetProcessesByName("TranslucentTB")(0).Kill()
+                    End If
+                End If
+
+                System.Threading.Thread.Sleep(5000) : Application.DoEvents()
+            Catch
+
+            End Try
+        Loop
+    End Sub
+
     Friend Sub EnableTaskbarTransparancy()
+
 
         Dim tskBarClassName As String = "Shell_TrayWnd"
         Dim tskBarHwnd As IntPtr = FindWindow(tskBarClassName, Nothing)
@@ -354,6 +385,7 @@ Public Class Form1
 
         If TransparantToolStripMenuItem.Checked = True Then
             accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
+
         End If
 
         Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
