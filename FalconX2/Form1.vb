@@ -151,8 +151,8 @@ Public Class Form1
             ToolStripMenuItem5.Checked = True
         End If
 
-        Dim t0 As System.Threading.Thread = New System.Threading.Thread(AddressOf TTBissuefix)
-        t0.Start()
+        ' Dim t0 As System.Threading.Thread = New System.Threading.Thread(AddressOf TTBissuefix)
+        ' t0.Start()
 
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
