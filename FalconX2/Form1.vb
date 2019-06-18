@@ -20,38 +20,12 @@ Public Class Form1
     Private Const SWP_DRAWFRAME As Integer = &H20
     Private Const SWP_NOCOPYBITS As Integer = &H100
 
-    Friend Structure WindowCompositionAttributeData
-        Public Attribute As WindowCompositionAttribute
-        Public Data As IntPtr
-        Public SizeOfData As Integer
-    End Structure
 
-    Friend Enum WindowCompositionAttribute
-        WCA_ACCENT_POLICY = 19
-    End Enum
-
-    Friend Enum AccentState
-        ACCENT_DISABLED = 0
-        ACCENT_ENABLE_GRADIENT = 1
-        ACCENT_ENABLE_TRANSPARENTGRADIENT = 2
-        ACCENT_ENABLE_BLURBEHIND = 3
-        ACCENT_ENABLE_TRANSPARANT = 6
-        ACCENT_ENABLE_ACRYLICBLURBEHIND = 4
-    End Enum
-
-    <StructLayout(LayoutKind.Sequential)>
-    Friend Structure AccentPolicy
-        Public AccentState As AccentState
-        Public AccentFlags As Integer
-        Public GradientColor As Integer
-        Public AnimationId As Integer
-    End Structure
 
     Private Declare Auto Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
     Private Declare Function SetProcessWorkingSetSize Lib "kernel32.dll" (ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     Public Declare Function TerminateProcess Lib "kernel32" (ByVal hProcess As IntPtr, ByVal uExitCode As UInteger) As Integer
-    Friend Declare Function SetWindowCompositionAttribute Lib "user32.dll" (ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
-    Private Declare Auto Function FindWindow Lib "user32.dll" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+
 
     Private TaskbarWidthFull As Integer
     Private tasklistPtr As IntPtr
@@ -100,10 +74,7 @@ Public Class Form1
         EaseInEaseOutToolStripMenuItem.Checked = False
         LinearToolStripMenuItem.Checked = False
 
-        NoneToolStripMenuItem1.Checked = False
-        TransparantToolStripMenuItem.Checked = False
-        BlurToolStripMenuItem.Checked = False
-        ToolStripMenuItem5.Checked = False
+
 
         If CheckBox1.Checked = True Then
             animation = 0
@@ -135,24 +106,10 @@ Public Class Form1
             LinearToolStripMenuItem.Checked = True
         End If
 
-        If CheckBox7.Checked = True Then
-            NoneToolStripMenuItem1.Checked = True
-        End If
 
-        If CheckBox8.Checked = True Then
-            TransparantToolStripMenuItem.Checked = True
-        End If
 
-        If CheckBox9.Checked = True Then
-            BlurToolStripMenuItem.Checked = True
-        End If
 
-        If CheckBox10.Checked = True Then
-            ToolStripMenuItem5.Checked = True
-        End If
 
-        ' Dim t0 As System.Threading.Thread = New System.Threading.Thread(AddressOf TTBissuefix)
-        ' t0.Start()
 
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
@@ -169,6 +126,14 @@ Public Class Form1
 
         ReleaseMemory()
     End Sub
+
+
+
+
+
+
+
+
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         start()
@@ -239,6 +204,7 @@ Public Class Form1
         Dim desktop As AutomationElement = AutomationElement.RootElement
         Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"))
 
+
         Do
             Try
 
@@ -264,6 +230,8 @@ Public Class Form1
                 Else
                     NotifyIcon1.Icon = My.Resources.dark
                 End If
+
+
             Catch
 
             End Try
@@ -311,18 +279,7 @@ Public Class Form1
 
                                      End Sub))
 
-                If NoneToolStripMenuItem1.Checked = True Then
-                Else
-                    If TransparantToolStripMenuItem.Checked = True Then
-                        EnableTaskbarTransparancy()
-                    End If
-                    If BlurToolStripMenuItem.Checked = True Then
-                        EnableTaskbarTransparancy()
-                    End If
-                    If ToolStripMenuItem5.Checked = True Then
-                        EnableTaskbarTransparancy()
-                    End If
-                End If
+
 
                 If cmoving = False Then
                     If refresh = True Then
@@ -338,65 +295,8 @@ Public Class Form1
         Loop
     End Sub
 
-    Sub TTBissuefix()
-        Do
-            Try
 
 
-
-
-                If NoneToolStripMenuItem1.Checked = True Then
-                Else
-                    If TransparantToolStripMenuItem.Checked = True Then
-                        Process.GetProcessesByName("TranslucentTB")(0).Kill()
-                    End If
-                    If BlurToolStripMenuItem.Checked = True Then
-                        Process.GetProcessesByName("TranslucentTB")(0).Kill()
-                    End If
-                    If ToolStripMenuItem5.Checked = True Then
-                        Process.GetProcessesByName("TranslucentTB")(0).Kill()
-                    End If
-                End If
-
-                System.Threading.Thread.Sleep(5000) : Application.DoEvents()
-            Catch
-
-            End Try
-        Loop
-    End Sub
-
-    Friend Sub EnableTaskbarTransparancy()
-
-
-        Dim tskBarClassName As String = "Shell_TrayWnd"
-        Dim tskBarHwnd As IntPtr = FindWindow(tskBarClassName, Nothing)
-
-        Dim accent = New AccentPolicy()
-        Dim accentStructSize = Marshal.SizeOf(accent)
-
-        If ToolStripMenuItem5.Checked = True Then
-            accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
-            accent.GradientColor = 10 'Or 16777215
-        End If
-
-        If BlurToolStripMenuItem.Checked = True Then
-            accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND
-        End If
-
-        If TransparantToolStripMenuItem.Checked = True Then
-            accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
-
-        End If
-
-        Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
-        Marshal.StructureToPtr(accent, accentPtr, False)
-        Dim data = New WindowCompositionAttributeData()
-        data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY
-        data.SizeOfData = accentStructSize
-        data.Data = accentPtr
-        SetWindowCompositionAttribute(tskBarHwnd, data)
-        Marshal.FreeHGlobal(accentPtr)
-    End Sub
 
     Friend Sub ReleaseMemory()
         Try
@@ -423,29 +323,22 @@ Public Class Form1
 
                                  System.Threading.Thread.Sleep(5000) : Application.DoEvents()
 
+                                 SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+
+
                                  NotifyIcon1.Visible = False
-                                 Application.ExitThread()
-                                 Application.ExitThread()
-                                 Application.ExitThread()
-                                 Application.ExitThread()
-                                 NotifyIcon1.Visible = False
-                                 Application.ExitThread()
-                                 Application.ExitThread()
-                                 Application.ExitThread()
-                                 Application.ExitThread()
-                                 NotifyIcon1.Visible = False
+
+
+
+                                 ReleaseMemory()
+                                 Me.Dispose()
 
                                  Application.Exit()
                                  Me.Close()
 
-                                 restartexplorer()
-
                              End Sub))
 
-        End
-        End
-        End
-        End
+
     End Sub
 
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
@@ -642,69 +535,7 @@ Public Class Form1
         My.Settings.Save()
     End Sub
 
-    Private Sub NoneToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles NoneToolStripMenuItem1.Click
-        NoneToolStripMenuItem1.Checked = True
-        BlurToolStripMenuItem.Checked = False
-        TransparantToolStripMenuItem.Checked = False
-        ToolStripMenuItem5.Checked = False
 
-        CheckBox7.Checked = True
-        CheckBox8.Checked = False
-        CheckBox9.Checked = False
-        CheckBox10.Checked = False
 
-        My.Settings.Save()
-
-        restartexplorer()
-
-        refresh = True
-        System.Threading.Thread.Sleep(3000) : Application.DoEvents()
-
-        Application.Restart()
-    End Sub
-
-    Private Sub TransparantToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TransparantToolStripMenuItem.Click
-        TransparantToolStripMenuItem.Checked = True
-        NoneToolStripMenuItem1.Checked = False
-        BlurToolStripMenuItem.Checked = False
-        ToolStripMenuItem5.Checked = False
-
-        CheckBox7.Checked = False
-        CheckBox8.Checked = True
-        CheckBox9.Checked = False
-        CheckBox10.Checked = False
-
-        My.Settings.Save()
-    End Sub
-
-    Private Sub BlurToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BlurToolStripMenuItem.Click
-        BlurToolStripMenuItem.Checked = True
-        TransparantToolStripMenuItem.Checked = False
-        NoneToolStripMenuItem1.Checked = False
-        ToolStripMenuItem5.Checked = False
-
-        CheckBox7.Checked = False
-        CheckBox8.Checked = False
-        CheckBox9.Checked = True
-        CheckBox10.Checked = False
-
-        My.Settings.Save()
-    End Sub
-
-    Private Sub ToolStripMenuItem5_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem5.Click
-        BlurToolStripMenuItem.Checked = False
-        TransparantToolStripMenuItem.Checked = False
-        NoneToolStripMenuItem1.Checked = False
-
-        ToolStripMenuItem5.Checked = True
-
-        CheckBox7.Checked = False
-        CheckBox8.Checked = False
-        CheckBox9.Checked = False
-
-        CheckBox10.Checked = True
-
-        My.Settings.Save()
-    End Sub
 
 End Class
