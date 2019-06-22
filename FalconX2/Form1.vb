@@ -1,7 +1,5 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
-Imports System.Runtime.InteropServices
-Imports System.Windows
 Imports System.Windows.Automation
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Transitions
@@ -20,12 +18,9 @@ Public Class Form1
     Private Const SWP_DRAWFRAME As Integer = &H20
     Private Const SWP_NOCOPYBITS As Integer = &H100
 
-
-
     Private Declare Auto Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
     Private Declare Function SetProcessWorkingSetSize Lib "kernel32.dll" (ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     Public Declare Function TerminateProcess Lib "kernel32" (ByVal hProcess As IntPtr, ByVal uExitCode As UInteger) As Integer
-
 
     Private TaskbarWidthFull As Integer
     Private tasklistPtr As IntPtr
@@ -36,22 +31,23 @@ Public Class Form1
 
     Dim refresh As Boolean = False
 
+
+    Dim desktop As AutomationElement = AutomationElement.RootElement
+    Dim tasklisty As AutomationElement = Nothing
+    Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"))
+    Dim trayWnd As AutomationElement = desktop.FindFirst(TreeScope.Children, condition)
+
+    Dim tasklist As AutomationElement = trayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
+
     Private Sub start()
 
-        Dim readValue = My.Computer.Registry.GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", Nothing)
-
-        If readValue = 1 Then
-            NotifyIcon1.Icon = My.Resources.light
-        Else
-            NotifyIcon1.Icon = My.Resources.dark
-        End If
+        NotifyIcon1.Text = "FalconX (Starting...)"
 
         Me.Hide()
         refresh = False
 
         Me.Left = 0
         Me.Width = Screen.PrimaryScreen.Bounds.Width
-        '  Hide()
 
         Dim strx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
 
@@ -73,8 +69,6 @@ Public Class Form1
         DecelerationToolStripMenuItem.Checked = False
         EaseInEaseOutToolStripMenuItem.Checked = False
         LinearToolStripMenuItem.Checked = False
-
-
 
         If CheckBox1.Checked = True Then
             animation = 0
@@ -106,36 +100,18 @@ Public Class Form1
             LinearToolStripMenuItem.Checked = True
         End If
 
-
-
-
-
-
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
-
-        System.Threading.Thread.Sleep(1000) : Application.DoEvents()
-
-        Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf CalculateLeftOffset)
-        t2.Start()
 
         System.Threading.Thread.Sleep(1000) : Application.DoEvents()
 
         Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyMoveTaskbar)
         t3.Start()
 
-        ReleaseMemory()
+        SaveMemory()
     End Sub
 
-
-
-
-
-
-
-
-
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Shown
         start()
 
     End Sub
@@ -143,16 +119,11 @@ Public Class Form1
     Private Sub ConstantlyCalculateWidth()
         Try
 
-            Dim desktop As AutomationElement = AutomationElement.RootElement
-            Dim tasklisty As AutomationElement = Nothing
-            Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"))
-            Dim trayWnd As AutomationElement = desktop.FindFirst(TreeScope.Children, condition)
 
-            Dim tasklist As AutomationElement = trayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
 
-            tasklisty = tasklist
 
             tasklistPtr = tasklist.Current.NativeWindowHandle
+            trayWndPtr = trayWnd.Current.NativeWindowHandle
             tasklistWidth = trayWnd.Current.BoundingRectangle.Width
             tasklistHeight = trayWnd.Current.BoundingRectangle.Height
             tasklistLeft = tasklist.Current.BoundingRectangle.Left
@@ -164,29 +135,46 @@ Public Class Form1
             Do
                 Try
 
-                    System.Threading.Thread.Sleep(500) : Application.DoEvents()
-
-                    Dim TaskbarWidth = 0
-                    Dim TaskbarWidth2
+                    Dim TaskbarWidth As Integer = 0
+                    Dim GarbageRound As Integer
 
                     If refresh = True Then
                         Exit Sub
                     End If
 
-                    For Each ui As AutomationElement In tasklisty.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
-                        If Not ui.Current.Name = Nothing Then
-                            Dim Bounds As Rect = ui.Current.BoundingRectangle
-                            TaskbarWidth = TaskbarWidth + Bounds.Width
-                            If refresh = True Then
-                                Exit Sub
-                            End If
+                    Dim OldTaskbarCount As Integer
+                    Dim TaskbarCount As Integer = 0
+                    Dim tw As TreeWalker = TreeWalker.ControlViewWalker
+                    Dim child As AutomationElement = tw.GetLastChild(tasklist)
 
-                            System.Threading.Thread.Sleep(20) : Application.DoEvents()
-                        End If
-                    Next
-                    If Not TaskbarWidth = TaskbarWidth2 Then
+                    tw = Nothing
+
+                    TaskbarCount = child.Current.BoundingRectangle.Left
+                    System.Threading.Thread.Sleep(400)
+
+                    If Not TaskbarCount = OldTaskbarCount Then
+                        OldTaskbarCount = TaskbarCount
+                        For Each ui As AutomationElement In tasklist.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
+                            If Not ui.Current.Name = Nothing Then
+                                TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
+                                System.Threading.Thread.Sleep(5)
+                                If refresh = True Then
+                                    Exit Sub
+                                End If
+                            End If
+                        Next
                         TaskbarWidthFull = TaskbarWidth
-                        TaskbarWidth2 = TaskbarWidth
+
+                    End If
+
+                    GarbageRound = GarbageRound + 1
+
+                    If GarbageRound = 20 Then
+                        GarbageRound = 0
+                        SaveMemory()
+
+                        tasklistWidth = Screen.PrimaryScreen.Bounds.Width
+
                     End If
                 Catch
 
@@ -199,50 +187,12 @@ Public Class Form1
 
     End Sub
 
-    Private Sub CalculateLeftOffset()
-
-        Dim desktop As AutomationElement = AutomationElement.RootElement
-        Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"))
-
-
-        Do
-            Try
-
-                If refresh = True Then
-                    Exit Sub
-                End If
-
-                System.Threading.Thread.Sleep(3000) : Application.DoEvents()
-
-                If refresh = True Then
-                    Exit Sub
-                End If
-                Dim listsSW As AutomationElement = desktop.FindFirst(TreeScope.Children, condition)
-                Dim tasklistSW As AutomationElement = listsSW.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskSwWClass"))
-                tasklistLeft = tasklistSW.Current.BoundingRectangle.Left
-
-                System.Threading.Thread.Sleep(2000) : Application.DoEvents()
-
-                Dim readValue = My.Computer.Registry.GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", Nothing)
-
-                If readValue = 1 Then
-                    NotifyIcon1.Icon = My.Resources.light
-                Else
-                    NotifyIcon1.Icon = My.Resources.dark
-                End If
-
-
-            Catch
-
-            End Try
-        Loop
-    End Sub
-
-    Dim hori As Boolean
-
     Private Sub ConstantlyMoveTaskbar()
 
         System.Threading.Thread.Sleep(2000) : Application.DoEvents()
+
+        NotifyIcon1.Icon = My.Resources.Icon1
+        NotifyIcon1.Text = "FalconX"
 
         Do
 
@@ -253,6 +203,13 @@ Public Class Form1
                 If refresh = True Then
                     Exit Sub
                 End If
+
+                Dim taskbarsizechanged As Integer
+
+                taskbarsizechanged = tasklistHeight
+
+
+
 
                 Dim TaskbarWidthHalf = TaskbarWidthFull / 2
 
@@ -279,14 +236,12 @@ Public Class Form1
 
                                      End Sub))
 
-
-
                 If cmoving = False Then
                     If refresh = True Then
                         Exit Sub
                     End If
 
-                    SetWindowPos(tasklistPtr, IntPtr.Zero, position, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+                    SetWindowPos(tasklistPtr, IntPtr.Zero, position, 0, position, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
                 End If
             Catch
@@ -295,20 +250,11 @@ Public Class Form1
         Loop
     End Sub
 
+    Public Function SaveMemory() As Int32
 
+        Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, -1, -1)
 
-
-    Friend Sub ReleaseMemory()
-        Try
-            GC.Collect()
-            GC.WaitForPendingFinalizers()
-            If Environment.OSVersion.Platform = PlatformID.Win32NT Then
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1)
-            End If
-        Catch ex As Exception
-
-        End Try
-    End Sub
+    End Function
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         exitf()
@@ -316,6 +262,9 @@ Public Class Form1
 
     Private Sub exitf()
         Me.Invoke(New Action(Sub()
+
+                                 NotifyIcon1.Icon = My.Resources.icon_red_MiX_icon
+                                 NotifyIcon1.Text = "FalconX (Closing...)"
 
                                  My.Settings.Save()
 
@@ -325,12 +274,9 @@ Public Class Form1
 
                                  SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
 
-
                                  NotifyIcon1.Visible = False
 
-
-
-                                 ReleaseMemory()
+                                 SaveMemory()
                                  Me.Dispose()
 
                                  Application.Exit()
@@ -338,11 +284,10 @@ Public Class Form1
 
                              End Sub))
 
-
     End Sub
 
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
-        ReleaseMemory()
+        SaveMemory()
         If refresh = True Then
             Exit Sub
         End If
@@ -404,6 +349,8 @@ Public Class Form1
                 Application.DoEvents()
             Loop
             cmoving = False
+
+            SaveMemory()
         Catch ex As Exception
 
         End Try
@@ -490,15 +437,22 @@ Public Class Form1
             File.Delete(str + "\FalconX.lnk")
             RunAtStartupToolStripMenuItem.Checked = False
         Else
-            Dim objectValue As Object = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
-            objectValue = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
-            Dim objectValue2 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "SpecialFolders", New Object() {"Startup"}, Nothing, Nothing, Nothing))
-            Dim objectValue3 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "CreateShortcut", New Object() {Operators.ConcatenateObject(objectValue2, "\FalconX.lnk")}, Nothing, Nothing, Nothing))
-            NewLateBinding.LateSet(objectValue3, Nothing, "TargetPath", New Object() {NewLateBinding.LateGet(objectValue, Nothing, "ExpandEnvironmentStrings", New Object() {Application.ExecutablePath}, Nothing, Nothing, Nothing)}, Nothing, Nothing)
-            NewLateBinding.LateSet(objectValue3, Nothing, "WorkingDirectory", New Object() {NewLateBinding.LateGet(objectValue, Nothing, "ExpandEnvironmentStrings", New Object() {Application.StartupPath}, Nothing, Nothing, Nothing)}, Nothing, Nothing)
-            NewLateBinding.LateSet(objectValue3, Nothing, "WindowStyle", New Object() {4}, Nothing, Nothing)
-            NewLateBinding.LateCall(objectValue3, Nothing, "Save", New Object(-1) {}, Nothing, Nothing, Nothing, True)
-            RunAtStartupToolStripMenuItem.Checked = True
+            If Application.StartupPath.Contains("40210ChrisAndriessen") Then
+                Dim objectValue As Object = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                objectValue = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                Dim objectValue2 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "SpecialFolders", New Object() {"Startup"}, Nothing, Nothing, Nothing))
+                System.IO.File.WriteAllBytes(objectValue2 & "\FalconX.lnk", My.Resources.FalconX)
+            Else
+                Dim objectValue As Object = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                objectValue = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                Dim objectValue2 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "SpecialFolders", New Object() {"Startup"}, Nothing, Nothing, Nothing))
+                Dim objectValue3 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "CreateShortcut", New Object() {Operators.ConcatenateObject(objectValue2, "\FalconX.lnk")}, Nothing, Nothing, Nothing))
+                NewLateBinding.LateSet(objectValue3, Nothing, "TargetPath", New Object() {NewLateBinding.LateGet(objectValue, Nothing, "ExpandEnvironmentStrings", New Object() {Application.ExecutablePath}, Nothing, Nothing, Nothing)}, Nothing, Nothing)
+                NewLateBinding.LateSet(objectValue3, Nothing, "WorkingDirectory", New Object() {NewLateBinding.LateGet(objectValue, Nothing, "ExpandEnvironmentStrings", New Object() {Application.StartupPath}, Nothing, Nothing, Nothing)}, Nothing, Nothing)
+                NewLateBinding.LateSet(objectValue3, Nothing, "WindowStyle", New Object() {4}, Nothing, Nothing)
+                NewLateBinding.LateCall(objectValue3, Nothing, "Save", New Object(-1) {}, Nothing, Nothing, Nothing, True)
+                RunAtStartupToolStripMenuItem.Checked = True
+            End If
         End If
 
     End Sub
@@ -524,8 +478,11 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+        NotifyIcon1.Icon = My.Resources.icon_yellow_d6H_icon
+        NotifyIcon1.Text = "FalconX (Restarting...)"
+
         refresh = True
-        System.Threading.Thread.Sleep(3000) : Application.DoEvents()
+        System.Threading.Thread.Sleep(5000) : Application.DoEvents()
 
         Application.Restart()
     End Sub
@@ -535,7 +492,8 @@ Public Class Form1
         My.Settings.Save()
     End Sub
 
+    Private Sub Form1_Load_1(sender As Object, e As EventArgs) Handles MyBase.Load
 
-
+    End Sub
 
 End Class

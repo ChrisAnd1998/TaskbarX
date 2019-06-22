@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>FalconX2.My.MyApplication</StartupObject>
     <RootNamespace>FalconX2</RootNamespace>
-    <AssemblyName>FalconX18062019</AssemblyName>
+    <AssemblyName>FalconX22062019</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -38,7 +38,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>FalconX18062019.xml</DocumentationFile>
+    <DocumentationFile>FalconX22062019.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -52,7 +52,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>FalconX18062019.xml</DocumentationFile>
+    <DocumentationFile>FalconX22062019.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -85,11 +85,8 @@
     <Reference Include="Transitions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\dot-net-transitions.1.2.1.0\lib\net40-full\Transitions.dll</HintPath>
     </Reference>
-    <Reference Include="UIAutomationClient">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="UIAutomationTypes">
-      <Private>True</Private>
+    <Reference Include="UIAComWrapperX, Version=1.1.0.16, Culture=neutral, PublicKeyToken=78cbcf77433a85e5, processorArchitecture=MSIL">
+      <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\UIAComWrapperX.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -153,12 +150,16 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Resources\FalconX %282%29.lnk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon1.ico" />
     <Content Include="Icon5.ico" />
+    <None Include="Resources\icon_yellow_d6H_icon.ico" />
+    <None Include="Resources\Icon1.ico" />
     <None Include="Resources\dark.ico" />
-    <None Include="Resources\light.ico" />
+    <None Include="Resources\icon_green_dI6_icon.ico" />
+    <None Include="Resources\icon_red_MiX_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -172,5 +173,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

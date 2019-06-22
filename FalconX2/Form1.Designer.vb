@@ -54,8 +54,8 @@ Partial Class Form1
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.ContextMenuStrip1.SuspendLayout()
-        Me.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout
+        Me.SuspendLayout
         '
         'ContextMenuStrip1
         '
@@ -75,7 +75,7 @@ Partial Class Form1
         '
         Me.CustomOffsetToolStripMenuItem.Enabled = False
         Me.CustomOffsetToolStripMenuItem.Name = "CustomOffsetToolStripMenuItem"
-        Me.CustomOffsetToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CustomOffsetToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.CustomOffsetToolStripMenuItem.Text = "Custom Offset (px)"
         '
         'ToolStripTextBox2

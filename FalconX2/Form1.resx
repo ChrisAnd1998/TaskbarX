@@ -126,26 +126,26 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="NotifyIcon1.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMEOAADBDgAAAAAAAAAA
-        AAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP//////////////////////////////////////////////////////////////////
-        /////////////////wD/////////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP////////8A////////////////////////////////////////////////////////
-        ////////////////////////////AP////////8A////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A/////////wD/////////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP////////8A/////////wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD/////////AP////////8A////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A/////////wD/////////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP////////8A/////////wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD/////////AP////////8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A/////////wD/////////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP////////8A////////
-        ////////////////////////////////////////////////////////////////////////////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-        /wD///8A//8AAP//AAAAAQAAf/0AAAABAAB//QAAf/0AAH/9AAB//QAAf/0AAH/9AAB//QAAf/0AAAAB
-        AAD//wAA//8AAA==
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMMOAADDDgAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8kAAD/JAAA/yQBAP8kAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAD/JAAA/yQEAP8kAQD/JAAAAAAAAAAAAAD/JAAA/yQHAP8kGgD/JAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAA/yQAAP8kEgD/JDYA/yQdAP8kAAD/JAAA/yQAAP8kJAD/JFYA/yQAAP8kAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAP8kAAD/JAAA/yQmAP8kmQD/JFAA/yQAAP8kAAD/JEsA/ySbAP8kAgD/
+        JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/yQAAP8kAAD/JDsA/yS2AP8kawD/JAwA/yRsAP8ktAD/
+        JAUA/yQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/JAAA/yQAAP8kKgD/JLcA/ySyAP8ksAD/
+        JL8A/yQJAP8kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8kAAD/JAAA/yQdAP8koAD/
+        JPkA/yTVAP8kHQD/JAAA/yQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/yQAAP8kAAD/
+        JAkA/ySTAP8k/gD/JMEA/yRSAP8kBgD/JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/yQAAP8kAAD/
+        JAEA/yQAAP8kbgD/JPAA/yTWAP8k9AD/JJcA/yQVAP8kAAD/JAAAAAAAAAAAAAAAAAAAAAAAAP8kAAD/
+        JAIA/yQ0AP8kZwD/JJUA/yTkAP8kQwD/JGMA/ySUAP8kNQD/JAAA/yQAAAAAAAAAAAAAAAAAAAAAAAD/
+        JAAA/yQAAP8kNgD/JMcA/yT2AP8k6wD/JDAA/yQAAP8kAwD/JAUA/yQAAP8kAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAP8kAAD/JAAA/yQZAP8kggD/JOkA/ySSAP8kGwD/JAAA/yQAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAP8kAAD/JAYA/yRKAP8kogD/JLIA/yQyAP8kAwD/JAAA/yQAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/JAAA/yQAAP8kAAD/JAYA/yRCAP8kQQD/JA8A/yQAAP8kAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8kAAD/JAAA/yQAAP8kAAD/
+        JAAAAAAA//8AAP9/AACefwAAjn8AAMY/AADgPwAA8D8AAPg/AAD8DwAA+gcAAPAHAAD4JwAA/B8AAP4H
+        AAD/hwAA//8AAA==
 </value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
