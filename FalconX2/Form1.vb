@@ -6,44 +6,68 @@ Imports Transitions
 
 Public Class Form1
 
-    Private Const SWP_NOSIZE As Integer = &H1
-    Private Const SWP_NOZORDER As Integer = &H4
-    Private Const SWP_SHOWWINDOW As Integer = &H40
-    Private Const SWP_ASYNCWINDOWPOS As Integer = &H4000
-    Private Const SWP_NOSENDCHANGING As Integer = &H400
-    Private Const SWP_NOACTIVATE As Integer = &H10
-    Private Const SWP_NOMOVE As Integer = &H2
+    Dim SWP_NOSIZE As UInt32 = 1
+    Dim SWP_NOMOVE As UInt32 = 2
+    Dim SWP_NOZORDER As UInt32 = 4
+    Dim SWP_NOREDRAW As UInt32 = 8
+    Dim SWP_NOACTIVATE As UInt32 = 16
+    Dim SWP_DRAWFRAME As UInt32 = 32
+    Dim SWP_FRAMECHANGED As UInt32 = 32
+    Dim SWP_SHOWWINDOW As UInt32 = 64
+    Dim SWP_HIDEWINDOW As UInt32 = 128
+    Dim SWP_NOCOPYBITS As UInt32 = 256
+    Dim SWP_NOOWNERZORDER As UInt32 = 512
+    Dim SWP_NOREPOSITION As UInt32 = 512
+    Dim SWP_NOSENDCHANGING As UInt32 = 1024
+    Dim SWP_DEFERERASE As UInt32 = 8192
+    Dim SWP_ASYNCWINDOWPOS As UInt32 = 16384
 
-    Private Const SWP_NOOWNERZORDER As Integer = &H200
-    Private Const SWP_DRAWFRAME As Integer = &H20
-    Private Const SWP_NOCOPYBITS As Integer = &H100
+    Dim WM_ACTIVATE = &H6
 
-    Private Declare Auto Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
+    Dim HWND_TOP As IntPtr = 0
+    Dim HWND_BOTTOM As IntPtr = 1
+    Dim HWND_TOPMOST As IntPtr = -1
+    Dim HWND_NOTOPMOST As IntPtr = -2
+
+    Public Structure RECT
+        Public Left As Integer
+        Public Top As Integer
+        Public Right As Integer
+        Public Bottom As Integer
+    End Structure
+
+    Private Declare Function GetWindowRect Lib "user32" (ByVal hWnd As IntPtr, ByRef lpRect As RECT) As Boolean
+    Public Declare Function GetParent Lib "user32" (ByVal hWnd As Long) As Long
+    Private Declare Auto Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
     Private Declare Function SetProcessWorkingSetSize Lib "kernel32.dll" (ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     Public Declare Function TerminateProcess Lib "kernel32" (ByVal hProcess As IntPtr, ByVal uExitCode As UInteger) As Integer
 
     Private TaskbarWidthFull As Integer
+    Private notifyLeft As Integer
     Private tasklistPtr As IntPtr
+    Private tasklistSWPtr As IntPtr
     Private trayWndPtr As IntPtr
+    Private notifyPtr As IntPtr
+    Private rebarPtr As IntPtr
+    Private taskbarparent As IntPtr
+    Private taskbarparentparent As IntPtr
     Private tasklistWidth As Integer
     Private tasklistHeight As Integer
     Private tasklistLeft As Integer
 
+    Dim rct As RECT
     Dim refresh As Boolean = False
-
-
     Dim desktop As AutomationElement = AutomationElement.RootElement
-    Dim tasklisty As AutomationElement = Nothing
     Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"))
     Dim trayWnd As AutomationElement = desktop.FindFirst(TreeScope.Children, condition)
-
     Dim tasklist As AutomationElement = trayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
+    Dim notify As AutomationElement = trayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
 
     Private Sub start()
 
         NotifyIcon1.Text = "FalconX (Starting...)"
 
-        Me.Hide()
+        '  Me.Hide()
         refresh = False
 
         Me.Left = 0
@@ -103,7 +127,7 @@ Public Class Form1
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
 
-        System.Threading.Thread.Sleep(1000) : Application.DoEvents()
+        System.Threading.Thread.Sleep(1000)
 
         Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyMoveTaskbar)
         t3.Start()
@@ -119,24 +143,27 @@ Public Class Form1
     Private Sub ConstantlyCalculateWidth()
         Try
 
-
-
-
             tasklistPtr = tasklist.Current.NativeWindowHandle
+
             trayWndPtr = trayWnd.Current.NativeWindowHandle
-            tasklistWidth = trayWnd.Current.BoundingRectangle.Width
+            notifyPtr = notify.Current.NativeWindowHandle
+            notifyLeft = notify.Current.BoundingRectangle.X
+            tasklistWidth = Screen.PrimaryScreen.Bounds.Width
             tasklistHeight = trayWnd.Current.BoundingRectangle.Height
-            tasklistLeft = tasklist.Current.BoundingRectangle.Left
 
-            SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+            taskbarparent = GetParent(tasklistPtr)
+            taskbarparentparent = GetParent(taskbarparent)
 
-            System.Threading.Thread.Sleep(500) : Application.DoEvents()
+            GetWindowRect(taskbarparentparent, rct)
+            tasklistLeft = rct.Left
+
+            System.Threading.Thread.Sleep(500)
 
             Do
                 Try
 
                     Dim TaskbarWidth As Integer = 0
-                    Dim GarbageRound As Integer
+                    Dim Laps As Integer
 
                     If refresh = True Then
                         Exit Sub
@@ -150,6 +177,7 @@ Public Class Form1
                     tw = Nothing
 
                     TaskbarCount = child.Current.BoundingRectangle.Left
+
                     System.Threading.Thread.Sleep(400)
 
                     If Not TaskbarCount = OldTaskbarCount Then
@@ -158,38 +186,46 @@ Public Class Form1
                             If Not ui.Current.Name = Nothing Then
                                 TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
                                 System.Threading.Thread.Sleep(5)
+
                                 If refresh = True Then
                                     Exit Sub
                                 End If
                             End If
                         Next
                         TaskbarWidthFull = TaskbarWidth
-
                     End If
 
-                    GarbageRound = GarbageRound + 1
+                    Laps = Laps + 1
 
-                    If GarbageRound = 20 Then
-                        GarbageRound = 0
-                        SaveMemory()
-
+                    If Laps = 10 Then
                         tasklistWidth = Screen.PrimaryScreen.Bounds.Width
+                        GetWindowRect(taskbarparentparent, rct)
+                        tasklistLeft = rct.Left
+                    End If
 
+                    If Laps = 20 Then
+                        Laps = 0
+                        SaveMemory()
                     End If
                 Catch
 
                 End Try
             Loop
         Catch ex As Exception
-            Console.WriteLine("Error Restarting...")
-            ConstantlyCalculateWidth()
+            NotifyIcon1.Icon = My.Resources.icon_yellow_d6H_icon
+            NotifyIcon1.Text = "FalconX (Restarting...)"
+
+            refresh = True
+            System.Threading.Thread.Sleep(5000)
+
+            Application.Restart()
         End Try
 
     End Sub
 
     Private Sub ConstantlyMoveTaskbar()
 
-        System.Threading.Thread.Sleep(2000) : Application.DoEvents()
+        System.Threading.Thread.Sleep(2000)
 
         NotifyIcon1.Icon = My.Resources.Icon1
         NotifyIcon1.Text = "FalconX"
@@ -198,25 +234,14 @@ Public Class Form1
 
             Try
 
-                System.Threading.Thread.Sleep(10) : Application.DoEvents()
+                System.Threading.Thread.Sleep(10)
 
                 If refresh = True Then
                     Exit Sub
                 End If
 
-                Dim taskbarsizechanged As Integer
-
-                taskbarsizechanged = tasklistHeight
-
-
-
-
                 Dim TaskbarWidthHalf = TaskbarWidthFull / 2
-
                 Dim Display1 As Integer = tasklistWidth / 2
-                Dim Display1h As Integer = tasklistHeight / 2
-
-                Dim positionh = Display1h - TaskbarWidthHalf - tasklistLeft - 2
 
                 Dim dd As Integer
 
@@ -226,14 +251,12 @@ Public Class Form1
                     dd = ToolStripTextBox2.Text
                 End If
 
-                Dim position = Display1 - TaskbarWidthHalf - tasklistLeft - 2 + dd
+                Dim position = Display1 - TaskbarWidthHalf - 2 + dd - tasklistLeft
 
                 Gotoit = position
 
                 Me.Invoke(New Action(Sub()
-
                                          Label1.Text = position
-
                                      End Sub))
 
                 If cmoving = False Then
@@ -241,7 +264,7 @@ Public Class Form1
                         Exit Sub
                     End If
 
-                    SetWindowPos(tasklistPtr, IntPtr.Zero, position, 0, position, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+                    SetWindowPos(tasklistPtr, IntPtr.Zero, position, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
                 End If
             Catch
@@ -270,7 +293,7 @@ Public Class Form1
 
                                  refresh = True
 
-                                 System.Threading.Thread.Sleep(5000) : Application.DoEvents()
+                                 System.Threading.Thread.Sleep(5000)
 
                                  SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
 
@@ -482,7 +505,7 @@ Public Class Form1
         NotifyIcon1.Text = "FalconX (Restarting...)"
 
         refresh = True
-        System.Threading.Thread.Sleep(5000) : Application.DoEvents()
+        System.Threading.Thread.Sleep(5000)
 
         Application.Restart()
     End Sub

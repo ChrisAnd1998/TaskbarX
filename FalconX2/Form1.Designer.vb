@@ -54,8 +54,9 @@ Partial Class Form1
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.ContextMenuStrip1.SuspendLayout
-        Me.SuspendLayout
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ContextMenuStrip1.SuspendLayout()
+        Me.SuspendLayout()
         '
         'ContextMenuStrip1
         '
@@ -305,13 +306,22 @@ Partial Class Form1
         Me.CheckBox1.Text = "CheckBox1"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.Black
+        Me.Panel2.Location = New System.Drawing.Point(12, 279)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(363, 357)
+        Me.Panel2.TabIndex = 11
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ClientSize = New System.Drawing.Size(437, 279)
+        Me.ClientSize = New System.Drawing.Size(1086, 648)
         Me.ControlBox = False
+        Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.CheckBox6)
@@ -322,7 +332,7 @@ Partial Class Form1
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Label1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -330,7 +340,6 @@ Partial Class Form1
         Me.Opacity = 0R
         Me.ShowInTaskbar = False
         Me.Text = "Form1"
-        Me.WindowState = System.Windows.Forms.FormWindowState.Minimized
         Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -367,4 +376,5 @@ Partial Class Form1
     Friend WithEvents CustomOffsetToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripTextBox2 As ToolStripTextBox
     Friend WithEvents Label3 As Label
+    Friend WithEvents Panel2 As Panel
 End Class
