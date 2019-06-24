@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports System.Windows.Automation
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Transitions
@@ -36,11 +37,20 @@ Public Class Form1
         Public Bottom As Integer
     End Structure
 
-    Private Declare Function GetWindowRect Lib "user32" (ByVal hWnd As IntPtr, ByRef lpRect As RECT) As Boolean
-    Public Declare Function GetParent Lib "user32" (ByVal hWnd As Long) As Long
-    Private Declare Auto Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
+    <DllImport("user32.dll")>
+    Private Shared Function GetWindowRect(ByVal hWnd As IntPtr, ByRef lpRect As RECT) As Boolean
+    End Function
+
+    <DllImport("user32.dll", ExactSpelling:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function GetParent(ByVal hWnd As IntPtr) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", SetLastError:=True)>
+    Private Shared Function SetWindowPos(ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As UInt32) As Boolean
+    End Function
+
     Private Declare Function SetProcessWorkingSetSize Lib "kernel32.dll" (ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
-    Public Declare Function TerminateProcess Lib "kernel32" (ByVal hProcess As IntPtr, ByVal uExitCode As UInteger) As Integer
+    Public Declare Function TerminateProcess Lib "kernel32.dll" (ByVal hProcess As IntPtr, ByVal uExitCode As UInteger) As Integer
 
     Private TaskbarWidthFull As Integer
     Private notifyLeft As Integer
@@ -54,6 +64,7 @@ Public Class Form1
     Private tasklistWidth As Integer
     Private tasklistHeight As Integer
     Private tasklistLeft As Integer
+    Dim taskbarhori As Boolean
 
     Dim rct As RECT
     Dim refresh As Boolean = False
@@ -127,7 +138,7 @@ Public Class Form1
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyCalculateWidth)
         t1.Start()
 
-        System.Threading.Thread.Sleep(1000)
+        System.Threading.Thread.Sleep(3000)
 
         Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf ConstantlyMoveTaskbar)
         t3.Start()
@@ -199,8 +210,16 @@ Public Class Form1
 
                     If Laps = 10 Then
                         tasklistWidth = Screen.PrimaryScreen.Bounds.Width
+                        tasklistHeight = Screen.PrimaryScreen.Bounds.Height
                         GetWindowRect(taskbarparentparent, rct)
                         tasklistLeft = rct.Left
+
+                        '  If trayWnd.Current.BoundingRectangle.Height = Screen.PrimaryScreen.Bounds.Height Then
+                        '  taskbarhori = False
+                        'Else
+                        ' taskbarhori = True
+                        'End If
+
                     End If
 
                     If Laps = 20 Then
@@ -243,6 +262,9 @@ Public Class Form1
                 Dim TaskbarWidthHalf = TaskbarWidthFull / 2
                 Dim Display1 As Integer = tasklistWidth / 2
 
+                Dim Display1Vert As Integer = tasklistHeight / 2
+
+
                 Dim dd As Integer
 
                 If ToolStripTextBox2.Text = Nothing Then
@@ -252,6 +274,8 @@ Public Class Form1
                 End If
 
                 Dim position = Display1 - TaskbarWidthHalf - 2 + dd - tasklistLeft
+
+                Dim positionVert = Display1Vert - TaskbarWidthHalf - 2 + dd - tasklistLeft
 
                 Gotoit = position
 
@@ -264,7 +288,12 @@ Public Class Form1
                         Exit Sub
                     End If
 
+                    '  If taskbarhori = True Then
                     SetWindowPos(tasklistPtr, IntPtr.Zero, position, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+                    '   Else
+                    '   SetWindowPos(tasklistPtr, IntPtr.Zero, 0, positionVert, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+                    '   End If
+
 
                 End If
             Catch
@@ -384,7 +413,10 @@ Public Class Form1
     Dim animation As Integer = 2
 
     Private Sub Panel1_Move(sender As Object, e As EventArgs) Handles Panel1.Move
+        ' If taskbarhori = True Then
         SetWindowPos(tasklistPtr, IntPtr.Zero, Panel1.Left, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+        ' End If
+
     End Sub
 
     Sub clearchecks()
