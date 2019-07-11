@@ -258,14 +258,14 @@ Public Class Form1
             '   SetWindowPos(notify.Current.NativeWindowHandle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
 
 
-            '  SetParent(tasklistPtr, trayWndPtr)
+            SetParent(tasklistPtr, trayWndPtr)
 
 
 
 
-            SetParent(tasklistPtr, tasklistPtr)
+            SetParent(trayWndPtr, taskbarparentparent)
 
-            SetParent(notifyparent, tasklistPtr)
+            SetParent(notifyparent, trayWndPtr)
 
             SetWindowPos(taskbarparentparent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
             SetWindowPos(taskbarparentparent, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
@@ -408,7 +408,7 @@ Public Class Form1
                     ' SetWindowPos(tasklistPtr, HWND_BOTTOM, 0, 0, tasklistWidth + 100, 100, SWP_NOZORDER Or SWP_NOMOVE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
                     '  SetWindowPos(notifyPtr, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE Or SWP_NOACTIVATE Or SWP_NOCOPYBITS)
-                    'SetWindowPos(notifyPtr, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE Or SWP_NOACTIVATE Or SWP_NOCOPYBITS)
+                    SetWindowPos(notifyPtr, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE Or SWP_NOACTIVATE Or SWP_NOCOPYBITS)
 
                 End If
             Catch
@@ -441,15 +441,15 @@ Public Class Form1
 
                                  System.Threading.Thread.Sleep(5000)
 
-                                 'restartexplorer()
+                                 restartexplorer()
                                  '  SetParent(trayWndPtr, traywndparent)
                                  ' SetParent(taskbarparent, taskbarparentparent)
                                  '  SetParent(tasklistPtr, taskbarparent)
 
-                                 '  System.Threading.Thread.Sleep(1000)
+                                 System.Threading.Thread.Sleep(1000)
 
 
-                                 SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+                                 ' SetWindowPos(tasklistPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
 
                                  NotifyIcon1.Visible = False
 
@@ -662,9 +662,9 @@ Public Class Form1
         refresh = True
         System.Threading.Thread.Sleep(5000)
 
-        ' restartexplorer()
+        restartexplorer()
 
-        ' System.Threading.Thread.Sleep(5000)
+        System.Threading.Thread.Sleep(3000)
 
 
         Application.Restart()
