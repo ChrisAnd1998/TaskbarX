@@ -53,6 +53,8 @@ Public Class Form1
         Public Bottom As Integer
     End Structure
 
+
+
     <DllImport("user32.dll")>
     Private Shared Function GetWindowRect(ByVal hWnd As IntPtr, ByRef lpRect As RECT) As Boolean
     End Function
@@ -86,6 +88,7 @@ Public Class Form1
     Private taskbarparent As IntPtr
     Private taskbarparentparent As IntPtr
     Private taskbarparentparentparent As IntPtr
+    Private notifyparent As IntPtr
     Private traywndparent As IntPtr
     Private tasklistWidth As Integer
     Private tasklistHeight As Integer
@@ -233,6 +236,7 @@ Public Class Form1
             tasklistWidth = Screen.PrimaryScreen.Bounds.Width
             tasklistHeight = trayWnd.Current.BoundingRectangle.Height
 
+            notifyparent = GetParent(notifyPtr)
             taskbarparent = GetParent(tasklistPtr)
             traywndparent = GetParent(trayWndPtr)
             taskbarparentparent = GetParent(taskbarparent)
@@ -256,15 +260,24 @@ Public Class Form1
 
             SetParent(tasklistPtr, trayWndPtr)
 
-            SetParent(notify.Current.NativeWindowHandle, trayWndPtr)
+
 
 
             SetParent(trayWndPtr, taskbarparentparent)
 
-
+            SetParent(notifyparent, trayWndPtr)
 
             SetWindowPos(taskbarparentparent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
             SetWindowPos(taskbarparentparent, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+
+            SetWindowPos(tasklistPtr, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+            ' SetWindowPos(tasklistPtr, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+
+            SetWindowPos(notifyPtr, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+            SetWindowPos(notifyPtr, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+
+            SetWindowPos(notifyparent, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+            SetWindowPos(notifyparent, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
 
 
             System.Threading.Thread.Sleep(500)
@@ -386,21 +399,25 @@ Public Class Form1
                     If refresh = True Then
                         Exit Sub
                     End If
-                    SetWindowPos(taskbarparentparent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
-                    SetWindowPos(taskbarparentparent, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+                    '  SetWindowPos(taskbarparentparent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+                    '  SetWindowPos(taskbarparentparent, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
 
 
-                    SetWindowPos(tasklistPtr, IntPtr.Zero, position, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+                    SetWindowPos(tasklistPtr, HWND_BOTTOM, position, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
+                    ' SetWindowPos(tasklistPtr, HWND_BOTTOM, 0, 0, tasklistWidth + 100, 100, SWP_NOZORDER Or SWP_NOMOVE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
-                    SetWindowPos(notifyPtr, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
-                    SetWindowPos(notifyPtr, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE)
+                    '  SetWindowPos(notifyPtr, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE Or SWP_NOACTIVATE Or SWP_NOCOPYBITS)
+                    SetWindowPos(notifyPtr, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE Or SWP_NOSIZE Or SWP_NOACTIVATE Or SWP_NOCOPYBITS)
+
                 End If
             Catch
 
             End Try
         Loop
     End Sub
+
+
 
     Public Function SaveMemory() As Int32
 
