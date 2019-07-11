@@ -385,9 +385,9 @@ Public Class Form1
                     dd = ToolStripTextBox2.Text
                 End If
 
-                Dim position = Display1 - TaskbarWidthHalf + dd - tasklistLeft - 2
+                Dim position = Display1 - TaskbarWidthHalf + dd - 2 'tasklistLeft - 2
 
-                Dim positionVert = Display1Vert - TaskbarWidthHalf + dd - tasklistLeft - 2
+                Dim positionVert = Display1Vert - TaskbarWidthHalf + dd - 2 'tasklistLeft - 2
 
                 Gotoit = position
 
