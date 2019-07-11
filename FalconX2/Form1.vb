@@ -662,6 +662,11 @@ Public Class Form1
         refresh = True
         System.Threading.Thread.Sleep(5000)
 
+        restartexplorer()
+
+        System.Threading.Thread.Sleep(5000)
+
+
         Application.Restart()
 
         Me.Dispose()

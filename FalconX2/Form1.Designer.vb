@@ -62,13 +62,13 @@ Partial Class Form1
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem3, Me.AnimationsToolStripMenuItem, Me.ToolStripSeparator1, Me.ToolStripMenuItem2, Me.ToolStripSeparator3, Me.RunAtStartupToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 126)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 148)
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CustomOffsetToolStripMenuItem, Me.ToolStripTextBox2})
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(151, 22)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem3.Text = "Position"
         '
         'CustomOffsetToolStripMenuItem
@@ -90,7 +90,7 @@ Partial Class Form1
         '
         Me.AnimationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NoneToolStripMenuItem, Me.AccelerationToolStripMenuItem, Me.CriticalDampingToolStripMenuItem, Me.DecelerationToolStripMenuItem, Me.EaseInEaseOutToolStripMenuItem, Me.LinearToolStripMenuItem, Me.ToolStripSeparator2, Me.ToolStripMenuItem1, Me.ToolStripTextBox1})
         Me.AnimationsToolStripMenuItem.Name = "AnimationsToolStripMenuItem"
-        Me.AnimationsToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
+        Me.AnimationsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.AnimationsToolStripMenuItem.Text = "Animations"
         '
         'NoneToolStripMenuItem
@@ -164,29 +164,29 @@ Partial Class Form1
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(148, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(151, 22)
-        Me.ToolStripMenuItem2.Text = "Refresh"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Text = "Restart"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(148, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
         '
         'RunAtStartupToolStripMenuItem
         '
         Me.RunAtStartupToolStripMenuItem.Name = "RunAtStartupToolStripMenuItem"
-        Me.RunAtStartupToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
+        Me.RunAtStartupToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.RunAtStartupToolStripMenuItem.Text = "Run At Startup"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'NotifyIcon1
