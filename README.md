@@ -14,7 +14,7 @@ It uses Dot Net Transitions (https://github.com/UweKeim/dot-net-transitions) for
 
 ![FalconX](https://chrisandriessen.nl/web/img/FX3.jpg)
 
-**Usage**
+**Usage at IDLE**
 
 GPU: GeForce RTX 2080 8GB  
 CPU: Intel(R) Core(TM) i7-8700K CPU @ 4.80GHz  
