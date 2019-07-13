@@ -21,7 +21,7 @@ CPU: Intel(R) Core(TM) i7-8700K CPU @ 4.80GHz
 Memory: 16.00 GB RAM DDR4  
 Current resolution: 3x 2560 x 1440, 144Hz  
 
-![FalconX](https://chrisandriessen.nl/web/img/FX3u.png)
+![FalconX](https://chrisandriessen.nl/web/img/FX3u2.png)
 
 
 
