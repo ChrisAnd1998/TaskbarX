@@ -8,7 +8,7 @@ to get the width of your taskbar and uses SetWindowPos
 
 It uses Dot Net Transitions (https://github.com/UweKeim/dot-net-transitions) for the animations.
 
-![FalconX](https://chrisandriessen.nl/web/img/FX3.png)
+![FalconX](https://chrisandriessen.nl/web/img/FX3.jpg)
 
 
 
