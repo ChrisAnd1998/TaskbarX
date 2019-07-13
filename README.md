@@ -16,12 +16,12 @@ It uses Dot Net Transitions (https://github.com/UweKeim/dot-net-transitions) for
 
 **Usage**
 
-GPU: GeForce RTX 2080 8GB
-CPU: Intel(R) Core(TM) i7-8700K CPU @ 4.80GHz
-Memory: 16.00 GB RAM DDR4
-Current resolution: 3x 2560 x 1440, 144Hz
+GPU: GeForce RTX 2080 8GB  
+CPU: Intel(R) Core(TM) i7-8700K CPU @ 4.80GHz  
+Memory: 16.00 GB RAM DDR4  
+Current resolution: 3x 2560 x 1440, 144Hz  
 
-![FalconX](https://chrisandriessen.nl/web/img/FX3.jpg)
+![FalconX](https://chrisandriessen.nl/web/img/FX3u.png)
 
 
 
