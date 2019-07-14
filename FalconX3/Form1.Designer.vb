@@ -133,7 +133,7 @@ Partial Class Form1
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(103, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "13.07.2019 - 1.1.2.0"
+        Me.Label3.Text = "14.07.2019 - 1.1.3.0"
         '
         'Label4
         '

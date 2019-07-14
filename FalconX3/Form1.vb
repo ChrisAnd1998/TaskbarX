@@ -1,18 +1,11 @@
-﻿
-
-Imports System.IO
+﻿Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Windows.Automation
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.Win32
 Imports Transitions
 
-
-
 Public Class Form1
-
-
 
     <DllImport("user32.dll", EntryPoint:="FindWindow", SetLastError:=True, CharSet:=CharSet.Auto)>
     Private Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
@@ -64,6 +57,7 @@ Public Class Form1
     Dim HWND_BOTTOM As IntPtr = 1
     Dim HWND_TOPMOST As IntPtr = -1
     Dim HWND_NOTOPMOST As IntPtr = -2
+
     Public Structure RECT
         Public Left As Integer
         Public Top As Integer
@@ -74,11 +68,13 @@ Public Class Form1
     Dim Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
     Dim MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
     Dim TrayNotifyWnd As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
+    Dim StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
     Dim MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
     Dim ReBarWindow32 = GetParent(MSTaskSwWClass)
     Dim Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
 
     Dim DesktopPtr As IntPtr = Desktop
+    Dim StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
     Dim Shell_TrayWndPtr As IntPtr = Shell_TrayWnd.Current.NativeWindowHandle
     Dim MSTaskListWClassPtr As IntPtr = MSTaskListWClass.Current.NativeWindowHandle
     Dim TrayNotifyWndPtr As IntPtr = TrayNotifyWnd.Current.NativeWindowHandle
@@ -91,14 +87,17 @@ Public Class Form1
     Dim IsTaskbarMoving As Boolean
     Dim TaskbarNewPos As Integer
 
+    Dim Launch As Boolean
+
     Sub RestartExplorer()
         For Each MyProcess In Process.GetProcessesByName("explorer")
             MyProcess.Kill()
         Next
     End Sub
 
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Launch = True
 
         If RadioButton1.Checked = False AndAlso RadioButton2.Checked = False AndAlso RadioButton3.Checked = False AndAlso RadioButton4.Checked = False AndAlso RadioButton5.Checked = False AndAlso RadioButton6.Checked = False Then
             RadioButton1.Checked = True
@@ -108,6 +107,7 @@ Public Class Form1
 
         Console.WriteLine("Desktop Hwnd: " & DesktopPtr.ToString)
         Console.WriteLine("Shell_TrayWnd Hwnd: " & Shell_TrayWndPtr.ToString)
+        Console.WriteLine("StartButton Hwnd: " & StartButtonPtr.ToString)
         Console.WriteLine("MSTaskListWClass Hwnd: " & MSTaskListWClassPtr.ToString)
         Console.WriteLine("MSTaskSwWClass Hwnd: " & MSTaskSwWClassPtr.ToString)
         Console.WriteLine("ReBarWindow32 Hwnd: " & ReBarWindow32Ptr.ToString)
@@ -116,12 +116,13 @@ Public Class Form1
         Console.WriteLine("Disable Redraw for ReBarWindow32...")
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
+
         Console.WriteLine("Starting TaskbarCalculator MultiThread...")
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarCalculator)
         t1.Start()
 
-        Console.WriteLine("Starting TaskbarMover MultiThread...")
-        Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarMover)
+        Console.WriteLine("Starting Memory Usage Limiter MultiThread...")
+        Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf SaveMemory)
         t2.Start()
 
     End Sub
@@ -131,34 +132,48 @@ Public Class Form1
 
             Try
 
-
                 Dim Laps As Integer
-
-
+                Dim Trigger As Integer
                 Dim TaskbarWidth As Integer = 0
                 Dim OldTaskbarCount As Integer
                 Dim TaskbarCount As Integer = 0
+                Dim Resolution As Integer = 0
+                Dim OldResolution As Integer
                 Dim tw As TreeWalker = TreeWalker.ControlViewWalker
                 Dim child As AutomationElement = tw.GetLastChild(MSTaskListWClass)
 
                 tw = Nothing
 
                 TaskbarCount = child.Current.BoundingRectangle.Left
+                Resolution = Screen.PrimaryScreen.Bounds.Width
 
-                If Not TaskbarCount = OldTaskbarCount Then
-                    OldTaskbarCount = TaskbarCount
-                    For Each ui As AutomationElement In MSTaskListWClass.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
-                        If Not ui.Current.Name = Nothing Then
-                            TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
-                            System.Threading.Thread.Sleep(5)
-                        End If
-                    Next
-                    TaskbarWidthFull = TaskbarWidth
+                System.Threading.Thread.Sleep(200)
+                If Not TaskbarCount = OldTaskbarCount Or Not Resolution = OldResolution Then
+                    Trigger = Trigger + 1
+                    If Trigger = 2 Then
+                        Trigger = 0
+                        OldTaskbarCount = TaskbarCount
+                        OldResolution = Resolution
+                        For Each ui As AutomationElement In MSTaskListWClass.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
+                            If Not ui.Current.Name = Nothing Then
+                                TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
+                                System.Threading.Thread.Sleep(5)
+                            End If
+                        Next
+                        Dim rct As RECT
+                        GetWindowRect(ReBarWindow32Ptr, rct)
+                        TaskbarLeft = rct.Left
+                        TaskbarWidthFull = TaskbarWidth
+                        Dim TaskbarWidthHalf = TaskbarWidthFull / 2
+                        Dim position As Integer
+                        position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+                        TaskbarNewPos = position
+                        Me.Invoke(New Action(Sub()
+                                                 Label1.Text = position
+                                             End Sub))
+                        ' SaveMemory()
+                    End If
                 End If
-
-                Dim rct As RECT
-                GetWindowRect(ReBarWindow32Ptr, rct)
-                TaskbarLeft = rct.Left
 
                 Laps = Laps + 1
 
@@ -167,12 +182,10 @@ Public Class Form1
                     SaveMemory()
                 End If
 
-                System.Threading.Thread.Sleep(400)
-
+                System.Threading.Thread.Sleep(200)
             Catch ex As Exception
                 Console.WriteLine("TaskbarCalculator : " & ex.Message)
             End Try
-
 
         Loop
     End Sub
@@ -182,36 +195,6 @@ Public Class Form1
         Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, -1, -1)
 
     End Function
-
-    Sub TaskbarMover()
-        System.Threading.Thread.Sleep(500)
-        Do
-
-            Try
-
-                System.Threading.Thread.Sleep(250)
-                Dim TaskbarWidthHalf = TaskbarWidthFull / 2
-                Dim position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
-
-
-
-                TaskbarNewPos = position
-
-                Me.Invoke(New Action(Sub()
-                                         Label1.Text = position
-                                     End Sub))
-
-                If IsTaskbarMoving = False Then
-                    SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, position, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
-                End If
-
-
-            Catch ex As Exception
-                Console.WriteLine("TaskbarMover : " & ex.Message)
-            End Try
-
-        Loop
-    End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
@@ -225,7 +208,6 @@ Public Class Form1
         SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
         NotifyIcon1.Visible = False
-
 
         Console.WriteLine("Closing...")
         Me.Close()
@@ -241,6 +223,7 @@ Public Class Form1
         My.Settings.Save()
         Me.Hide()
         Me.Opacity = 0
+
     End Sub
 
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
@@ -293,24 +276,27 @@ Public Class Form1
             Loop
 
             IsTaskbarMoving = False
-
-
         Catch ex As Exception
             Console.WriteLine("FluentMove : " & ex.Message)
         End Try
     End Sub
 
     Private Sub Panel1_Move(sender As Object, e As EventArgs) Handles Panel1.Move
-        Console.WriteLine("Disable Redraw for ReBarWindow32...")
-        SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
+
+        Console.WriteLine("Enable Redraw for ReBarWindow32...")
+        SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
 
         Console.WriteLine("Moving Taskbar...")
         SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, Panel1.Left, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+
+        Console.WriteLine("Disable Redraw for ReBarWindow32...")
+        SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.Click
         Me.Opacity = 100
         Me.Show()
+
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -321,21 +307,37 @@ Public Class Form1
 
     Sub RunAtStartUp()
 
-        Dim str As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
-        File.Delete(str + "\FalconX.lnk")
+
+        Dim regKey As Microsoft.Win32.RegistryKey
+        regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+        regKey.DeleteValue(Application.ProductName, False)
+        regKey.Close()
+
+
+        Dim strx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
+
+        If File.Exists(strx + "\FalconX.lnk") Then
+            Dim str As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
+            File.Delete(str + "\FalconX.lnk")
+        End If
+
 
         If CheckBox7.Checked = True Then
-            Console.WriteLine("Creating Startup Entry...")
-            Dim regKey As Microsoft.Win32.RegistryKey
-            regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
-            regKey.SetValue(Application.ProductName, """" & Application.ExecutablePath & """")
-            regKey.Close()
-        Else
-            Console.WriteLine("Removing Startup Entry...")
-            Dim regKey As Microsoft.Win32.RegistryKey
-            regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
-            regKey.DeleteValue(Application.ProductName, False)
-            regKey.Close()
+            If Application.StartupPath.Contains("40210ChrisAndriessen") Then
+                Dim objectValue As Object = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                objectValue = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                Dim objectValue2 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "SpecialFolders", New Object() {"Startup"}, Nothing, Nothing, Nothing))
+                System.IO.File.WriteAllBytes(objectValue2 & "\FalconX.lnk", My.Resources.FalconX)
+            Else
+                Dim objectValue As Object = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                objectValue = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
+                Dim objectValue2 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "SpecialFolders", New Object() {"Startup"}, Nothing, Nothing, Nothing))
+                Dim objectValue3 As Object = RuntimeHelpers.GetObjectValue(NewLateBinding.LateGet(objectValue, Nothing, "CreateShortcut", New Object() {Operators.ConcatenateObject(objectValue2, "\FalconX.lnk")}, Nothing, Nothing, Nothing))
+                NewLateBinding.LateSet(objectValue3, Nothing, "TargetPath", New Object() {NewLateBinding.LateGet(objectValue, Nothing, "ExpandEnvironmentStrings", New Object() {Application.ExecutablePath}, Nothing, Nothing, Nothing)}, Nothing, Nothing)
+                NewLateBinding.LateSet(objectValue3, Nothing, "WorkingDirectory", New Object() {NewLateBinding.LateGet(objectValue, Nothing, "ExpandEnvironmentStrings", New Object() {Application.StartupPath}, Nothing, Nothing, Nothing)}, Nothing, Nothing)
+                NewLateBinding.LateSet(objectValue3, Nothing, "WindowStyle", New Object() {4}, Nothing, Nothing)
+                NewLateBinding.LateCall(objectValue3, Nothing, "Save", New Object(-1) {}, Nothing, Nothing, Nothing, True)
+            End If
         End If
 
         Console.WriteLine("Saving Settings...")
@@ -345,6 +347,39 @@ Public Class Form1
 
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
         RunAtStartUp()
+    End Sub
+
+    Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        If Launch = True Then
+            Me.Hide()
+            Launch = False
+        End If
+    End Sub
+
+
+
+    Private Sub RadioButton1_Click(sender As Object, e As EventArgs) Handles RadioButton1.Click
+        RadioButton1.Checked = True
+    End Sub
+
+    Private Sub RadioButton2_Click(sender As Object, e As EventArgs) Handles RadioButton2.Click
+        RadioButton2.Checked = True
+    End Sub
+
+    Private Sub RadioButton3_Click(sender As Object, e As EventArgs) Handles RadioButton3.Click
+        RadioButton3.Checked = True
+    End Sub
+
+    Private Sub RadioButton4_Click(sender As Object, e As EventArgs) Handles RadioButton4.Click
+        RadioButton4.Checked = True
+    End Sub
+
+    Private Sub RadioButton5_Click(sender As Object, e As EventArgs) Handles RadioButton5.Click
+        RadioButton5.Checked = True
+    End Sub
+
+    Private Sub RadioButton6_Click(sender As Object, e As EventArgs) Handles RadioButton6.Click
+        RadioButton6.Checked = True
     End Sub
 
 
