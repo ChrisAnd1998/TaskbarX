@@ -35,6 +35,12 @@ Public Class Form1
     Private Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     End Function
 
+    <DllImport("uxtheme.dll", ExactSpelling:=True, CharSet:=CharSet.Unicode)>
+    Public Shared Function SetWindowTheme(hWnd As IntPtr, pszSubAppName As [String], pszSubIdList As [String]) As Integer
+    End Function
+
+
+
     Dim SWP_NOSIZE As UInt32 = 1
     Dim SWP_NOMOVE As UInt32 = 2
     Dim SWP_NOZORDER As UInt32 = 4
@@ -51,7 +57,10 @@ Public Class Form1
     Dim SWP_DEFERERASE As UInt32 = 8192
     Dim SWP_ASYNCWINDOWPOS As UInt32 = 16384
 
+    Private Const WM_SETICON = &H80
+
     Private Const WM_SETREDRAW As Integer = 11
+
 
     Dim HWND_TOP As IntPtr = 0
     Dim HWND_BOTTOM As IntPtr = 1
@@ -83,11 +92,10 @@ Public Class Form1
 
     Dim TaskbarWidthFull As Integer
     Dim TaskbarLeft As Integer
-
     Dim IsTaskbarMoving As Boolean
     Dim TaskbarNewPos As Integer
-
     Dim Launch As Boolean
+    Dim UpdateTaskbar As Boolean
 
     Sub RestartExplorer()
         For Each MyProcess In Process.GetProcessesByName("explorer")
@@ -137,6 +145,10 @@ Public Class Form1
                 Dim TaskbarWidth As Integer = 0
                 Dim OldTaskbarCount As Integer
                 Dim TaskbarCount As Integer = 0
+
+                Dim OldTrayWidth As Integer
+                Dim TrayWidth As Integer = 0
+
                 Dim Resolution As Integer = 0
                 Dim OldResolution As Integer
                 Dim tw As TreeWalker = TreeWalker.ControlViewWalker
@@ -146,14 +158,19 @@ Public Class Form1
 
                 TaskbarCount = child.Current.BoundingRectangle.Left
                 Resolution = Screen.PrimaryScreen.Bounds.Width
+                TrayWidth = TrayNotifyWnd.Current.BoundingRectangle.Left
+
+
 
                 System.Threading.Thread.Sleep(200)
-                If Not TaskbarCount = OldTaskbarCount Or Not Resolution = OldResolution Then
+                If Not TaskbarCount = OldTaskbarCount Or Not Resolution = OldResolution Or Not TrayWidth = OldTrayWidth Or UpdateTaskbar = True Then
                     Trigger = Trigger + 1
                     If Trigger = 2 Then
                         Trigger = 0
                         OldTaskbarCount = TaskbarCount
                         OldResolution = Resolution
+                        OldTrayWidth = TrayWidth
+                        UpdateTaskbar = False
                         For Each ui As AutomationElement In MSTaskListWClass.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
                             If Not ui.Current.Name = Nothing Then
                                 TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
@@ -166,8 +183,16 @@ Public Class Form1
                         TaskbarWidthFull = TaskbarWidth
                         Dim TaskbarWidthHalf = TaskbarWidthFull / 2
                         Dim position As Integer
-                        position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+
+                        If CheckBox1.Checked = True Then
+                            Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Width / 2 - (TaskbarLeft \ 2))
+                            position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
+                        Else
+                            position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+                        End If
+
                         TaskbarNewPos = position
+
                         Me.Invoke(New Action(Sub()
                                                  Label1.Text = position
                                              End Sub))
@@ -289,6 +314,8 @@ Public Class Form1
         Console.WriteLine("Moving Taskbar...")
         SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, Panel1.Left, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
 
+
+
         Console.WriteLine("Disable Redraw for ReBarWindow32...")
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
     End Sub
@@ -382,5 +409,15 @@ Public Class Form1
         RadioButton6.Checked = True
     End Sub
 
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        UpdateTaskbar = True
+    End Sub
 
+    Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
+        UpdateTaskbar = True
+    End Sub
+
+    Private Sub NumericUpDown2_KeyDown(sender As Object, e As KeyEventArgs) Handles NumericUpDown2.KeyDown
+        UpdateTaskbar = True
+    End Sub
 End Class
