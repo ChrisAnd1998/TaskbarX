@@ -30,12 +30,12 @@ Current resolution: 3x 2560 x 1440, 144Hz
 [![Alt text](https://img.youtube.com/vi/H07adcIXg7s/0.jpg)](https://www.youtube.com/watch?v=H07adcIXg7s)  
 
 
-**ChangeLog**
+**Full ChangeLog**
 
 ```
 FalconX Build 14.07.2019 1.1.4.0 July
-* Added option to center between the left Start, search etc... buttons and the right Tray menu.
-* Bug fixes and optimizations.
+* Added option to center between the left Start, search etc... buttons and the right Tray menu
+* Bug fixes and optimizations
 
 FalconX Build 14.07.2019 1.1.3.0 July
 * Bug fixes and optimizations
@@ -45,7 +45,7 @@ FalconX Build 13.07.2019 1.1.2.0 July
 * New easier to use Settings
 * Bug fixes and optimizations
 
-FalconX Build 11.07.2019 1.1.1.0July
+FalconX Build 11.07.2019 1.1.1.0 July
 * Attempt to fix flickering icons bug
 
 FalconX Build 24.06.2019 June
@@ -59,8 +59,8 @@ FalconX Build 23.06.2019 June
 * Automatically fixes position on left offset change within < 10 seconds
 
 FalconX Build 22.06.2019 June
-* Improved CPU usage to 0%/0.1% at idle.
-* Updates actual Memory usage for task manager.
+* Improved CPU usage to 0%/0.1% at idle
+* Updates actual Memory usage for task manager
 * Automatically fixes position on resolution change within < 10 seconds
 * Switched to (UI Automation COM API) instead of (UI Automation .NET)
 
