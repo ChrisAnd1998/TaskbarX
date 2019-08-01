@@ -33,6 +33,10 @@ Current resolution: 3x 2560 x 1440, 144Hz
 **Full ChangeLog**
 
 ```
+FalconX Build 01.08.2019 1.1.5.0 August
+* FalconX should work again with third-party startmenu's
+* Made form sizable for the people who could'nt see the buttons at the bottom.
+
 FalconX Build 14.07.2019 1.1.4.0 July
 * Added option to center between the left Start, search etc... buttons and the right Tray menu
 * Bug fixes and optimizations
