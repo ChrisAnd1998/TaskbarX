@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Windows.Automation
 Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.Win32
 Imports Transitions
 
 Public Class Form1
@@ -34,11 +35,6 @@ Public Class Form1
     <DllImport("kernel32.dll")>
     Private Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     End Function
-
-    <DllImport("uxtheme.dll", ExactSpelling:=True, CharSet:=CharSet.Unicode)>
-    Public Shared Function SetWindowTheme(hWnd As IntPtr, pszSubAppName As [String], pszSubIdList As [String]) As Integer
-    End Function
-
 
 
     Dim SWP_NOSIZE As UInt32 = 1
@@ -77,13 +73,13 @@ Public Class Form1
     Dim Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
     Dim MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
     Dim TrayNotifyWnd As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
-    Dim StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
+    'Dim StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
     Dim MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
     Dim ReBarWindow32 = GetParent(MSTaskSwWClass)
     Dim Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
 
     Dim DesktopPtr As IntPtr = Desktop
-    Dim StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
+    'Dim StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
     Dim Shell_TrayWndPtr As IntPtr = Shell_TrayWnd.Current.NativeWindowHandle
     Dim MSTaskListWClassPtr As IntPtr = MSTaskListWClass.Current.NativeWindowHandle
     Dim TrayNotifyWndPtr As IntPtr = TrayNotifyWnd.Current.NativeWindowHandle
@@ -92,8 +88,10 @@ Public Class Form1
 
     Dim TaskbarWidthFull As Integer
     Dim TaskbarLeft As Integer
+    Dim SecondaryTaskbarLeft As Integer
     Dim IsTaskbarMoving As Boolean
     Dim TaskbarNewPos As Integer
+    Dim SecondaryTaskbarNewPos As Integer
     Dim Launch As Boolean
     Dim UpdateTaskbar As Boolean
 
@@ -105,17 +103,20 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+
         Launch = True
 
         If RadioButton1.Checked = False AndAlso RadioButton2.Checked = False AndAlso RadioButton3.Checked = False AndAlso RadioButton4.Checked = False AndAlso RadioButton5.Checked = False AndAlso RadioButton6.Checked = False Then
             RadioButton1.Checked = True
         End If
 
+
+
         RunAtStartUp()
 
         Console.WriteLine("Desktop Hwnd: " & DesktopPtr.ToString)
         Console.WriteLine("Shell_TrayWnd Hwnd: " & Shell_TrayWndPtr.ToString)
-        Console.WriteLine("StartButton Hwnd: " & StartButtonPtr.ToString)
+        'Console.WriteLine("StartButton Hwnd: " & StartButtonPtr.ToString)
         Console.WriteLine("MSTaskListWClass Hwnd: " & MSTaskListWClassPtr.ToString)
         Console.WriteLine("MSTaskSwWClass Hwnd: " & MSTaskSwWClassPtr.ToString)
         Console.WriteLine("ReBarWindow32 Hwnd: " & ReBarWindow32Ptr.ToString)
@@ -180,18 +181,27 @@ Public Class Form1
                         Dim rct As RECT
                         GetWindowRect(ReBarWindow32Ptr, rct)
                         TaskbarLeft = rct.Left
+
+
+
+
                         TaskbarWidthFull = TaskbarWidth
                         Dim TaskbarWidthHalf = TaskbarWidthFull / 2
                         Dim position As Integer
 
+
                         If CheckBox1.Checked = True Then
                             Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Width / 2 - (TaskbarLeft \ 2))
                             position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
+
                         Else
                             position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+
                         End If
 
                         TaskbarNewPos = position
+                        SecondaryTaskbarNewPos = position
+
 
                         Me.Invoke(New Action(Sub()
                                                  Label1.Text = position
@@ -207,6 +217,8 @@ Public Class Form1
                     SaveMemory()
                 End If
 
+
+
                 System.Threading.Thread.Sleep(200)
             Catch ex As Exception
                 Console.WriteLine("TaskbarCalculator : " & ex.Message)
@@ -214,6 +226,8 @@ Public Class Form1
 
         Loop
     End Sub
+
+
 
     Public Function SaveMemory() As Int32
 
@@ -315,12 +329,12 @@ Public Class Form1
         SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, Panel1.Left, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
 
 
-
         Console.WriteLine("Disable Redraw for ReBarWindow32...")
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.Click
+
         Me.Opacity = 100
         Me.Show()
 
@@ -377,6 +391,7 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+
         If Launch = True Then
             Me.Hide()
             Launch = False
@@ -420,4 +435,6 @@ Public Class Form1
     Private Sub NumericUpDown2_KeyDown(sender As Object, e As KeyEventArgs) Handles NumericUpDown2.KeyDown
         UpdateTaskbar = True
     End Sub
+
+
 End Class
