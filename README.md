@@ -33,6 +33,9 @@ Current resolution: 3x 2560 x 1440, 144Hz
 **Full ChangeLog**
 
 ```
+FalconX Build 25.08.2019 1.1.6.0 August
+* Fixed start-up issues in UWP mode.
+
 FalconX Build 01.08.2019 1.1.5.0 August
 * FalconX should work again with third-party startmenu's
 * Made form sizable for the people who could'nt see the buttons at the bottom.
