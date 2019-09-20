@@ -33,6 +33,12 @@ Current resolution: 3x 2560 x 1440, 144Hz
 **Full ChangeLog**
 
 ```
+FalconX Build 20.09.2019 1.1.7.0 August
+* Vertical taskbar support.
+* Automatically restarts when Explorer restarts.
+* Added option to change Reaction speed.
+* Added simple reset settings button.
+
 FalconX Build 25.08.2019 1.1.6.0 August
 * Fixed start-up issues in UWP mode.
 
