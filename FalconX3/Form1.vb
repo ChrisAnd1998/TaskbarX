@@ -73,13 +73,11 @@ Public Class Form1
     Dim Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
     Dim MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
     Dim TrayNotifyWnd As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
-    'Dim StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
     Dim MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
     Dim ReBarWindow32 = GetParent(MSTaskSwWClass)
     Dim Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
 
     Dim DesktopPtr As IntPtr = Desktop
-    'Dim StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
     Dim Shell_TrayWndPtr As IntPtr = Shell_TrayWnd.Current.NativeWindowHandle
     Dim MSTaskListWClassPtr As IntPtr = MSTaskListWClass.Current.NativeWindowHandle
     Dim TrayNotifyWndPtr As IntPtr = TrayNotifyWnd.Current.NativeWindowHandle
@@ -94,6 +92,7 @@ Public Class Form1
     Dim SecondaryTaskbarNewPos As Integer
     Dim Launch As Boolean
     Dim UpdateTaskbar As Boolean
+    Dim Horizontal As Boolean
 
     Sub RestartExplorer()
         For Each MyProcess In Process.GetProcessesByName("explorer")
@@ -123,25 +122,28 @@ Public Class Form1
 
         RunAtStartUp()
 
-        Console.WriteLine("Desktop Hwnd: " & DesktopPtr.ToString)
-        Console.WriteLine("Shell_TrayWnd Hwnd: " & Shell_TrayWndPtr.ToString)
-        'Console.WriteLine("StartButton Hwnd: " & StartButtonPtr.ToString)
-        Console.WriteLine("MSTaskListWClass Hwnd: " & MSTaskListWClassPtr.ToString)
-        Console.WriteLine("MSTaskSwWClass Hwnd: " & MSTaskSwWClassPtr.ToString)
-        Console.WriteLine("ReBarWindow32 Hwnd: " & ReBarWindow32Ptr.ToString)
-        Console.WriteLine("TrayNotifyWnd Hwnd: " & TrayNotifyWndPtr.ToString)
 
-        Console.WriteLine("Disable Redraw for ReBarWindow32...")
+        Console.WriteLine("Desktop Hwnd: " & DesktopPtr.ToString & Environment.NewLine)
+        Console.WriteLine("Shell_TrayWnd Hwnd: " & Shell_TrayWndPtr.ToString & Environment.NewLine)
+        Console.WriteLine("MSTaskListWClass Hwnd: " & MSTaskListWClassPtr.ToString & Environment.NewLine)
+        Console.WriteLine("MSTaskSwWClass Hwnd: " & MSTaskSwWClassPtr.ToString & Environment.NewLine)
+        Console.WriteLine("ReBarWindow32 Hwnd: " & ReBarWindow32Ptr.ToString & Environment.NewLine)
+        Console.WriteLine("TrayNotifyWnd Hwnd: " & TrayNotifyWndPtr.ToString & Environment.NewLine)
+
+
+        Console.WriteLine("Disable Redraw for ReBarWindow32..." & Environment.NewLine)
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
 
-        Console.WriteLine("Starting TaskbarCalculator MultiThread...")
+        Console.WriteLine("Starting TaskbarCalculator MultiThread..." & Environment.NewLine)
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarCalculator)
         t1.Start()
 
-        Console.WriteLine("Starting Memory Usage Limiter MultiThread...")
+        Console.WriteLine("Starting Memory Usage Limiter MultiThread..." & Environment.NewLine)
         Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf SaveMemory)
         t2.Start()
+
+
 
     End Sub
 
@@ -149,6 +151,7 @@ Public Class Form1
         Do
 
             Try
+
 
                 Dim Laps As Integer
                 Dim Trigger As Integer
@@ -166,13 +169,29 @@ Public Class Form1
 
                 tw = Nothing
 
-                TaskbarCount = child.Current.BoundingRectangle.Left
-                Resolution = Screen.PrimaryScreen.Bounds.Width
-                TrayWidth = TrayNotifyWnd.Current.BoundingRectangle.Left
+                If MSTaskListWClass.Current.BoundingRectangle.Height >= 200 Then
+                    If Horizontal = True Then
+                        UpdateTaskbar = True
+                    End If
+                    Horizontal = False
+                Else
+                    If Horizontal = False Then
+                        UpdateTaskbar = True
+                    End If
+                    Horizontal = True
+                End If
 
+                If Horizontal = False Then
+                    TaskbarCount = child.Current.BoundingRectangle.Top
+                    Resolution = Screen.PrimaryScreen.Bounds.Height
+                    TrayWidth = Resolution - TrayNotifyWnd.Current.BoundingRectangle.Height
+                Else
+                    TaskbarCount = child.Current.BoundingRectangle.Left
+                    Resolution = Screen.PrimaryScreen.Bounds.Width
+                    TrayWidth = TrayNotifyWnd.Current.BoundingRectangle.Left
+                End If
 
-
-                System.Threading.Thread.Sleep(200)
+                System.Threading.Thread.Sleep(NumericUpDown3.Value)
                 If Not TaskbarCount = OldTaskbarCount Or Not Resolution = OldResolution Or Not TrayWidth = OldTrayWidth Or UpdateTaskbar = True Then
                     Trigger = Trigger + 1
                     If Trigger = 2 Then
@@ -183,41 +202,64 @@ Public Class Form1
                         UpdateTaskbar = False
                         For Each ui As AutomationElement In MSTaskListWClass.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
                             If Not ui.Current.Name = Nothing Then
-                                TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
+                                If Horizontal = False Then
+                                    TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Height
+                                Else
+                                    TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
+                                End If
                                 System.Threading.Thread.Sleep(5)
                             End If
                         Next
+                        Console.WriteLine(TaskbarWidth)
                         Dim rct As RECT
                         GetWindowRect(ReBarWindow32Ptr, rct)
-                        TaskbarLeft = rct.Left
 
-
-
-
-                        TaskbarWidthFull = TaskbarWidth
-                        Dim TaskbarWidthHalf = TaskbarWidthFull / 2
-                        Dim position As Integer
-
-
-                        If CheckBox1.Checked = True Then
-                            Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Width / 2 - (TaskbarLeft \ 2))
-                            position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
-
+                        If Horizontal = False Then
+                            TaskbarLeft = rct.Top
                         Else
-                            position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
-
+                            TaskbarLeft = rct.Left
                         End If
 
+                        Console.WriteLine(rct.Bottom)
+
+                        TaskbarWidthFull = TaskbarWidth
+                            Dim TaskbarWidthHalf = TaskbarWidthFull / 2
+                            Dim position As Integer
+
+
+                        If Horizontal = True Then
+                            If CheckBox1.Checked = True Then
+                                Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Width / 2 - (TaskbarLeft \ 2))
+                                position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
+
+                            Else
+                                position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+
+                            End If
+
+                        Else
+                            If CheckBox1.Checked = True Then
+                                Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Height / 2 - (TaskbarLeft \ 2))
+                                position = Screen.PrimaryScreen.Bounds.Height / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
+
+                            Else
+                                position = Screen.PrimaryScreen.Bounds.Height / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+
+                            End If
+                        End If
+
+
+
                         TaskbarNewPos = position
-                        SecondaryTaskbarNewPos = position
+
 
 
                         Me.Invoke(New Action(Sub()
-                                                 Label1.Text = position
-                                             End Sub))
-                        ' SaveMemory()
+                                                     Label1.Text = position
+                                                 End Sub))
+
+                        End If
                     End If
-                End If
 
                 Laps = Laps + 1
 
@@ -228,9 +270,53 @@ Public Class Form1
 
 
 
-                System.Threading.Thread.Sleep(200)
+
+
             Catch ex As Exception
-                Console.WriteLine("TaskbarCalculator : " & ex.Message)
+                Console.WriteLine("TaskbarCalculator : " & ex.Message & Environment.NewLine)
+
+                If ex.ToString.Contains("E_ACCESSDENIED") Then
+
+
+                    Dim Handle As IntPtr
+                    Dim Laps2 As Integer
+
+                    Console.WriteLine("Looking for Explorer..." & Environment.NewLine)
+
+                    SaveMemory()
+
+                    Do
+
+                        Laps2 = Laps2 + 1
+
+                        If Laps2 = 20 Then
+                            Laps2 = 0
+                            SaveMemory()
+                        End If
+
+
+                        Handle = Nothing
+                        System.Threading.Thread.Sleep(250)
+                        Handle = FindWindowByClass("Shell_TrayWnd", 0)
+
+                    Loop Until Not Handle = Nothing
+
+
+                    'Dim p() As Process
+
+                    'Do
+                    '  p = Process.GetProcessesByName("explorer")
+                    '  System.Threading.Thread.Sleep(250)
+                    '  Console.WriteLine("Looking for Explorer..." & Environment.NewLine)
+                    'Loop Until p.Count > 0
+
+                    Console.WriteLine("Explorer detected! Restarting..." & Environment.NewLine)
+
+                    NotifyIcon1.Visible = False
+                    Application.Restart()
+                    End
+                End If
+
             End Try
 
         Loop
@@ -246,13 +332,13 @@ Public Class Form1
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-        Console.WriteLine("Saving Settings...")
+        Console.WriteLine("Saving Settings..." & Environment.NewLine)
         My.Settings.Save()
 
-        Console.WriteLine("Enable Redraw for ReBarWindow32...")
+        Console.WriteLine("Enable Redraw for ReBarWindow32..." & Environment.NewLine)
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
 
-        Console.WriteLine("Setting Taskbar back to Default Position...")
+        Console.WriteLine("Setting Taskbar back to Default Position..." & Environment.NewLine)
         SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
         NotifyIcon1.Visible = False
@@ -267,7 +353,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Console.WriteLine("Saving Settings...")
+        Console.WriteLine("Saving Settings..." & Environment.NewLine)
         My.Settings.Save()
         Me.Hide()
         Me.Opacity = 0
@@ -325,20 +411,23 @@ Public Class Form1
 
             IsTaskbarMoving = False
         Catch ex As Exception
-            Console.WriteLine("FluentMove : " & ex.Message)
+            Console.WriteLine("FluentMove : " & ex.Message & Environment.NewLine)
         End Try
     End Sub
 
     Private Sub Panel1_Move(sender As Object, e As EventArgs) Handles Panel1.Move
 
-        Console.WriteLine("Enable Redraw for ReBarWindow32...")
+        Console.WriteLine("Enable Redraw for ReBarWindow32..." & Environment.NewLine)
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
 
-        Console.WriteLine("Moving Taskbar...")
-        SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, Panel1.Left, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+        Console.WriteLine("Moving Taskbar..." & Environment.NewLine)
+        If Horizontal = False Then
+            SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, Panel1.Left, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+        Else
+            SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, Panel1.Left, 0, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
+        End If
 
-
-        Console.WriteLine("Disable Redraw for ReBarWindow32...")
+        Console.WriteLine("Disable Redraw for ReBarWindow32..." & Environment.NewLine)
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
     End Sub
 
@@ -385,7 +474,7 @@ Public Class Form1
             NewLateBinding.LateCall(objectValue3, Nothing, "Save", New Object(-1) {}, Nothing, Nothing, Nothing, True)
         End If
 
-        Console.WriteLine("Saving Settings...")
+        Console.WriteLine("Saving Settings..." & Environment.NewLine)
         My.Settings.Save()
 
     End Sub
@@ -438,6 +527,20 @@ Public Class Form1
 
     Private Sub NumericUpDown2_KeyDown(sender As Object, e As KeyEventArgs) Handles NumericUpDown2.KeyDown
         UpdateTaskbar = True
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Select Case MsgBox("Are you Sure?", MsgBoxStyle.YesNo, "Reset settings...")
+            Case MsgBoxResult.Yes
+                RadioButton4.Checked = True
+                RadioButton4.Checked = True
+                NumericUpDown1.Value = 250
+                NumericUpDown2.Value = 0
+                NumericUpDown3.Value = 400
+                CheckBox1.Checked = False
+            Case MsgBoxResult.No
+                MessageBox.Show("NO button")
+        End Select
     End Sub
 
 

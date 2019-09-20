@@ -41,8 +41,13 @@ Partial Class Form1
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.NumericUpDown3 = New System.Windows.Forms.NumericUpDown()
+        Me.Panel6 = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
@@ -54,9 +59,12 @@ Partial Class Form1
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.Button4 = New System.Windows.Forms.Button()
         CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
@@ -85,7 +93,8 @@ Partial Class Form1
         '
         'Panel1
         '
-        Me.Panel1.Location = New System.Drawing.Point(0, 289)
+        Me.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(200, 51)
         Me.Panel1.TabIndex = 2
@@ -93,7 +102,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(48, 273)
+        Me.Label1.Location = New System.Drawing.Point(21, 221)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(39, 13)
         Me.Label1.TabIndex = 3
@@ -125,7 +134,7 @@ Partial Class Form1
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(103, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "25.08.2019 - 1.1.6.0"
+        Me.Label3.Text = "20.09.2019 - 1.1.7.0"
         '
         'Label4
         '
@@ -156,7 +165,7 @@ Partial Class Form1
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 192)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(200, 186)
+        Me.GroupBox1.Size = New System.Drawing.Size(200, 286)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Animations"
@@ -236,8 +245,13 @@ Partial Class Form1
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.PictureBox2)
+        Me.GroupBox2.Controls.Add(Me.Label8)
+        Me.GroupBox2.Controls.Add(Me.NumericUpDown3)
+        Me.GroupBox2.Controls.Add(Me.Panel6)
         Me.GroupBox2.Controls.Add(Me.Panel5)
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
+        Me.GroupBox2.Controls.Add(Me.Label7)
         Me.GroupBox2.Controls.Add(Me.Panel2)
         Me.GroupBox2.Controls.Add(Me.NumericUpDown2)
         Me.GroupBox2.Controls.Add(Me.NumericUpDown1)
@@ -245,15 +259,54 @@ Partial Class Form1
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Location = New System.Drawing.Point(218, 192)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(199, 186)
+        Me.GroupBox2.Size = New System.Drawing.Size(199, 286)
         Me.GroupBox2.TabIndex = 12
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Settings"
         '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(9, 141)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 16
+        Me.PictureBox2.TabStop = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(29, 143)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(157, 12)
+        Me.Label8.TabIndex = 19
+        Me.Label8.Text = "Increases CPU usage when lowering"
+        '
+        'NumericUpDown3
+        '
+        Me.NumericUpDown3.DataBindings.Add(New System.Windows.Forms.Binding("Value", Global.FalconX3.My.MySettings.Default, "s_react", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.NumericUpDown3.Location = New System.Drawing.Point(9, 114)
+        Me.NumericUpDown3.Maximum = New Decimal(New Integer() {1215752191, 23, 0, 0})
+        Me.NumericUpDown3.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown3.Name = "NumericUpDown3"
+        Me.NumericUpDown3.Size = New System.Drawing.Size(120, 20)
+        Me.NumericUpDown3.TabIndex = 18
+        Me.NumericUpDown3.Value = Global.FalconX3.My.MySettings.Default.s_react
+        '
+        'Panel6
+        '
+        Me.Panel6.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.Panel6.Location = New System.Drawing.Point(9, 171)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(184, 1)
+        Me.Panel6.TabIndex = 17
+        '
         'Panel5
         '
         Me.Panel5.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.Panel5.Location = New System.Drawing.Point(9, 147)
+        Me.Panel5.Location = New System.Drawing.Point(9, 242)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(184, 1)
         Me.Panel5.TabIndex = 14
@@ -263,17 +316,26 @@ Partial Class Form1
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.Checked = Global.FalconX3.My.MySettings.Default.s_centerbetweentoolbars
         Me.CheckBox1.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "s_centerbetweentoolbars", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.CheckBox1.Location = New System.Drawing.Point(9, 160)
+        Me.CheckBox1.Location = New System.Drawing.Point(9, 258)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(145, 17)
         Me.CheckBox1.TabIndex = 14
         Me.CheckBox1.Text = "Center between Toolbars"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(6, 93)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(155, 13)
+        Me.Label7.TabIndex = 15
+        Me.Label7.Text = "Reaction Speed in Milliseconds"
+        '
         'Panel2
         '
         Me.Panel2.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.Panel2.Location = New System.Drawing.Point(9, 78)
+        Me.Panel2.Location = New System.Drawing.Point(9, 77)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(184, 1)
         Me.Panel2.TabIndex = 13
@@ -281,7 +343,7 @@ Partial Class Form1
         'NumericUpDown2
         '
         Me.NumericUpDown2.DataBindings.Add(New System.Windows.Forms.Binding("Value", Global.FalconX3.My.MySettings.Default, "s_offset", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.NumericUpDown2.Location = New System.Drawing.Point(9, 112)
+        Me.NumericUpDown2.Location = New System.Drawing.Point(9, 208)
         Me.NumericUpDown2.Maximum = New Decimal(New Integer() {1000000, 0, 0, 0})
         Me.NumericUpDown2.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericUpDown2.Name = "NumericUpDown2"
@@ -302,7 +364,7 @@ Partial Class Form1
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(6, 91)
+        Me.Label6.Location = New System.Drawing.Point(6, 187)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(154, 13)
         Me.Label6.TabIndex = 2
@@ -332,9 +394,9 @@ Partial Class Form1
         Me.Panel4.Controls.Add(Me.Button2)
         Me.Panel4.Controls.Add(Me.Button1)
         Me.Panel4.Controls.Add(Me.CheckBox7)
-        Me.Panel4.Location = New System.Drawing.Point(-10, 390)
+        Me.Panel4.Location = New System.Drawing.Point(-10, 490)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(460, 63)
+        Me.Panel4.Size = New System.Drawing.Size(440, 51)
         Me.Panel4.TabIndex = 15
         '
         'Button3
@@ -375,13 +437,23 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "FalconX"
         Me.NotifyIcon1.Visible = True
         '
+        'Button4
+        '
+        Me.Button4.Image = CType(resources.GetObject("Button4.Image"), System.Drawing.Image)
+        Me.Button4.Location = New System.Drawing.Point(395, 164)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(22, 22)
+        Me.Button4.TabIndex = 16
+        Me.Button4.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(429, 440)
+        Me.ClientSize = New System.Drawing.Size(429, 540)
         Me.ControlBox = False
+        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel3)
@@ -407,6 +479,8 @@ Partial Class Form1
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
@@ -447,4 +521,10 @@ Partial Class Form1
     Friend WithEvents Button3 As Button
     Friend WithEvents CheckBox1 As CheckBox
     Friend WithEvents Panel5 As Panel
+    Friend WithEvents NumericUpDown3 As NumericUpDown
+    Friend WithEvents Panel6 As Panel
+    Friend WithEvents Label7 As Label
+    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Button4 As Button
 End Class
