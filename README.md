@@ -33,6 +33,10 @@ Current resolution: 3x 2560 x 1440, 144Hz
 **Full ChangeLog**
 
 ```
+FalconX Build 21.09.2019 1.1.8.0 August
+* .Net Transitions fully integrated.
+* Animation Preview
+
 FalconX Build 20.09.2019 1.1.7.0 August
 * Vertical taskbar support.
 * Automatically restarts when Explorer restarts.
