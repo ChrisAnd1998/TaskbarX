@@ -2,6 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Windows.Automation
+Imports FalconX3.Transitions
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.Win32
 Imports Transitions
@@ -94,6 +95,13 @@ Public Class Form1
     Dim UpdateTaskbar As Boolean
     Dim Horizontal As Boolean
 
+    Dim Radiobutton1Value As Boolean
+    Dim Radiobutton2Value As Boolean
+    Dim Radiobutton3Value As Boolean
+    Dim Radiobutton4Value As Boolean
+    Dim Radiobutton5Value As Boolean
+    Dim Radiobutton6Value As Boolean
+
     Sub RestartExplorer()
         For Each MyProcess In Process.GetProcessesByName("explorer")
             MyProcess.Kill()
@@ -121,6 +129,13 @@ Public Class Form1
 
 
         RunAtStartUp()
+
+
+
+        Dim CurrentProcess As Process = Process.GetCurrentProcess
+        CurrentProcess.PriorityClass = ProcessPriorityClass.Idle
+
+
 
 
         Console.WriteLine("Desktop Hwnd: " & DesktopPtr.ToString & Environment.NewLine)
@@ -223,8 +238,8 @@ Public Class Form1
                         Console.WriteLine(rct.Bottom)
 
                         TaskbarWidthFull = TaskbarWidth
-                            Dim TaskbarWidthHalf = TaskbarWidthFull / 2
-                            Dim position As Integer
+                        Dim TaskbarWidthHalf = TaskbarWidthFull / 2
+                        Dim position As Integer
 
 
                         If Horizontal = True Then
@@ -255,16 +270,17 @@ Public Class Form1
 
 
                         Me.Invoke(New Action(Sub()
-                                                     Label1.Text = position
-                                                 End Sub))
+                                                 Label1.Text = position
+                                             End Sub))
 
-                        End If
                     End If
+                End If
 
                 Laps = Laps + 1
 
-                If Laps = 20 Then
+                If Laps = 50 Then
                     Laps = 0
+                    Console.WriteLine("SetProcessWorkingSetSize" & Environment.NewLine)
                     SaveMemory()
                 End If
 
@@ -289,8 +305,9 @@ Public Class Form1
 
                         Laps2 = Laps2 + 1
 
-                        If Laps2 = 20 Then
+                        If Laps2 = 50 Then
                             Laps2 = 0
+                            Console.WriteLine("SetProcessWorkingSetSize" & Environment.NewLine)
                             SaveMemory()
                         End If
 
@@ -326,7 +343,7 @@ Public Class Form1
 
     Public Function SaveMemory() As Int32
 
-        Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, -1, -1)
+        Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, 2097152, 2097152)
 
     End Function
 
@@ -361,7 +378,43 @@ Public Class Form1
     End Sub
 
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
+
+        Radiobutton1Value = False
+        Radiobutton2Value = False
+        Radiobutton3Value = False
+        Radiobutton4Value = False
+        Radiobutton5Value = False
+        Radiobutton6Value = False
+
+        If RadioButton2.Checked = True Then
+            Radiobutton2Value = True
+        End If
+
+        If RadioButton4.Checked = True Then
+            Radiobutton4Value = True
+        End If
+
+        If RadioButton3.Checked = True Then
+            Radiobutton3Value = True
+        End If
+
+        If RadioButton5.Checked = True Then
+            Radiobutton5Value = True
+        End If
+
+        If RadioButton6.Checked = True Then
+            Radiobutton6Value = True
+        End If
+
+        If RadioButton1.Checked = True Then
+            Radiobutton1Value = True
+        End If
+
+        System.Threading.Thread.Sleep(100) : Application.DoEvents()
+
+
         FluentMove()
+
     End Sub
 
     Sub FluentMove()
@@ -371,37 +424,37 @@ Public Class Form1
 
             Dim Speed As Integer = NumericUpDown1.Value
 
-            If RadioButton2.Checked = True Then
+            If Radiobutton2Value = True Then
                 Dim r1 As Transition = New Transition(New TransitionType_Acceleration(Speed))
                 r1.add(Panel1, "Left", TaskbarNewPos)
                 r1.run()
             End If
 
-            If RadioButton4.Checked = True Then
+            If Radiobutton4Value = True Then
                 Dim r3 As Transition = New Transition(New TransitionType_CriticalDamping(Speed))
                 r3.add(Panel1, "Left", TaskbarNewPos)
                 r3.run()
             End If
 
-            If RadioButton3.Checked = True Then
+            If Radiobutton3Value = True Then
                 Dim r4 As Transition = New Transition(New TransitionType_Deceleration(Speed))
                 r4.add(Panel1, "Left", TaskbarNewPos)
                 r4.run()
             End If
 
-            If RadioButton5.Checked = True Then
+            If Radiobutton5Value = True Then
                 Dim r5 As Transition = New Transition(New TransitionType_EaseInEaseOut(Speed))
                 r5.add(Panel1, "Left", TaskbarNewPos)
                 r5.run()
             End If
 
-            If RadioButton6.Checked = True Then
+            If Radiobutton6Value = True Then
                 Dim r7 As Transition = New Transition(New TransitionType_Linear(Speed))
                 r7.add(Panel1, "Left", TaskbarNewPos)
                 r7.run()
             End If
 
-            If RadioButton1.Checked = True Then
+            If Radiobutton1Value = True Then
                 Panel1.Left = TaskbarNewPos
             End If
 
@@ -429,6 +482,8 @@ Public Class Form1
 
         Console.WriteLine("Disable Redraw for ReBarWindow32..." & Environment.NewLine)
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
+
+
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.Click
@@ -539,9 +594,63 @@ Public Class Form1
                 NumericUpDown3.Value = 400
                 CheckBox1.Checked = False
             Case MsgBoxResult.No
-                MessageBox.Show("NO button")
+
         End Select
     End Sub
 
+    Private Sub RadioButton4_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton4.CheckedChanged
+        TrackBar1.Value = 1
+        If Me.Visible = True Then
+            Dim r As Transition = New Transition(New TransitionType_CriticalDamping(2000))
+            r.add(TrackBar1, "Value", 1000)
+            r.run()
+        End If
+    End Sub
 
+    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
+        TrackBar1.Value = 1
+        If Me.Visible = True Then
+            Dim r As Transition = New Transition(New TransitionType_EaseInEaseOut(2000))
+            r.add(TrackBar1, "Value", 1000)
+            r.run()
+        End If
+    End Sub
+
+    Private Sub RadioButton6_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton6.CheckedChanged
+        TrackBar1.Value = 1
+        If Me.Visible = True Then
+            Dim r As Transition = New Transition(New TransitionType_Linear(2000))
+            r.add(TrackBar1, "Value", 1000)
+            r.run()
+        End If
+    End Sub
+
+    Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
+        TrackBar1.Value = 1
+        If Me.Visible = True Then
+            Dim r As Transition = New Transition(New TransitionType_Acceleration(2000))
+            r.add(TrackBar1, "Value", 1000)
+            r.run()
+        End If
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        TrackBar1.Value = 1
+        If Me.Visible = True Then
+            Dim r As Transition = New Transition(New TransitionType_Deceleration(2000))
+            r.add(TrackBar1, "Value", 1000)
+            r.run()
+        End If
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        TrackBar1.Value = 1
+        System.Threading.Thread.Sleep(50) : Application.DoEvents()
+
+        If Me.Visible = True Then
+            Dim r As Transition = New Transition(New TransitionType_Linear(1))
+            r.add(TrackBar1, "Value", 1000)
+            r.run()
+        End If
+    End Sub
 End Class

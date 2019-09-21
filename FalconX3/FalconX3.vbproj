@@ -42,7 +42,8 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>FalconX3.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DefineConstants>
     </DefineConstants>
@@ -55,7 +56,8 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>FalconX3.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -111,9 +113,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="Transitions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\dot-net-transitions.1.2.1.0\lib\net40-full\Transitions.dll</HintPath>
-    </Reference>
     <Reference Include="UIAComWrapperX, Version=1.1.0.16, Culture=neutral, PublicKeyToken=78cbcf77433a85e5, processorArchitecture=MSIL">
       <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\UIAComWrapperX.dll</HintPath>
     </Reference>
@@ -155,6 +154,24 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Resources\Transitions\IManagedType.vb" />
+    <Compile Include="Resources\Transitions\ITransitionType.vb" />
+    <Compile Include="Resources\Transitions\ManagedType_Color.vb" />
+    <Compile Include="Resources\Transitions\ManagedType_Double.vb" />
+    <Compile Include="Resources\Transitions\ManagedType_Float.vb" />
+    <Compile Include="Resources\Transitions\ManagedType_Int.vb" />
+    <Compile Include="Resources\Transitions\ManagedType_String.vb" />
+    <Compile Include="Resources\Transitions\Transition.vb" />
+    <Compile Include="Resources\Transitions\TransitionChain.vb" />
+    <Compile Include="Resources\Transitions\TransitionElement.vb" />
+    <Compile Include="Resources\Transitions\TransitionManager.vb" />
+    <Compile Include="Resources\Transitions\TransitionType_Acceleration.vb" />
+    <Compile Include="Resources\Transitions\TransitionType_CriticalDamping.vb" />
+    <Compile Include="Resources\Transitions\TransitionType_Deceleration.vb" />
+    <Compile Include="Resources\Transitions\TransitionType_EaseInEaseOut.vb" />
+    <Compile Include="Resources\Transitions\TransitionType_Linear.vb" />
+    <Compile Include="Resources\Transitions\TransitionType_UserDefined.vb" />
+    <Compile Include="Resources\Transitions\Utility.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
@@ -191,8 +208,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
