@@ -27,7 +27,7 @@ Current resolution: 3x 2560 x 1440, 144Hz
 
 **Video**
 
-[![Alt text](https://img.youtube.com/vi/H07adcIXg7s/0.jpg)](https://www.youtube.com/watch?v=H07adcIXg7s)  
+[![Alt text](https://img.youtube.com/vi/AJHV-Z8QNDw/0.jpg)](https://www.youtube.com/watch?v=AJHV-Z8QNDw)  
 
 
 **Full ChangeLog**
