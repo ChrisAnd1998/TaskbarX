@@ -131,3 +131,6 @@ Started project Falcon10
 Finding ways to center the taskbar
 (may 6th 2018) 
 ```
+
+**Tags**
+center taskbar, center taskbar icons, center taskbar icons windows 10, center taskbar windows, windows center taskbar, windows center taskbar icons, center taskbar icons, windows 10 center taskbar icons, falcon10, falcon taskbar, taskbar, taskbar icons, taskbar buttons
