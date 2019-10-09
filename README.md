@@ -1,36 +1,17 @@
 # FalconX
-FalconX is a tool written in VB.NET that centers your taskbar icons with animations.
 
+FalconX automate's your taskbar position to the center.
 
-FalconX uses the UIAutomation API  
-(https://docs.microsoft.com/en-us/dotnet/framework/ui-automation/ui-automation-overview)  
-to get the width of your taskbar and uses SetWindowPos  
-(https://www.pinvoke.net/default.aspx/user32.setwindowpos)  
-to move the taskbar.  
+## Preview
 
-It uses Dot Net Transitions (https://github.com/UweKeim/dot-net-transitions) for the animations.  
+[![Alt text](https://img.youtube.com/vi/AJHV-Z8QNDw/0.jpg)](https://www.youtube.com/watch?v=AJHV-Z8QNDw) 
 
-**ScreenShot**
+## Downloads
 
-![FalconX](https://chrisandriessen.nl/web/img/FX3.jpg)  
+- FREE | Simple .zip package : (https://chrisandriessen.nl/web/FalconX.html)  
+- PAID | Windows Store : (https://www.microsoft.com/store/productid/9PCMZ6BXK8GH)
 
-**Usage at IDLE**
-
-GPU: GeForce RTX 2080 8GB  
-CPU: Intel(R) Core(TM) i7-8700K CPU @ 4.80GHz  
-Memory: 16.00 GB RAM DDR4  
-Current resolution: 3x 2560 x 1440, 144Hz  
-
-![FalconX](https://chrisandriessen.nl/web/img/FX3u2.png)  
-
-
-
-**Video**
-
-[![Alt text](https://img.youtube.com/vi/AJHV-Z8QNDw/0.jpg)](https://www.youtube.com/watch?v=AJHV-Z8QNDw)  
-
-
-**Full ChangeLog**
+## Changelog
 
 ```
 FalconX Build 09.10.2019 1.1.9.0 October
@@ -136,6 +117,7 @@ Finding ways to center the taskbar
 (may 6th 2018) 
 ```
 
-**Tags**
 
+
+## Tags
 center taskbar, center taskbar icons, center taskbar icons windows 10, center taskbar windows, windows center taskbar, windows center taskbar icons, center taskbar icons, windows 10 center taskbar icons, falcon10, falcon taskbar, taskbar, taskbar icons, taskbar buttons
