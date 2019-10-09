@@ -33,6 +33,10 @@ Current resolution: 3x 2560 x 1440, 144Hz
 **Full ChangeLog**
 
 ```
+FalconX Build 09.10.2019 1.1.9.0 October
+- Removed .Net Transitions.
+* Added VisualEffects (www.easings.net)
+
 FalconX Build 21.09.2019 1.1.8.0 August
 * .Net Transitions fully integrated.
 * Animation Preview
