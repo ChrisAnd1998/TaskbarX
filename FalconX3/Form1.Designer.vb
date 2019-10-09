@@ -26,7 +26,6 @@ Partial Class Form1
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -34,12 +33,7 @@ Partial Class Form1
         Me.Label4 = New System.Windows.Forms.Label()
         Me.LogoPictureBox = New System.Windows.Forms.PictureBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton6 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -54,15 +48,12 @@ Partial Class Form1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
-        Me.Panel7 = New System.Windows.Forms.Panel()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Button5 = New System.Windows.Forms.Button()
         CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -70,18 +61,15 @@ Partial Class Form1
         CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel4.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
         '
         Me.Button1.FlatAppearance.BorderSize = 0
-        Me.Button1.Location = New System.Drawing.Point(22, 15)
+        Me.Button1.Location = New System.Drawing.Point(12, 388)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(194, 26)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Exit/End"
         Me.Button1.UseVisualStyleBackColor = True
@@ -89,20 +77,12 @@ Partial Class Form1
         'Button2
         '
         Me.Button2.FlatAppearance.BorderSize = 0
-        Me.Button2.Location = New System.Drawing.Point(352, 15)
+        Me.Button2.Location = New System.Drawing.Point(12, 452)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.Size = New System.Drawing.Size(194, 26)
         Me.Button2.TabIndex = 1
         Me.Button2.Text = "Ok"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.SystemColors.Control
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(200, 51)
-        Me.Panel1.TabIndex = 2
         '
         'Label1
         '
@@ -139,7 +119,7 @@ Partial Class Form1
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(103, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "21.09.2019 - 1.1.8.0"
+        Me.Label3.Text = "09.10.2019 - 1.1.9.0"
         '
         'Label4
         '
@@ -162,91 +142,26 @@ Partial Class Form1
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.RadioButton6)
-        Me.GroupBox1.Controls.Add(Me.RadioButton5)
-        Me.GroupBox1.Controls.Add(Me.RadioButton4)
-        Me.GroupBox1.Controls.Add(Me.RadioButton3)
-        Me.GroupBox1.Controls.Add(Me.RadioButton2)
-        Me.GroupBox1.Controls.Add(Me.RadioButton1)
+        Me.GroupBox1.Controls.Add(Me.Button5)
+        Me.GroupBox1.Controls.Add(Me.ComboBox1)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 192)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(200, 213)
+        Me.GroupBox1.Size = New System.Drawing.Size(200, 51)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Animations"
         '
-        'RadioButton6
+        'ComboBox1
         '
-        Me.RadioButton6.AutoSize = True
-        Me.RadioButton6.Checked = Global.FalconX3.My.MySettings.Default.a_linear
-        Me.RadioButton6.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "a_linear", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.RadioButton6.Location = New System.Drawing.Point(8, 136)
-        Me.RadioButton6.Name = "RadioButton6"
-        Me.RadioButton6.Size = New System.Drawing.Size(54, 17)
-        Me.RadioButton6.TabIndex = 15
-        Me.RadioButton6.Text = "Linear"
-        Me.RadioButton6.UseVisualStyleBackColor = True
-        '
-        'RadioButton5
-        '
-        Me.RadioButton5.AutoSize = True
-        Me.RadioButton5.Checked = Global.FalconX3.My.MySettings.Default.a_easeineaseout
-        Me.RadioButton5.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "a_easeineaseout", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.RadioButton5.Location = New System.Drawing.Point(8, 113)
-        Me.RadioButton5.Name = "RadioButton5"
-        Me.RadioButton5.Size = New System.Drawing.Size(99, 17)
-        Me.RadioButton5.TabIndex = 14
-        Me.RadioButton5.Text = "EaseInEaseOut"
-        Me.RadioButton5.UseVisualStyleBackColor = True
-        '
-        'RadioButton4
-        '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Checked = Global.FalconX3.My.MySettings.Default.a_criticaldamping
-        Me.RadioButton4.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "a_criticaldamping", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.RadioButton4.Location = New System.Drawing.Point(8, 90)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(98, 17)
-        Me.RadioButton4.TabIndex = 13
-        Me.RadioButton4.TabStop = True
-        Me.RadioButton4.Text = "CriticalDamping"
-        Me.RadioButton4.UseVisualStyleBackColor = True
-        '
-        'RadioButton3
-        '
-        Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Checked = Global.FalconX3.My.MySettings.Default.a_deceleration
-        Me.RadioButton3.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "a_deceleration", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.RadioButton3.Location = New System.Drawing.Point(8, 68)
-        Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(85, 17)
-        Me.RadioButton3.TabIndex = 12
-        Me.RadioButton3.Text = "Deceleration"
-        Me.RadioButton3.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Checked = Global.FalconX3.My.MySettings.Default.a_acceleration
-        Me.RadioButton2.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "a_acceleration", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.RadioButton2.Location = New System.Drawing.Point(8, 45)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(84, 17)
-        Me.RadioButton2.TabIndex = 11
-        Me.RadioButton2.Text = "Acceleration"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = Global.FalconX3.My.MySettings.Default.a_none
-        Me.RadioButton1.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "a_none", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.RadioButton1.Location = New System.Drawing.Point(8, 22)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(51, 17)
-        Me.RadioButton1.TabIndex = 10
-        Me.RadioButton1.Text = "None"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        Me.ComboBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.FalconX3.My.MySettings.Default, "anima", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"None", "Linear", "ExpoEaseOut", "ExpoEaseIn", "ExpoEaseInOut", "ExpoEaseOutIn", "CircEaseOut", "CircEaseIn", "CircEaseInOut", "CircEaseOutIn", "QuadEaseOut", "QuadEaseIn", "QuadEaseInOut", "QuadEaseOutIn", "SineEaseOut", "SineEaseIn", "SineEaseInOut", "SineEaseOutIn", "CubicEaseOut", "CubicEaseIn", "CubicEaseInOut", "CubicEaseOutIn", "QuartEaseOut", "QuartEaseIn", "QuartEaseInOut", "QuartEaseOutIn", "QuintEaseOut", "QuintEaseIn", "QuintEaseInOut", "QuintEaseOutIn", "ElasticEaseOut", "ElasticEaseIn", "ElasticEaseInOut", "ElasticEaseOutIn", "BounceEaseOut", "BounceEaseIn", "BounceEaseInOut", "BounceEaseOutIn", "BackEaseOut", "BackEaseIn", "BackEaseInOut", "BackEaseOutIn"})
+        Me.ComboBox1.Location = New System.Drawing.Point(9, 19)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(139, 21)
+        Me.ComboBox1.TabIndex = 0
+        Me.ComboBox1.Text = Global.FalconX3.My.MySettings.Default.anima
         '
         'GroupBox2
         '
@@ -392,24 +307,12 @@ Partial Class Form1
         Me.Panel3.Size = New System.Drawing.Size(405, 1)
         Me.Panel3.TabIndex = 14
         '
-        'Panel4
-        '
-        Me.Panel4.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.Panel4.Controls.Add(Me.Button3)
-        Me.Panel4.Controls.Add(Me.Button2)
-        Me.Panel4.Controls.Add(Me.Button1)
-        Me.Panel4.Controls.Add(Me.CheckBox7)
-        Me.Panel4.Location = New System.Drawing.Point(-10, 490)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(440, 51)
-        Me.Panel4.TabIndex = 15
-        '
         'Button3
         '
         Me.Button3.FlatAppearance.BorderSize = 0
-        Me.Button3.Location = New System.Drawing.Point(103, 15)
+        Me.Button3.Location = New System.Drawing.Point(12, 420)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 23)
+        Me.Button3.Size = New System.Drawing.Size(194, 26)
         Me.Button3.TabIndex = 11
         Me.Button3.Text = "Restart"
         Me.Button3.UseVisualStyleBackColor = True
@@ -419,7 +322,7 @@ Partial Class Form1
         Me.CheckBox7.AutoSize = True
         Me.CheckBox7.Checked = Global.FalconX3.My.MySettings.Default.runatstartup
         Me.CheckBox7.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "runatstartup", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.CheckBox7.Location = New System.Drawing.Point(251, 18)
+        Me.CheckBox7.Location = New System.Drawing.Point(13, 366)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(95, 17)
         Me.CheckBox7.TabIndex = 10
@@ -451,46 +354,28 @@ Partial Class Form1
         Me.Button4.TabIndex = 16
         Me.Button4.UseVisualStyleBackColor = True
         '
-        'TrackBar1
+        'Button5
         '
-        Me.TrackBar1.Enabled = False
-        Me.TrackBar1.Location = New System.Drawing.Point(6, 16)
-        Me.TrackBar1.Maximum = 1000
-        Me.TrackBar1.Minimum = 1
-        Me.TrackBar1.Name = "TrackBar1"
-        Me.TrackBar1.Size = New System.Drawing.Size(188, 45)
-        Me.TrackBar1.TabIndex = 16
-        Me.TrackBar1.Value = 1
-        '
-        'Panel7
-        '
-        Me.Panel7.Location = New System.Drawing.Point(6, 16)
-        Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(188, 12)
-        Me.Panel7.TabIndex = 17
-        '
-        'GroupBox3
-        '
-        Me.GroupBox3.Controls.Add(Me.Panel7)
-        Me.GroupBox3.Controls.Add(Me.TrackBar1)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 411)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(200, 67)
-        Me.GroupBox3.TabIndex = 18
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Animation Preview"
+        Me.Button5.Image = CType(resources.GetObject("Button5.Image"), System.Drawing.Image)
+        Me.Button5.Location = New System.Drawing.Point(154, 18)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(37, 23)
+        Me.Button5.TabIndex = 17
+        Me.Button5.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(429, 540)
+        Me.ClientSize = New System.Drawing.Size(429, 491)
         Me.ControlBox = False
-        Me.Controls.Add(Me.GroupBox3)
+        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Button4)
+        Me.Controls.Add(Me.CheckBox7)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -500,7 +385,6 @@ Partial Class Form1
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -512,19 +396,13 @@ Partial Class Form1
         Me.TopMost = True
         CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel4.ResumeLayout(False)
-        Me.Panel4.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -532,7 +410,6 @@ Partial Class Form1
 
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
-    Friend WithEvents Panel1 As Panel
     Friend WithEvents Label1 As Label
     Friend WithEvents CheckBox7 As CheckBox
     Friend WithEvents LinkLabel1 As LinkLabel
@@ -548,13 +425,6 @@ Partial Class Form1
     Friend WithEvents Label6 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Panel3 As Panel
-    Friend WithEvents Panel4 As Panel
-    Friend WithEvents RadioButton6 As RadioButton
-    Friend WithEvents RadioButton5 As RadioButton
-    Friend WithEvents RadioButton4 As RadioButton
-    Friend WithEvents RadioButton3 As RadioButton
-    Friend WithEvents RadioButton2 As RadioButton
-    Friend WithEvents RadioButton1 As RadioButton
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents NotifyIcon1 As NotifyIcon
     Friend WithEvents Button3 As Button
@@ -566,7 +436,6 @@ Partial Class Form1
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label8 As Label
     Friend WithEvents Button4 As Button
-    Friend WithEvents TrackBar1 As TrackBar
-    Friend WithEvents Panel7 As Panel
-    Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents Button5 As Button
 End Class

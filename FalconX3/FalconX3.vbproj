@@ -59,6 +59,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -116,6 +117,9 @@
     <Reference Include="UIAComWrapperX, Version=1.1.0.16, Culture=neutral, PublicKeyToken=78cbcf77433a85e5, processorArchitecture=MSIL">
       <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\UIAComWrapperX.dll</HintPath>
     </Reference>
+    <Reference Include="VisualEffects">
+      <HintPath>..\..\VisualEffects\bin\Debug\VisualEffects.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +143,12 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form2.Designer.vb">
+      <DependentUpon>Form2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form2.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -154,28 +164,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Resources\Transitions\IManagedType.vb" />
-    <Compile Include="Resources\Transitions\ITransitionType.vb" />
-    <Compile Include="Resources\Transitions\ManagedType_Color.vb" />
-    <Compile Include="Resources\Transitions\ManagedType_Double.vb" />
-    <Compile Include="Resources\Transitions\ManagedType_Float.vb" />
-    <Compile Include="Resources\Transitions\ManagedType_Int.vb" />
-    <Compile Include="Resources\Transitions\ManagedType_String.vb" />
-    <Compile Include="Resources\Transitions\Transition.vb" />
-    <Compile Include="Resources\Transitions\TransitionChain.vb" />
-    <Compile Include="Resources\Transitions\TransitionElement.vb" />
-    <Compile Include="Resources\Transitions\TransitionManager.vb" />
-    <Compile Include="Resources\Transitions\TransitionType_Acceleration.vb" />
-    <Compile Include="Resources\Transitions\TransitionType_CriticalDamping.vb" />
-    <Compile Include="Resources\Transitions\TransitionType_Deceleration.vb" />
-    <Compile Include="Resources\Transitions\TransitionType_EaseInEaseOut.vb" />
-    <Compile Include="Resources\Transitions\TransitionType_Linear.vb" />
-    <Compile Include="Resources\Transitions\TransitionType_UserDefined.vb" />
-    <Compile Include="Resources\Transitions\Utility.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -208,6 +203,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
