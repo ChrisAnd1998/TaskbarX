@@ -35,5 +35,8 @@
     <Setting Name="s_react" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">400</Value>
     </Setting>
+    <Setting Name="anima" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
