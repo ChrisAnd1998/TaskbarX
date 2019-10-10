@@ -4,8 +4,6 @@ Imports System.Runtime.InteropServices
 Imports System.Windows.Automation
 
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.Win32
-
 
 Public Class Form1
 
@@ -37,9 +35,6 @@ Public Class Form1
     Private Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     End Function
 
-
-
-
     Dim SWP_NOSIZE As UInt32 = 1
     Dim SWP_NOMOVE As UInt32 = 2
     Dim SWP_NOZORDER As UInt32 = 4
@@ -63,7 +58,6 @@ Public Class Form1
     Private Const WM_ERASEBKGND = &H14
     Private Const WM_DESTROY = &H2
     Private Const WM_ENABLE = &HA
-
 
     Dim HWND_TOP As IntPtr = 0
     Dim HWND_BOTTOM As IntPtr = 1
@@ -110,14 +104,6 @@ Public Class Form1
     Dim TrayBarHeight As Integer
     Public StartUp As Boolean
 
-    Dim Radiobutton1Value As Boolean
-    Dim Radiobutton2Value As Boolean
-    Dim Radiobutton3Value As Boolean
-    Dim Radiobutton4Value As Boolean
-    Dim Radiobutton5Value As Boolean
-    Dim Radiobutton6Value As Boolean
-
-
 
     Sub RestartExplorer()
         For Each MyProcess In Process.GetProcessesByName("explorer")
@@ -131,17 +117,20 @@ Public Class Form1
 
         Form2.Show()
 
+        Try
+            If Application.StartupPath.Contains("40210ChrisAndriessen") Then
+                CheckBox7.Visible = False
+                CheckBox7.Checked = False
+                Dim strx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
+                If File.Exists(strx + "\FalconX.lnk") Then
+                    Dim str As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
+                    File.Delete(str + "\FalconX.lnk")
+                End If
 
-        If Application.StartupPath.Contains("40210ChrisAndriessen") Then
-            CheckBox7.Visible = False
-            CheckBox7.Checked = False
-            Dim strx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
-            If File.Exists(strx + "\FalconX.lnk") Then
-                Dim str As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
-                File.Delete(str + "\FalconX.lnk")
             End If
+        Catch ex As Exception
 
-        End If
+        End Try
 
         Launch = True
 
@@ -149,15 +138,12 @@ Public Class Form1
             ComboBox1.Text = "QuadEaseOut"
         End If
 
-
         RunAtStartUp()
-
 
         Dim CurrentProcess As Process = Process.GetCurrentProcess
         CurrentProcess.PriorityClass = ProcessPriorityClass.Idle
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
-
 
         IsTaskbarMoving = False
 
@@ -167,14 +153,12 @@ Public Class Form1
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarCalculator)
         t1.Start()
 
-
     End Sub
 
     Sub TaskbarCalculator()
         Do
 
             Try
-
 
                 Dim Laps As Integer
                 Dim Trigger As Integer
@@ -219,13 +203,14 @@ Public Class Form1
                 System.Threading.Thread.Sleep(NumericUpDown3.Value)
                 If Not TaskbarCount = OldTaskbarCount Or Not Resolution = OldResolution Or Not TrayWidth = OldTrayWidth Or UpdateTaskbar = True Then
 
-
                     Dim CurrentProcess As Process = Process.GetCurrentProcess
                     CurrentProcess.PriorityClass = ProcessPriorityClass.High
 
                     OldTaskbarCount = TaskbarCount
                     OldResolution = Resolution
                     OldTrayWidth = TrayWidth
+
+                    UpdateTaskbar = False
 
                     For Each ui As AutomationElement In MSTaskListWClass.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
                         If Not ui.Current.Name = Nothing Then
@@ -254,6 +239,7 @@ Public Class Form1
                     Dim position As Integer
 
 
+
                     If Horizontal = True Then
                         If CheckBox1.Checked = True Then
                             Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Width / 2 - (TaskbarLeft \ 2))
@@ -272,7 +258,6 @@ Public Class Form1
 
                     TaskbarNewPos = position
 
-
                     If StickyStartButton = True Then
                         StartButtonWidth = StartButton.Current.BoundingRectangle.Width
                         StartButtonHeight = StartButton.Current.BoundingRectangle.Height
@@ -289,8 +274,6 @@ Public Class Form1
 
                 End If
 
-
-
                 Laps = Laps + 1
 
                 If Laps = 50 Then
@@ -298,13 +281,10 @@ Public Class Form1
                     Console.WriteLine("SetProcessWorkingSetSize" & Environment.NewLine)
                     SaveMemory()
                 End If
-
-
             Catch ex As Exception
                 Console.WriteLine("TaskbarCalculator : " & ex.Message & Environment.NewLine)
 
                 If ex.ToString.Contains("E_ACCESSDENIED") Then
-
 
                     Dim Handle As IntPtr
                     Dim Laps2 As Integer
@@ -321,7 +301,6 @@ Public Class Form1
                             Laps2 = 0
                             SaveMemory()
                         End If
-
 
                         Handle = Nothing
                         System.Threading.Thread.Sleep(250)
@@ -354,14 +333,16 @@ Public Class Form1
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
     End Sub
+
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
 
+        Console.WriteLine("Position Changed")
+
         If Form2.Visible = True Then
-            Form2.needtomove()
+            Form2.AnimatorMove()
         End If
 
     End Sub
-
 
     Public Function SaveMemory() As Int32
 
@@ -398,7 +379,6 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.Click
 
         Me.Opacity = 100
@@ -426,14 +406,12 @@ Public Class Form1
         regKey.DeleteValue(Application.ProductName, False)
         regKey.Close()
 
-
         Dim strx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
 
         If File.Exists(strx + "\FalconX.lnk") Then
             Dim str As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
             File.Delete(str + "\FalconX.lnk")
         End If
-
 
         If CheckBox7.Checked = True Then
             Dim objectValue As Object = RuntimeHelpers.GetObjectValue(Interaction.CreateObject("WScript.Shell", ""))
@@ -457,19 +435,11 @@ Public Class Form1
 
     Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
 
-
-
-
-
         If Launch = True Then
             Me.Hide()
             Launch = False
         End If
     End Sub
-
-
-
-
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         UpdateTaskbar = True
@@ -503,4 +473,5 @@ Public Class Form1
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         Process.Start("https://easings.net/")
     End Sub
+
 End Class

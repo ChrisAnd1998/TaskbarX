@@ -117,7 +117,8 @@
     <Reference Include="UIAComWrapperX, Version=1.1.0.16, Culture=neutral, PublicKeyToken=78cbcf77433a85e5, processorArchitecture=MSIL">
       <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\UIAComWrapperX.dll</HintPath>
     </Reference>
-    <Reference Include="VisualEffects">
+    <Reference Include="VisualEffects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\VisualEffects\bin\Debug\VisualEffects.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
