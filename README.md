@@ -19,6 +19,11 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+
+FalconX Build 10.10.2019 1.2.0.0 October
+* Slight change to the VisualEffects to make them even smoother.
+* Bug fixes and optimizations
+
 FalconX Build 09.10.2019 1.1.9.0 October
 - Removed .Net Transitions.
 * Added VisualEffects (www.easings.net)
