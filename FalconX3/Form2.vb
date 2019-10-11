@@ -26,10 +26,12 @@ Public Class Form2
 
         If Form1.ComboBox1.Text = "" Then
             Panel1.Left = position
+            IsMoving = False
         End If
 
         If Form1.ComboBox1.Text = "None" Then
             Panel1.Left = position
+            IsMoving = False
         End If
 
         If Form1.ComboBox1.Text = "Linear" Then
@@ -206,4 +208,7 @@ Public Class Form2
         IsMoving = False
     End Sub
 
+    Private Sub CheckedListBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
+
+    End Sub
 End Class

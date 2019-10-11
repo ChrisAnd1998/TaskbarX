@@ -41,8 +41,10 @@ Partial Class Form2
         Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "Form2"
+        Me.Opacity = 0R
         Me.ShowInTaskbar = False
         Me.Text = "Form2"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Minimized
         Me.ResumeLayout(False)
 
     End Sub
