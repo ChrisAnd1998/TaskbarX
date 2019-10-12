@@ -35,34 +35,34 @@ Public Class Form1
     Private Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     End Function
 
-    Dim SWP_NOSIZE As UInt32 = 1
-    Dim SWP_NOMOVE As UInt32 = 2
-    Dim SWP_NOZORDER As UInt32 = 4
-    Dim SWP_NOREDRAW As UInt32 = 8
-    Dim SWP_NOACTIVATE As UInt32 = 16
-    Dim SWP_DRAWFRAME As UInt32 = 32
-    Dim SWP_FRAMECHANGED As UInt32 = 32
-    Dim SWP_SHOWWINDOW As UInt32 = 64
-    Dim SWP_HIDEWINDOW As UInt32 = 128
-    Dim SWP_NOCOPYBITS As UInt32 = 256
-    Dim SWP_NOOWNERZORDER As UInt32 = 512
-    Dim SWP_NOREPOSITION As UInt32 = 512
-    Dim SWP_NOSENDCHANGING As UInt32 = 1024
-    Dim SWP_DEFERERASE As UInt32 = 8192
-    Dim SWP_ASYNCWINDOWPOS As UInt32 = 16384
+    Public SWP_NOSIZE As UInt32 = 1
+    Public SWP_NOMOVE As UInt32 = 2
+    Public SWP_NOZORDER As UInt32 = 4
+    Public SWP_NOREDRAW As UInt32 = 8
+    Public SWP_NOACTIVATE As UInt32 = 16
+    Public SWP_DRAWFRAME As UInt32 = 32
+    Public SWP_FRAMECHANGED As UInt32 = 32
+    Public SWP_SHOWWINDOW As UInt32 = 64
+    Public SWP_HIDEWINDOW As UInt32 = 128
+    Public SWP_NOCOPYBITS As UInt32 = 256
+    Public SWP_NOOWNERZORDER As UInt32 = 512
+    Public SWP_NOREPOSITION As UInt32 = 512
+    Public SWP_NOSENDCHANGING As UInt32 = 1024
+    Public SWP_DEFERERASE As UInt32 = 8192
+    Public SWP_ASYNCWINDOWPOS As UInt32 = 16384
 
     Private Const WM_SETICON = &H80
 
-    Private Const WM_SETREDRAW As Integer = 11
+    Public Const WM_SETREDRAW As Integer = 11
     Private Const WM_PAINT = &HF
     Private Const WM_ERASEBKGND = &H14
     Private Const WM_DESTROY = &H2
     Private Const WM_ENABLE = &HA
 
-    Dim HWND_TOP As IntPtr = 0
-    Dim HWND_BOTTOM As IntPtr = 1
-    Dim HWND_TOPMOST As IntPtr = -1
-    Dim HWND_NOTOPMOST As IntPtr = -2
+    Public HWND_TOP As IntPtr = 0
+    Public HWND_BOTTOM As IntPtr = 1
+    Public HWND_TOPMOST As IntPtr = -1
+    Public HWND_NOTOPMOST As IntPtr = -2
 
     Public Structure RECT
         Public Left As Integer
@@ -71,39 +71,48 @@ Public Class Form1
         Public Bottom As Integer
     End Structure
 
-    Dim Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
-    Dim MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
-    Dim TrayNotifyWnd As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
-    Dim StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
-    Dim MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
-    Dim ReBarWindow32 = GetParent(MSTaskSwWClass)
-    Dim Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
+    Public Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
+    Public MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
+    Public TrayNotifyWnd As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
+    Public StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
+    Public MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
+    Public ReBarWindow32 = GetParent(MSTaskSwWClass)
+    Public Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
 
-    Dim DesktopPtr As IntPtr = Desktop
-    Dim Shell_TrayWndPtr As IntPtr = Shell_TrayWnd.Current.NativeWindowHandle
-    Dim MSTaskListWClassPtr As IntPtr = MSTaskListWClass.Current.NativeWindowHandle
-    Dim StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
-    Dim TrayNotifyWndPtr As IntPtr = TrayNotifyWnd.Current.NativeWindowHandle
-    Dim MSTaskSwWClassPtr As IntPtr = MSTaskSwWClass
-    Dim ReBarWindow32Ptr As IntPtr = ReBarWindow32
+    Public DesktopPtr As IntPtr = Desktop
+    Public Shell_TrayWndPtr As IntPtr = Shell_TrayWnd.Current.NativeWindowHandle
+    Public MSTaskListWClassPtr As IntPtr = MSTaskListWClass.Current.NativeWindowHandle
+    Public StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
+    Public TrayNotifyWndPtr As IntPtr = TrayNotifyWnd.Current.NativeWindowHandle
+    Public MSTaskSwWClassPtr As IntPtr = MSTaskSwWClass
+    Public ReBarWindow32Ptr As IntPtr = ReBarWindow32
 
-    Dim TaskbarWidthFull As Integer
-    Dim TaskbarLeft As Integer
-    Dim SecondaryTaskbarLeft As Integer
+    Public TaskbarWidthFull As Integer
+    Public TaskbarLeft As Integer
+    Public SecondaryTaskbarLeft As Integer
     Public IsTaskbarMoving As Boolean
     Public TaskbarNewPos As Integer
-    Dim SecondaryTaskbarNewPos As Integer
-    Dim Launch As Boolean
+    Public SecondaryTaskbarNewPos As Integer
+    Public Launch As Boolean
     Public UpdateTaskbar As Boolean
-    Dim Horizontal As Boolean
-    Dim StickyStartButton As Boolean
-    Dim StartButtonWidth As Integer
-    Dim StartButtonHeight As Integer
-    Dim StickyTray As Boolean
-    Dim TrayBarWidth As Integer
-    Dim TrayBarHeight As Integer
+    Public Horizontal As Boolean
+    Public StickyStartButton As Boolean
+    Public StartButtonWidth As Integer
+    Public StartButtonHeight As Integer
+    Public StickyTray As Boolean
+    Public TrayBarWidth As Integer
+    Public TrayBarHeight As Integer
     Public StartUp As Boolean
 
+    Public SecondTaskbarPtr As IntPtr
+
+    Public SecondTaskbarWidth As Integer
+    Public SecondTaskbarPos As Integer
+
+    Public ThirdTaskbarPtr As IntPtr
+
+    Public ThirdTaskbarWidth As Integer
+    Public ThirdTaskbarPos As Integer
 
     Sub RestartExplorer()
         For Each MyProcess In Process.GetProcessesByName("explorer")
@@ -113,9 +122,15 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        If Screen.AllScreens.LongCount = 1 Then
+            CheckBox2.Enabled = False
+        End If
+
         StartUp = True
 
         Form2.Show()
+        Form3.Show()
+        Form4.Show()
 
         Try
             If Application.StartupPath.Contains("40210ChrisAndriessen") Then
@@ -212,17 +227,19 @@ Public Class Form1
 
                     UpdateTaskbar = False
 
-                    For Each ui As AutomationElement In MSTaskListWClass.FindAll(TreeScope.Descendants, New PropertyCondition(AutomationElement.IsControlElementProperty, True))
-                        If Not ui.Current.Name = Nothing Then
-                            If Horizontal = False Then
-                                TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Height
-                            Else
-                                TaskbarWidth = TaskbarWidth + ui.Current.BoundingRectangle.Width
-                            End If
-                            System.Threading.Thread.Sleep(5)
-                        End If
-                    Next
-                    Console.WriteLine(TaskbarWidth)
+                    Dim TreeWalker1 As TreeWalker = TreeWalker.ControlViewWalker
+                    Dim BChildFirst1 As AutomationElement = TreeWalker1.GetFirstChild(MSTaskListWClass)
+                    Dim BChildLast1 As AutomationElement = TreeWalker1.GetLastChild(MSTaskListWClass)
+
+                    If Horizontal = True Then
+                        TaskbarWidth = (BChildFirst1.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + (BChildLast1.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + BChildLast1.Current.BoundingRectangle.Width
+                    Else
+                        TaskbarWidth = (BChildFirst1.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + (BChildLast1.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + BChildLast1.Current.BoundingRectangle.Height
+
+                    End If
+
+                    TreeWalker1 = Nothing
+
                     Dim rct As RECT
                     GetWindowRect(ReBarWindow32Ptr, rct)
 
@@ -232,13 +249,9 @@ Public Class Form1
                         TaskbarLeft = rct.Left
                     End If
 
-                    Console.WriteLine(rct.Bottom)
-
                     TaskbarWidthFull = TaskbarWidth
                     Dim TaskbarWidthHalf = TaskbarWidthFull / 2
                     Dim position As Integer
-
-
 
                     If Horizontal = True Then
                         If CheckBox1.Checked = True Then
@@ -258,14 +271,108 @@ Public Class Form1
 
                     TaskbarNewPos = position
 
-                    If StickyStartButton = True Then
-                        StartButtonWidth = StartButton.Current.BoundingRectangle.Width
-                        StartButtonHeight = StartButton.Current.BoundingRectangle.Height
-                    End If
+                    If CheckBox2.Checked = True Then
 
-                    If StickyTray = True Then
-                        TrayBarWidth = TrayNotifyWnd.Current.BoundingRectangle.Width
-                        TrayBarHeight = TrayNotifyWnd.Current.BoundingRectangle.Height
+                        If Screen.AllScreens.LongCount >= 1 Then
+
+                            Dim desktops As AutomationElement = AutomationElement.RootElement
+                            Dim lists As AutomationElementCollection = desktops.FindAll(TreeScope.Children, New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_SecondaryTrayWnd"))
+
+                            Dim ScreenCount As Integer
+
+                            ScreenCount = 0
+
+                            For Each trayWnd As AutomationElement In lists
+                                ScreenCount = ScreenCount + 1
+
+                                Dim tasklist As AutomationElement = trayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
+                                Dim taskptr As IntPtr = tasklist.Current.NativeWindowHandle
+
+                                If ScreenCount = 1 Then
+                                    SecondTaskbarPtr = taskptr
+                                    SecondTaskbarWidth = 0
+
+                                    Dim TreeWalker2 As TreeWalker = TreeWalker.ControlViewWalker
+                                    Dim BChildFirst2 As AutomationElement = TreeWalker2.GetFirstChild(MSTaskListWClass)
+                                    Dim BChildLast2 As AutomationElement = TreeWalker2.GetLastChild(MSTaskListWClass)
+
+                                    If Horizontal = True Then
+                                        SecondTaskbarWidth = (BChildFirst2.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + (BChildLast2.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + BChildLast2.Current.BoundingRectangle.Width
+                                    Else
+                                        SecondTaskbarWidth = (BChildFirst2.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + (BChildLast2.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + BChildLast2.Current.BoundingRectangle.Height
+
+                                    End If
+
+                                    TreeWalker2 = Nothing
+
+                                    Dim rct2 As RECT
+                                    GetWindowRect(ReBarWindow32Ptr, rct2)
+
+                                    Dim SecondTaskbarLeft As Integer
+
+                                    If Horizontal = False Then
+                                        SecondTaskbarLeft = rct2.Top
+                                    Else
+                                        SecondTaskbarLeft = rct2.Left
+                                    End If
+
+                                    Dim SecondTaskbarWidthHalf = SecondTaskbarWidth / 2
+
+                                    If Horizontal = True Then
+                                        SecondTaskbarPos = trayWnd.Current.BoundingRectangle.Width / 2 - SecondTaskbarWidthHalf - SecondTaskbarLeft + NumericUpDown2.Value - 4
+                                    Else
+                                        SecondTaskbarPos = trayWnd.Current.BoundingRectangle.Height / 2 - SecondTaskbarWidthHalf - SecondTaskbarLeft + NumericUpDown2.Value - 4
+                                    End If
+
+                                    Console.WriteLine(trayWnd.Current.BoundingRectangle.Width)
+                                    Console.WriteLine(SecondTaskbarPos)
+
+                                End If
+
+                                If ScreenCount = 2 Then
+                                    ThirdTaskbarPtr = taskptr
+                                    ThirdTaskbarWidth = 0
+
+                                    Dim TreeWalker3 As TreeWalker = TreeWalker.ControlViewWalker
+                                    Dim BChildFirst3 As AutomationElement = TreeWalker3.GetFirstChild(MSTaskListWClass)
+                                    Dim BChildLast3 As AutomationElement = TreeWalker3.GetLastChild(MSTaskListWClass)
+
+                                    If Horizontal = True Then
+                                        ThirdTaskbarWidth = (BChildFirst3.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + (BChildLast3.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + BChildLast3.Current.BoundingRectangle.Width
+                                    Else
+                                        ThirdTaskbarWidth = (BChildFirst3.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + (BChildLast3.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + BChildLast3.Current.BoundingRectangle.Height
+
+                                    End If
+
+                                    TreeWalker3 = Nothing
+
+                                    Dim rct3 As RECT
+                                    GetWindowRect(ReBarWindow32Ptr, rct3)
+
+                                    Dim ThirdTaskbarLeft As Integer
+
+                                    If Horizontal = False Then
+                                        ThirdTaskbarLeft = rct3.Top
+                                    Else
+                                        ThirdTaskbarLeft = rct3.Left
+                                    End If
+
+                                    Dim ThirdTaskbarWidthHalf = ThirdTaskbarWidth / 2
+
+                                    If Horizontal = True Then
+                                        ThirdTaskbarPos = trayWnd.Current.BoundingRectangle.Width / 2 - ThirdTaskbarWidthHalf - ThirdTaskbarLeft + NumericUpDown2.Value - 4
+                                    Else
+                                        ThirdTaskbarPos = trayWnd.Current.BoundingRectangle.Height / 2 - ThirdTaskbarWidthHalf - ThirdTaskbarLeft + NumericUpDown2.Value - 4
+                                    End If
+
+                                    Console.WriteLine(trayWnd.Current.BoundingRectangle.Width)
+                                    Console.WriteLine(ThirdTaskbarPos)
+
+                                End If
+
+                            Next
+                        End If
+
                     End If
 
                     Me.Invoke(Sub()
@@ -320,26 +427,42 @@ Public Class Form1
         Loop
     End Sub
 
-    Sub MovetoPos()
-        SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
-
-        Dim position = Form2.Panel1.Left
-
-        If Horizontal = False Then
-            SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, position, 0, 0, SWP_NOZORDER Or SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE)
-        Else
-            SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, position, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE)
-        End If
-
-        SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
-    End Sub
-
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
 
         Console.WriteLine("Position Changed")
 
         If Form2.Visible = True Then
+
+
+
+            If CheckBox2.Checked = True Then
+
+                Dim desktops As AutomationElement = AutomationElement.RootElement
+                Dim lists As AutomationElementCollection = desktops.FindAll(TreeScope.Children, New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_SecondaryTrayWnd"))
+
+                Dim ScreenCount As Integer
+                ScreenCount = 0
+                If Screen.AllScreens.LongCount >= 1 Then
+
+                    For Each trayWnd As AutomationElement In lists
+
+                        ScreenCount = ScreenCount + 1
+
+                        If ScreenCount = 1 Then
+                            Form3.AnimatorMove()
+                        End If
+
+                        If ScreenCount = 2 Then
+                            Form4.AnimatorMove()
+                        End If
+
+                    Next
+
+                End If
+            End If
+
             Form2.AnimatorMove()
+
         End If
 
     End Sub
@@ -358,6 +481,8 @@ Public Class Form1
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
 
         SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+        SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+        SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
         SetWindowPos(StartButtonPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
         NotifyIcon1.Visible = False
@@ -387,6 +512,10 @@ Public Class Form1
     End Sub
 
     Sub RestartApp()
+        SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+        SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+        SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+
         NotifyIcon1.Visible = False
         Application.Restart()
         End
@@ -401,7 +530,6 @@ Public Class Form1
     Sub RunAtStartUp()
 
         Try
-
 
             If Application.StartupPath.Contains("40210ChrisAndriessen") Then
                 Exit Sub
@@ -429,8 +557,6 @@ Public Class Form1
                 NewLateBinding.LateSet(objectValue3, Nothing, "WindowStyle", New Object() {4}, Nothing, Nothing)
                 NewLateBinding.LateCall(objectValue3, Nothing, "Save", New Object(-1) {}, Nothing, Nothing, Nothing, True)
             End If
-
-
         Catch ex As Exception
             Console.WriteLine(ex.ToString)
         End Try
@@ -443,11 +569,7 @@ Public Class Form1
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
         My.Settings.Save()
 
-
         RunAtStartUp()
-
-
-
 
     End Sub
 
@@ -505,6 +627,18 @@ Public Class Form1
         RestartExplorer()
     End Sub
 
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
 
+        If CheckBox2.Checked = False Then
+            SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
+
+        End If
+
+        UpdateTaskbar = True
+
+        My.Settings.Save()
+
+    End Sub
 
 End Class

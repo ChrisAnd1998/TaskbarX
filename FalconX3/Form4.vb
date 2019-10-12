@@ -3,10 +3,9 @@ Imports VisualEffects
 Imports VisualEffects.Animations.Effects
 Imports VisualEffects.Easing
 
-Public Class Form2
+Public Class Form4
 
     Dim IsMoving As Boolean
-    Dim POS As Integer
 
     <DllImport("user32.dll")>
     Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal wMsg As Int32, ByVal wParam As Boolean, ByVal lParam As Int32) As Integer
@@ -17,25 +16,24 @@ Public Class Form2
     End Function
 
     Private Sub Panel1_Move(sender As Object, e As EventArgs) Handles Panel1.Move
-        SendMessage(Form1.ReBarWindow32Ptr, Form1.WM_SETREDRAW, True, 0)
 
         Dim position = Panel1.Left
 
         If Form1.Horizontal = False Then
-            SetWindowPos(Form1.MSTaskListWClassPtr, IntPtr.Zero, 0, position, 0, 0, Form1.SWP_NOZORDER Or Form1.SWP_NOSIZE Or Form1.SWP_ASYNCWINDOWPOS Or Form1.SWP_NOSENDCHANGING Or Form1.SWP_NOACTIVATE)
+            SetWindowPos(Form1.ThirdTaskbarPtr, IntPtr.Zero, 0, position, 0, 0, Form1.SWP_NOZORDER Or Form1.SWP_NOSIZE Or Form1.SWP_ASYNCWINDOWPOS Or Form1.SWP_NOSENDCHANGING Or Form1.SWP_NOACTIVATE)
         Else
-            SetWindowPos(Form1.MSTaskListWClassPtr, IntPtr.Zero, position, 0, 0, 0, Form1.SWP_NOSIZE Or Form1.SWP_ASYNCWINDOWPOS Or Form1.SWP_NOACTIVATE)
+            SetWindowPos(Form1.ThirdTaskbarPtr, IntPtr.Zero, position, 0, 0, 0, Form1.SWP_NOSIZE Or Form1.SWP_ASYNCWINDOWPOS Or Form1.SWP_NOACTIVATE)
         End If
 
-        SendMessage(Form1.ReBarWindow32Ptr, Form1.WM_SETREDRAW, False, 0)
     End Sub
 
     Dim SPEED As Integer
     Dim EFFECT As String
+    Dim POS As Integer
     Sub AnimatorMove()
 
 
-        POS = Form1.TaskbarNewPos
+        POS = Form1.ThirdTaskbarPos
 
         SPEED = Form1.NumericUpDown1.Value
 
@@ -231,8 +229,7 @@ Public Class Form2
     End Sub
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Console.WriteLine("form2")
+        Console.WriteLine("form4")
         AddHandler Animator.Animated, AddressOf IsAnimated
     End Sub
 
