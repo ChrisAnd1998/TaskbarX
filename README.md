@@ -19,6 +19,10 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 12.10.2019 1.2.2.0 October
+* Multi Monitor Support. (up to 3 displays).
+# Enable with "Center on Multiple Monitors" option.
+
 FalconX Build 11.10.2019 1.2.1.0 October
 * And another stability update.
 
