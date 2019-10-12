@@ -4,7 +4,7 @@ FalconX automate's your taskbar position to the center.
 
 ## Preview
 
-[![Alt text](https://img.youtube.com/vi/AJHV-Z8QNDw/0.jpg)](https://www.youtube.com/watch?v=AJHV-Z8QNDw) 
+[![Alt text](https://img.youtube.com/vi/diPj9AKCpb4/0.jpg)](https://www.youtube.com/watch?v=AJHV-Z8QNDw) 
 
 ## Downloads
 
