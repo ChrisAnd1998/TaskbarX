@@ -2,6 +2,16 @@
 
 FalconX automate's your taskbar position to the center.
 
+## Features
+
+- 42 different Animations including "none"
+- Change animation speed
+- Change custom offset position based on center
+- Center between startbutton, search, taskview etc... and left tray icons, clock etc...
+- All taskbar settings supported
+- Vertical taskbar supported
+- Multiple monitors supported max (3)
+
 ## Preview
 
 [![Alt text](https://img.youtube.com/vi/diPj9AKCpb4/0.jpg)](https://www.youtube.com/watch?v=diPj9AKCpb4) 
