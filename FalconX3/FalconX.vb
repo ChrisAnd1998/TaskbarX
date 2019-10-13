@@ -72,21 +72,21 @@ Public Class FalconX
         Public Bottom As Integer
     End Structure
 
-    Public Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
-    Public MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
-    Public TrayNotifyWnd As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
-    Public StartButton As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
-    Public MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
-    Public ReBarWindow32 = GetParent(MSTaskSwWClass)
-    Public Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
+    Public Shell_TrayWnd As AutomationElement '= AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
+    Public MSTaskListWClass As AutomationElement '= Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
+    Public TrayNotifyWnd As AutomationElement '= Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
+    Public StartButton As AutomationElement '= Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
+    Public MSTaskSwWClass '= GetParent(MSTaskListWClass.Current.NativeWindowHandle)
+    Public ReBarWindow32 '= GetParent(MSTaskSwWClass)
+    Public Desktop '= GetParent(FindWindowByClass("Shell_TrayWnd", 0))
 
-    Public DesktopPtr As IntPtr = Desktop
-    Public Shell_TrayWndPtr As IntPtr = Shell_TrayWnd.Current.NativeWindowHandle
-    Public MSTaskListWClassPtr As IntPtr = MSTaskListWClass.Current.NativeWindowHandle
-    Public StartButtonPtr As IntPtr = StartButton.Current.NativeWindowHandle
-    Public TrayNotifyWndPtr As IntPtr = TrayNotifyWnd.Current.NativeWindowHandle
-    Public MSTaskSwWClassPtr As IntPtr = MSTaskSwWClass
-    Public ReBarWindow32Ptr As IntPtr = ReBarWindow32
+    Public DesktopPtr As IntPtr '= Desktop
+    Public Shell_TrayWndPtr As IntPtr '= Shell_TrayWnd.Current.NativeWindowHandle
+    Public MSTaskListWClassPtr As IntPtr '= MSTaskListWClass.Current.NativeWindowHandle
+    Public StartButtonPtr As IntPtr '= StartButton.Current.NativeWindowHandle
+    Public TrayNotifyWndPtr As IntPtr '= TrayNotifyWnd.Current.NativeWindowHandle
+    Public MSTaskSwWClassPtr As IntPtr '= MSTaskSwWClass
+    Public ReBarWindow32Ptr As IntPtr '= ReBarWindow32
 
     Public TaskbarWidthFull As Integer
     Public TaskbarLeft As Integer
@@ -129,14 +129,6 @@ Public Class FalconX
 
             If File.Exists(path) Then
 
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(0))
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(1))
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(2))
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(3))
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(4))
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(5))
-                Console.WriteLine(System.IO.File.ReadAllLines(path)(6))
-
                 ComboBox1.Text = System.IO.File.ReadAllLines(path)(0)
                 NumericUpDown1.Value = System.IO.File.ReadAllLines(path)(1)
                 NumericUpDown3.Value = System.IO.File.ReadAllLines(path)(2)
@@ -160,6 +152,12 @@ Public Class FalconX
                     CheckBox2.Checked = False
                 End If
 
+                If System.IO.File.ReadAllLines(path)(7) = "True" Then
+                    CheckBox3.Checked = True
+                Else
+                    CheckBox3.Checked = False
+                End If
+
             End If
         Catch
         End Try
@@ -177,6 +175,7 @@ Public Class FalconX
             Dim Rate = NumericUpDown3.Value
             Dim Offset = NumericUpDown2.Value
             Dim RunAtStartUp As Boolean
+            Dim Transparant As Boolean
             Dim CBT As Boolean
             Dim CMM As Boolean
 
@@ -184,6 +183,12 @@ Public Class FalconX
                 RunAtStartUp = False
             Else
                 RunAtStartUp = True
+            End If
+
+            If CheckBox3.Checked = False Then
+                Transparant = False
+            Else
+                Transparant = True
             End If
 
             If CheckBox1.Checked = False Then
@@ -199,7 +204,7 @@ Public Class FalconX
             End If
 
             ' Add text to the file.
-            Dim info As Byte() = New UTF8Encoding(True).GetBytes(Animation.ToString & Environment.NewLine & Speed.ToString & Environment.NewLine & Rate.ToString & Environment.NewLine & Offset.ToString & Environment.NewLine & RunAtStartUp.ToString & Environment.NewLine & CBT.ToString & Environment.NewLine & CMM.ToString)
+            Dim info As Byte() = New UTF8Encoding(True).GetBytes(Animation.ToString & Environment.NewLine & Speed.ToString & Environment.NewLine & Rate.ToString & Environment.NewLine & Offset.ToString & Environment.NewLine & RunAtStartUp.ToString & Environment.NewLine & CBT.ToString & Environment.NewLine & CMM.ToString & Environment.NewLine & Transparant.ToString)
 
             fs.Write(info, 0, info.Length)
             fs.Close()
@@ -208,6 +213,30 @@ Public Class FalconX
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Dim Handle As IntPtr
+
+        Do
+            Handle = Nothing
+            System.Threading.Thread.Sleep(250)
+            Handle = FindWindowByClass("Shell_TrayWnd", 0)
+        Loop Until Not Handle = Nothing
+
+        Shell_TrayWnd = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", 0))
+        MSTaskListWClass = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
+        TrayNotifyWnd = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "TrayNotifyWnd"))
+        StartButton = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "Start"))
+        MSTaskSwWClass = GetParent(MSTaskListWClass.Current.NativeWindowHandle)
+        ReBarWindow32 = GetParent(MSTaskSwWClass)
+        Desktop = GetParent(FindWindowByClass("Shell_TrayWnd", 0))
+        DesktopPtr = Desktop
+
+        Shell_TrayWndPtr = Shell_TrayWnd.Current.NativeWindowHandle
+        MSTaskListWClassPtr = MSTaskListWClass.Current.NativeWindowHandle
+        StartButtonPtr = StartButton.Current.NativeWindowHandle
+        TrayNotifyWndPtr = TrayNotifyWnd.Current.NativeWindowHandle
+        MSTaskSwWClassPtr = MSTaskSwWClass
+        ReBarWindow32Ptr = ReBarWindow32
 
         Try
             Dim strx2 As String = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\Chris_Andriessen"
@@ -338,9 +367,6 @@ Public Class FalconX
 
                     TreeWalker1 = Nothing
 
-                    ' Dim rct As RECT
-                    ' GetWindowRect(ReBarWindow32Ptr, rct)
-
                     Dim RebarWnd As AutomationElement = AutomationElement.FromHandle(GetParent(MSTaskListWClassPtr))
 
                     If Horizontal = False Then
@@ -393,13 +419,13 @@ Public Class FalconX
                                     SecondTaskbarWidth = 0
 
                                     Dim TreeWalker2 As TreeWalker = TreeWalker.ControlViewWalker
-                                    Dim BChildFirst2 As AutomationElement = TreeWalker2.GetFirstChild(MSTaskListWClass)
-                                    Dim BChildLast2 As AutomationElement = TreeWalker2.GetLastChild(MSTaskListWClass)
+                                    Dim BChildFirst2 As AutomationElement = TreeWalker2.GetFirstChild(tasklist)
+                                    Dim BChildLast2 As AutomationElement = TreeWalker2.GetLastChild(tasklist)
 
                                     If Horizontal = True Then
-                                        SecondTaskbarWidth = (BChildFirst2.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + (BChildLast2.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + BChildLast2.Current.BoundingRectangle.Width
+                                        SecondTaskbarWidth = (BChildFirst2.Current.BoundingRectangle.Left - tasklist.Current.BoundingRectangle.Left) + (BChildLast2.Current.BoundingRectangle.Left - tasklist.Current.BoundingRectangle.Left) + BChildLast2.Current.BoundingRectangle.Width
                                     Else
-                                        SecondTaskbarWidth = (BChildFirst2.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + (BChildLast2.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + BChildLast2.Current.BoundingRectangle.Height
+                                        SecondTaskbarWidth = (BChildFirst2.Current.BoundingRectangle.Top - tasklist.Current.BoundingRectangle.Top) + (BChildLast2.Current.BoundingRectangle.Top - tasklist.Current.BoundingRectangle.Top) + BChildLast2.Current.BoundingRectangle.Height
 
                                     End If
 
@@ -432,13 +458,13 @@ Public Class FalconX
                                     ThirdTaskbarWidth = 0
 
                                     Dim TreeWalker3 As TreeWalker = TreeWalker.ControlViewWalker
-                                    Dim BChildFirst3 As AutomationElement = TreeWalker3.GetFirstChild(MSTaskListWClass)
-                                    Dim BChildLast3 As AutomationElement = TreeWalker3.GetLastChild(MSTaskListWClass)
+                                    Dim BChildFirst3 As AutomationElement = TreeWalker3.GetFirstChild(tasklist)
+                                    Dim BChildLast3 As AutomationElement = TreeWalker3.GetLastChild(tasklist)
 
                                     If Horizontal = True Then
-                                        ThirdTaskbarWidth = (BChildFirst3.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + (BChildLast3.Current.BoundingRectangle.Left - MSTaskListWClass.Current.BoundingRectangle.Left) + BChildLast3.Current.BoundingRectangle.Width
+                                        ThirdTaskbarWidth = (BChildFirst3.Current.BoundingRectangle.Left - tasklist.Current.BoundingRectangle.Left) + (BChildLast3.Current.BoundingRectangle.Left - tasklist.Current.BoundingRectangle.Left) + BChildLast3.Current.BoundingRectangle.Width
                                     Else
-                                        ThirdTaskbarWidth = (BChildFirst3.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + (BChildLast3.Current.BoundingRectangle.Top - MSTaskListWClass.Current.BoundingRectangle.Top) + BChildLast3.Current.BoundingRectangle.Height
+                                        ThirdTaskbarWidth = (BChildFirst3.Current.BoundingRectangle.Top - tasklist.Current.BoundingRectangle.Top) + (BChildLast3.Current.BoundingRectangle.Top - tasklist.Current.BoundingRectangle.Top) + BChildLast3.Current.BoundingRectangle.Height
 
                                     End If
 
@@ -719,6 +745,76 @@ Public Class FalconX
 
         End If
 
+    End Sub
+
+    Private Sub CheckBox3_Click(sender As Object, e As EventArgs) Handles CheckBox3.Click
+
+    End Sub
+
+    Friend Structure WindowCompositionAttributeData
+        Public Attribute As WindowCompositionAttribute
+        Public Data As IntPtr
+        Public SizeOfData As Integer
+    End Structure
+
+    Friend Enum WindowCompositionAttribute
+        WCA_ACCENT_POLICY = 19
+    End Enum
+
+    Friend Enum AccentState
+        ACCENT_DISABLED = 0
+        ACCENT_ENABLE_GRADIENT = 1
+        ACCENT_ENABLE_TRANSPARENTGRADIENT = 2
+        ACCENT_ENABLE_BLURBEHIND = 3
+        ACCENT_ENABLE_TRANSPARANT = 6
+        ACCENT_ENABLE_ACRYLICBLURBEHIND = 4
+    End Enum
+
+    <StructLayout(LayoutKind.Sequential)>
+    Friend Structure AccentPolicy
+        Public AccentState As AccentState
+        Public AccentFlags As Integer
+        Public GradientColor As Integer
+        Public AnimationId As Integer
+    End Structure
+
+    Friend Declare Function SetWindowCompositionAttribute Lib "user32.dll" (ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
+
+    Friend Sub EnableTaskbarStyle()
+
+        Dim desktops As AutomationElement = AutomationElement.RootElement
+        Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_SecondaryTrayWnd"))
+        Dim lists As AutomationElementCollection = desktops.FindAll(TreeScope.Children, condition)
+
+        Dim accent = New AccentPolicy()
+        Dim accentStructSize = Marshal.SizeOf(accent)
+
+        accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
+
+        Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
+        Marshal.StructureToPtr(accent, accentPtr, False)
+        Dim data = New WindowCompositionAttributeData()
+        data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY
+        data.SizeOfData = accentStructSize
+        data.Data = accentPtr
+
+        Do
+            For Each trayWnd As AutomationElement In lists
+                SetWindowCompositionAttribute(trayWnd.Current.NativeWindowHandle, data)
+            Next
+            System.Threading.Thread.Sleep(10)
+        Loop Until CheckBox3.Checked = False
+
+        Marshal.FreeHGlobal(accentPtr)
+
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        SaveMemory()
+        If CheckBox3.Checked = True Then
+            Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf EnableTaskbarStyle)
+            t1.Start()
+        End If
     End Sub
 
 End Class

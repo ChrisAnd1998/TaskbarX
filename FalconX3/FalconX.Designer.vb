@@ -37,6 +37,7 @@ Partial Class FalconX
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
@@ -78,7 +79,7 @@ Partial Class FalconX
         Me.Button1.FlatAppearance.BorderSize = 0
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
         Me.Button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button1.Location = New System.Drawing.Point(12, 407)
+        Me.Button1.Location = New System.Drawing.Point(12, 429)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(194, 26)
         Me.Button1.TabIndex = 2
@@ -90,7 +91,7 @@ Partial Class FalconX
         Me.Button2.FlatAppearance.BorderSize = 0
         Me.Button2.Image = CType(resources.GetObject("Button2.Image"), System.Drawing.Image)
         Me.Button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button2.Location = New System.Drawing.Point(12, 471)
+        Me.Button2.Location = New System.Drawing.Point(12, 493)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(194, 26)
         Me.Button2.TabIndex = 0
@@ -132,7 +133,7 @@ Partial Class FalconX
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(103, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "13.10.2019 - 1.2.4.0"
+        Me.Label3.Text = "13.10.2019 - 1.2.5.0"
         '
         'Label4
         '
@@ -186,6 +187,7 @@ Partial Class FalconX
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.CheckBox2)
+        Me.GroupBox2.Controls.Add(Me.CheckBox3)
         Me.GroupBox2.Controls.Add(Me.PictureBox5)
         Me.GroupBox2.Controls.Add(Me.PictureBox4)
         Me.GroupBox2.Controls.Add(Me.PictureBox3)
@@ -203,7 +205,7 @@ Partial Class FalconX
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Location = New System.Drawing.Point(218, 192)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(199, 306)
+        Me.GroupBox2.Size = New System.Drawing.Size(199, 328)
         Me.GroupBox2.TabIndex = 12
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Settings"
@@ -217,6 +219,16 @@ Partial Class FalconX
         Me.CheckBox2.TabIndex = 22
         Me.CheckBox2.Text = "Center on Multiple Monitors Max(3)"
         Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(9, 303)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(169, 17)
+        Me.CheckBox3.TabIndex = 17
+        Me.CheckBox3.Text = "Transparant Taskbar (Testing)"
+        Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'PictureBox5
         '
@@ -371,7 +383,7 @@ Partial Class FalconX
         Me.Button3.FlatAppearance.BorderSize = 0
         Me.Button3.Image = CType(resources.GetObject("Button3.Image"), System.Drawing.Image)
         Me.Button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button3.Location = New System.Drawing.Point(12, 439)
+        Me.Button3.Location = New System.Drawing.Point(12, 461)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(194, 26)
         Me.Button3.TabIndex = 1
@@ -398,7 +410,7 @@ Partial Class FalconX
         '
         Me.Button4.Image = CType(resources.GetObject("Button4.Image"), System.Drawing.Image)
         Me.Button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button4.Location = New System.Drawing.Point(12, 311)
+        Me.Button4.Location = New System.Drawing.Point(12, 333)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(194, 26)
         Me.Button4.TabIndex = 5
@@ -410,7 +422,7 @@ Partial Class FalconX
         Me.Button6.FlatAppearance.BorderSize = 0
         Me.Button6.Image = CType(resources.GetObject("Button6.Image"), System.Drawing.Image)
         Me.Button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button6.Location = New System.Drawing.Point(12, 375)
+        Me.Button6.Location = New System.Drawing.Point(12, 397)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(194, 26)
         Me.Button6.TabIndex = 3
@@ -422,7 +434,7 @@ Partial Class FalconX
         Me.Button7.FlatAppearance.BorderSize = 0
         Me.Button7.Image = CType(resources.GetObject("Button7.Image"), System.Drawing.Image)
         Me.Button7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button7.Location = New System.Drawing.Point(12, 343)
+        Me.Button7.Location = New System.Drawing.Point(12, 365)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(194, 26)
         Me.Button7.TabIndex = 4
@@ -432,7 +444,7 @@ Partial Class FalconX
         'CheckBox7
         '
         Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Location = New System.Drawing.Point(13, 288)
+        Me.CheckBox7.Location = New System.Drawing.Point(13, 310)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(95, 17)
         Me.CheckBox7.TabIndex = 6
@@ -444,7 +456,7 @@ Partial Class FalconX
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(429, 520)
+        Me.ClientSize = New System.Drawing.Size(429, 570)
         Me.ControlBox = False
         Me.Controls.Add(Me.Button6)
         Me.Controls.Add(Me.Button3)
@@ -525,4 +537,5 @@ Partial Class FalconX
     Friend WithEvents PictureBox4 As PictureBox
     Friend WithEvents PictureBox3 As PictureBox
     Friend WithEvents CheckBox2 As CheckBox
+    Friend WithEvents CheckBox3 As CheckBox
 End Class
