@@ -19,6 +19,10 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 13.10.2019 1.2.3.0 October
+* Secondary Taskbar now checks its own left offset.
+# So you can have a search box on your main taskbar and button on the secondary taskbar
+
 FalconX Build 12.10.2019 1.2.2.0 October
 * Multi Monitor Support. (up to 3 displays).
 # Enable with "Center on Multiple Monitors" option.
