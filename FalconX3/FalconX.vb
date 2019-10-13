@@ -144,7 +144,7 @@ Public Class FalconX
 
             End If
         Catch ex As Exception
-            Console.WriteLine(ex)
+            ' Console.WriteLine(ex)
         End Try
 
         Launch = True
@@ -156,7 +156,7 @@ Public Class FalconX
         RunAtStartUp()
 
         Dim CurrentProcess As Process = Process.GetCurrentProcess
-        CurrentProcess.PriorityClass = ProcessPriorityClass.Idle
+        CurrentProcess.PriorityClass = ProcessPriorityClass.BelowNormal
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
@@ -218,8 +218,6 @@ Public Class FalconX
                 System.Threading.Thread.Sleep(NumericUpDown3.Value)
                 If Not TaskbarCount = OldTaskbarCount Or Not Resolution = OldResolution Or Not TrayWidth = OldTrayWidth Or UpdateTaskbar = True Then
 
-
-
                     OldTaskbarCount = TaskbarCount
                     OldResolution = Resolution
                     OldTrayWidth = TrayWidth
@@ -239,13 +237,15 @@ Public Class FalconX
 
                     TreeWalker1 = Nothing
 
-                    Dim rct As RECT
-                    GetWindowRect(ReBarWindow32Ptr, rct)
+                    ' Dim rct As RECT
+                    ' GetWindowRect(ReBarWindow32Ptr, rct)
+
+                    Dim RebarWnd As AutomationElement = AutomationElement.FromHandle(GetParent(MSTaskListWClassPtr))
 
                     If Horizontal = False Then
-                        TaskbarLeft = rct.Top
+                        TaskbarLeft = RebarWnd.Current.BoundingRectangle.Top
                     Else
-                        TaskbarLeft = rct.Left
+                        TaskbarLeft = RebarWnd.Current.BoundingRectangle.Left
                     End If
 
                     TaskbarWidthFull = TaskbarWidth
@@ -255,16 +255,16 @@ Public Class FalconX
                     If Horizontal = True Then
                         If CheckBox1.Checked = True Then
                             Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Width / 2 - (TaskbarLeft \ 2))
-                            position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
+                            position = (Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset).ToString.Replace("-", "")
                         Else
-                            position = Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+                            position = (Screen.PrimaryScreen.Bounds.Width / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4).ToString.Replace("-", "")
                         End If
                     Else
                         If CheckBox1.Checked = True Then
                             Dim offset = (TrayNotifyWnd.Current.BoundingRectangle.Height / 2 - (TaskbarLeft \ 2))
-                            position = Screen.PrimaryScreen.Bounds.Height / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset
+                            position = (Screen.PrimaryScreen.Bounds.Height / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4 - offset).ToString.Replace("-", "")
                         Else
-                            position = Screen.PrimaryScreen.Bounds.Height / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4
+                            position = (Screen.PrimaryScreen.Bounds.Height / 2 - TaskbarWidthHalf - TaskbarLeft + NumericUpDown2.Value - 4).ToString.Replace("-", "")
                         End If
                     End If
 
@@ -304,31 +304,25 @@ Public Class FalconX
 
                                     TreeWalker2 = Nothing
 
-                                    Dim rct2 As RECT
-                                    GetWindowRect(GetParent(taskptr), rct2)
+                                    Dim WorkerW As AutomationElement = AutomationElement.FromHandle(GetParent(taskptr))
 
                                     Dim SecondTaskbarLeft As Integer
 
                                     If Horizontal = False Then
-                                        Dim SecondTaskbarLeftFilter = rct2.Top.ToString.Replace("-", "")
-                                        SecondTaskbarLeft = SecondTaskbarLeftFilter.ToString.Replace("-", "")
+                                        SecondTaskbarLeft = WorkerW.Current.BoundingRectangle.Top
                                     Else
-                                        Dim SecondTaskbarLeftFilter = rct2.Left.ToString.Replace("-", "")
-                                        SecondTaskbarLeft = (trayWnd.Current.BoundingRectangle.Width - SecondTaskbarLeftFilter).ToString.Replace("-", "")
-                                    End If
 
-                                    Console.WriteLine("2!" & SecondTaskbarLeft)
+                                        SecondTaskbarLeft = WorkerW.Current.BoundingRectangle.Left - trayWnd.Current.BoundingRectangle.Left
+
+                                    End If
 
                                     Dim SecondTaskbarWidthHalf = SecondTaskbarWidth / 2
 
                                     If Horizontal = True Then
-                                        SecondTaskbarPos = trayWnd.Current.BoundingRectangle.Width / 2 - SecondTaskbarWidthHalf - SecondTaskbarLeft + NumericUpDown2.Value - 4
+                                        SecondTaskbarPos = (trayWnd.Current.BoundingRectangle.Width / 2 - SecondTaskbarWidthHalf - SecondTaskbarLeft + NumericUpDown2.Value - 4).ToString.Replace("-", "")
                                     Else
-                                        SecondTaskbarPos = trayWnd.Current.BoundingRectangle.Height / 2 - SecondTaskbarWidthHalf - SecondTaskbarLeft + NumericUpDown2.Value - 4
+                                        SecondTaskbarPos = (trayWnd.Current.BoundingRectangle.Height / 2 - SecondTaskbarWidthHalf - SecondTaskbarLeft + NumericUpDown2.Value - 4).ToString.Replace("-", "")
                                     End If
-
-                                    Console.WriteLine(trayWnd.Current.BoundingRectangle.Width)
-                                    Console.WriteLine(SecondTaskbarPos)
 
                                 End If
 
@@ -349,31 +343,26 @@ Public Class FalconX
 
                                     TreeWalker3 = Nothing
 
-                                    Dim rct3 As RECT
-                                    GetWindowRect(GetParent(taskptr), rct3)
+                                    Dim WorkerW As AutomationElement = AutomationElement.FromHandle(GetParent(taskptr))
 
                                     Dim ThirdTaskbarLeft As Integer
 
                                     If Horizontal = False Then
-                                        Dim ThirdTaskbarLeftFilter = rct3.Top.ToString.Replace("-", "")
-                                        ThirdTaskbarLeft = ThirdTaskbarLeftFilter.ToString.Replace("-", "")
-                                    Else
-                                        Dim ThirdTaskbarLeftFilter = rct3.Left.ToString.Replace("-", "")
-                                        ThirdTaskbarLeft = (trayWnd.Current.BoundingRectangle.Width - ThirdTaskbarLeftFilter).ToString.Replace("-", "")
-                                    End If
 
-                                    Console.WriteLine("3!" & ThirdTaskbarLeft)
+                                        ThirdTaskbarLeft = WorkerW.Current.BoundingRectangle.Top
+                                    Else
+
+                                        ThirdTaskbarLeft = WorkerW.Current.BoundingRectangle.Left - trayWnd.Current.BoundingRectangle.Left
+
+                                    End If
 
                                     Dim ThirdTaskbarWidthHalf = ThirdTaskbarWidth / 2
 
                                     If Horizontal = True Then
-                                        ThirdTaskbarPos = trayWnd.Current.BoundingRectangle.Width / 2 - ThirdTaskbarWidthHalf - ThirdTaskbarLeft + NumericUpDown2.Value - 4
+                                        ThirdTaskbarPos = (trayWnd.Current.BoundingRectangle.Width / 2 - ThirdTaskbarWidthHalf - ThirdTaskbarLeft + NumericUpDown2.Value - 4).ToString.Replace("-", "")
                                     Else
-                                        ThirdTaskbarPos = trayWnd.Current.BoundingRectangle.Height / 2 - ThirdTaskbarWidthHalf - ThirdTaskbarLeft + NumericUpDown2.Value - 4
+                                        ThirdTaskbarPos = (trayWnd.Current.BoundingRectangle.Height / 2 - ThirdTaskbarWidthHalf - ThirdTaskbarLeft + NumericUpDown2.Value - 4).ToString.Replace("-", "")
                                     End If
-
-                                    Console.WriteLine(trayWnd.Current.BoundingRectangle.Width)
-                                    Console.WriteLine(ThirdTaskbarPos)
 
                                 End If
 
@@ -392,18 +381,15 @@ Public Class FalconX
 
                 If Laps = 50 Then
                     Laps = 0
-                    Console.WriteLine("SetProcessWorkingSetSize" & Environment.NewLine)
+
                     SaveMemory()
                 End If
             Catch ex As Exception
-                Console.WriteLine("TaskbarCalculator : " & ex.Message & Environment.NewLine)
 
                 If ex.ToString.Contains("E_ACCESSDENIED") Then
 
                     Dim Handle As IntPtr
                     Dim Laps2 As Integer
-
-                    Console.WriteLine("Looking for Explorer..." & Environment.NewLine)
 
                     SaveMemory()
 
@@ -422,8 +408,6 @@ Public Class FalconX
 
                     Loop Until Not Handle = Nothing
 
-                    Console.WriteLine("Explorer detected! Restarting..." & Environment.NewLine)
-
                     NotifyIcon1.Visible = False
                     Application.Restart()
                     End
@@ -435,8 +419,6 @@ Public Class FalconX
     End Sub
 
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
-
-        Console.WriteLine("Position Changed")
 
         If MainAnimator.Visible = True Then
 
@@ -480,7 +462,6 @@ Public Class FalconX
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-        Console.WriteLine("Saving Settings..." & Environment.NewLine)
         My.Settings.Save()
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
@@ -491,7 +472,6 @@ Public Class FalconX
 
         NotifyIcon1.Visible = False
 
-        Console.WriteLine("Closing...")
         Me.Close()
         End
     End Sub
@@ -501,7 +481,7 @@ Public Class FalconX
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Console.WriteLine("Saving Settings..." & Environment.NewLine)
+
         My.Settings.Save()
         Me.Hide()
         Me.Opacity = 0
@@ -562,10 +542,9 @@ Public Class FalconX
                 NewLateBinding.LateCall(objectValue3, Nothing, "Save", New Object(-1) {}, Nothing, Nothing, Nothing, True)
             End If
         Catch ex As Exception
-            Console.WriteLine(ex.ToString)
+
         End Try
 
-        Console.WriteLine("Saving Settings..." & Environment.NewLine)
         My.Settings.Save()
 
     End Sub

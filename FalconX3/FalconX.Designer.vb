@@ -451,7 +451,7 @@ Partial Class FalconX
         Me.CheckBox7.Text = "Run at Startup"
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
-        'Form1
+        'FalconX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -478,7 +478,7 @@ Partial Class FalconX
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Form1"
+        Me.Name = "FalconX"
         Me.Opacity = 0R
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

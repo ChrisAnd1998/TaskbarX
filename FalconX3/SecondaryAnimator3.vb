@@ -229,7 +229,7 @@ Public Class SecondaryAnimator3
     End Sub
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Console.WriteLine("form4")
+        'Console.WriteLine("form4")
         AddHandler Animator.Animated, AddressOf IsAnimated
     End Sub
 
