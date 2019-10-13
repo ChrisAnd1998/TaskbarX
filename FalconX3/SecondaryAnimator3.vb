@@ -30,8 +30,8 @@ Public Class SecondaryAnimator3
     Dim SPEED As Integer
     Dim EFFECT As String
     Dim POS As Integer
-    Sub AnimatorMove()
 
+    Sub AnimatorMove()
 
         POS = FalconX.ThirdTaskbarPos
 
@@ -39,10 +39,8 @@ Public Class SecondaryAnimator3
 
         EFFECT = FalconX.ComboBox1.Text
 
-
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Go)
         t1.Start()
-
 
     End Sub
 

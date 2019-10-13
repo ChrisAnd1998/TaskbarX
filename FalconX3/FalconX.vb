@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
+Imports System.Text
 Imports System.Windows.Automation
 
 Imports Microsoft.VisualBasic.CompilerServices
@@ -120,7 +121,106 @@ Public Class FalconX
         Next
     End Sub
 
+    Sub LoadSettings()
+
+        Try
+
+            Dim path As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\FalconX.cfg"
+
+            If File.Exists(path) Then
+
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(0))
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(1))
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(2))
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(3))
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(4))
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(5))
+                Console.WriteLine(System.IO.File.ReadAllLines(path)(6))
+
+                ComboBox1.Text = System.IO.File.ReadAllLines(path)(0)
+                NumericUpDown1.Value = System.IO.File.ReadAllLines(path)(1)
+                NumericUpDown3.Value = System.IO.File.ReadAllLines(path)(2)
+                NumericUpDown2.Value = System.IO.File.ReadAllLines(path)(3)
+
+                If System.IO.File.ReadAllLines(path)(4) = "True" Then
+                    CheckBox7.Checked = True
+                Else
+                    CheckBox7.Checked = False
+                End If
+
+                If System.IO.File.ReadAllLines(path)(5) = "True" Then
+                    CheckBox1.Checked = True
+                Else
+                    CheckBox1.Checked = False
+                End If
+
+                If System.IO.File.ReadAllLines(path)(6) = "True" Then
+                    CheckBox2.Checked = True
+                Else
+                    CheckBox2.Checked = False
+                End If
+
+            End If
+        Catch
+        End Try
+
+    End Sub
+
+    Sub SaveSettings()
+        Try
+
+            Dim path As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\FalconX.cfg"
+            Dim fs As FileStream = File.Create(path)
+
+            Dim Animation = ComboBox1.Text
+            Dim Speed = NumericUpDown1.Value
+            Dim Rate = NumericUpDown3.Value
+            Dim Offset = NumericUpDown2.Value
+            Dim RunAtStartUp As Boolean
+            Dim CBT As Boolean
+            Dim CMM As Boolean
+
+            If CheckBox7.Checked = False Then
+                RunAtStartUp = False
+            Else
+                RunAtStartUp = True
+            End If
+
+            If CheckBox1.Checked = False Then
+                CBT = False
+            Else
+                CBT = True
+            End If
+
+            If CheckBox2.Checked = False Then
+                CMM = False
+            Else
+                CMM = True
+            End If
+
+            ' Add text to the file.
+            Dim info As Byte() = New UTF8Encoding(True).GetBytes(Animation.ToString & Environment.NewLine & Speed.ToString & Environment.NewLine & Rate.ToString & Environment.NewLine & Offset.ToString & Environment.NewLine & RunAtStartUp.ToString & Environment.NewLine & CBT.ToString & Environment.NewLine & CMM.ToString)
+
+            fs.Write(info, 0, info.Length)
+            fs.Close()
+        Catch
+        End Try
+    End Sub
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Try
+            Dim strx2 As String = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\Chris_Andriessen"
+
+            If Directory.Exists(strx2) Then
+                Directory.Delete(strx2, True)
+            End If
+        Catch
+        End Try
+
+        LoadSettings()
+
+        System.Threading.Thread.Sleep(500) : Application.DoEvents()
 
         If Screen.AllScreens.LongCount = 1 Then
             CheckBox2.Enabled = False
@@ -171,6 +271,7 @@ Public Class FalconX
     End Sub
 
     Sub TaskbarCalculator()
+
         Do
 
             Try
@@ -372,7 +473,9 @@ Public Class FalconX
                     End If
 
                     Me.Invoke(Sub()
+
                                   Label1.Text = position
+
                               End Sub)
 
                 End If
@@ -461,8 +564,7 @@ Public Class FalconX
     End Function
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
-        My.Settings.Save()
+        SaveSettings()
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
 
@@ -481,8 +583,8 @@ Public Class FalconX
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        SaveSettings()
 
-        My.Settings.Save()
         Me.Hide()
         Me.Opacity = 0
 
@@ -506,7 +608,7 @@ Public Class FalconX
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        My.Settings.Save()
+        SaveSettings()
         RestartApp()
 
     End Sub
@@ -545,12 +647,9 @@ Public Class FalconX
 
         End Try
 
-        My.Settings.Save()
-
     End Sub
 
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
-        My.Settings.Save()
 
         RunAtStartUp()
 
@@ -567,10 +666,12 @@ Public Class FalconX
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+
         UpdateTaskbar = True
     End Sub
 
     Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
+
         UpdateTaskbar = True
     End Sub
 
@@ -582,31 +683,31 @@ Public Class FalconX
         Select Case MsgBox("Are you Sure?", MsgBoxStyle.YesNo, "Reset settings...")
             Case MsgBoxResult.Yes
                 ComboBox1.Text = "QuadEaseOut"
-                NumericUpDown1.Value = 250
+                NumericUpDown1.Value = 450
                 NumericUpDown2.Value = 0
-                NumericUpDown3.Value = 400
+                NumericUpDown3.Value = 500
                 CheckBox1.Checked = False
+                CheckBox2.Checked = False
+                CheckBox7.Checked = False
             Case MsgBoxResult.No
 
         End Select
-    End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        My.Settings.Save()
+        SaveSettings()
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         Process.Start("https://easings.net/")
-        My.Settings.Save()
+
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         Process.Start("https://github.com/ChrisAnd1998/FalconX/issues")
-        My.Settings.Save()
+
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        My.Settings.Save()
+
         RestartExplorer()
     End Sub
 
@@ -617,10 +718,6 @@ Public Class FalconX
             SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOSENDCHANGING Or SWP_NOACTIVATE Or SWP_NOCOPYBITS Or SWP_NOOWNERZORDER)
 
         End If
-
-        UpdateTaskbar = True
-
-        My.Settings.Save()
 
     End Sub
 

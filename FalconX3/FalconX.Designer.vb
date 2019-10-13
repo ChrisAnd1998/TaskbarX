@@ -132,7 +132,7 @@ Partial Class FalconX
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(103, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "13.10.2019 - 1.2.3.0"
+        Me.Label3.Text = "13.10.2019 - 1.2.4.0"
         '
         'Label4
         '
@@ -169,13 +169,12 @@ Partial Class FalconX
         Me.Button5.Image = CType(resources.GetObject("Button5.Image"), System.Drawing.Image)
         Me.Button5.Location = New System.Drawing.Point(154, 18)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(37, 23)
+        Me.Button5.Size = New System.Drawing.Size(38, 23)
         Me.Button5.TabIndex = 8
         Me.Button5.UseVisualStyleBackColor = True
         '
         'ComboBox1
         '
-        Me.ComboBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.FalconX3.My.MySettings.Default, "anima", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"None", "Linear", "ExpoEaseOut", "ExpoEaseIn", "ExpoEaseInOut", "ExpoEaseOutIn", "CircEaseOut", "CircEaseIn", "CircEaseInOut", "CircEaseOutIn", "QuadEaseOut", "QuadEaseIn", "QuadEaseInOut", "QuadEaseOutIn", "SineEaseOut", "SineEaseIn", "SineEaseInOut", "SineEaseOutIn", "CubicEaseOut", "CubicEaseIn", "CubicEaseInOut", "CubicEaseOutIn", "QuartEaseOut", "QuartEaseIn", "QuartEaseInOut", "QuartEaseOutIn", "QuintEaseOut", "QuintEaseIn", "QuintEaseInOut", "QuintEaseOutIn", "ElasticEaseOut", "ElasticEaseIn", "ElasticEaseInOut", "ElasticEaseOutIn", "BounceEaseOut", "BounceEaseIn", "BounceEaseInOut", "BounceEaseOutIn", "BackEaseOut", "BackEaseIn", "BackEaseInOut", "BackEaseOutIn"})
@@ -183,7 +182,6 @@ Partial Class FalconX
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox1.TabIndex = 7
-        Me.ComboBox1.Text = Global.FalconX3.My.MySettings.Default.anima
         '
         'GroupBox2
         '
@@ -213,8 +211,6 @@ Partial Class FalconX
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Checked = Global.FalconX3.My.MySettings.Default.multi
-        Me.CheckBox2.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "multi", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.CheckBox2.Location = New System.Drawing.Point(9, 280)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(189, 17)
@@ -274,14 +270,13 @@ Partial Class FalconX
         '
         'NumericUpDown3
         '
-        Me.NumericUpDown3.DataBindings.Add(New System.Windows.Forms.Binding("Value", Global.FalconX3.My.MySettings.Default, "s_react", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.NumericUpDown3.Location = New System.Drawing.Point(9, 114)
         Me.NumericUpDown3.Maximum = New Decimal(New Integer() {1215752191, 23, 0, 0})
         Me.NumericUpDown3.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown3.Name = "NumericUpDown3"
         Me.NumericUpDown3.Size = New System.Drawing.Size(120, 20)
         Me.NumericUpDown3.TabIndex = 10
-        Me.NumericUpDown3.Value = Global.FalconX3.My.MySettings.Default.s_react
+        Me.NumericUpDown3.Value = New Decimal(New Integer() {500, 0, 0, 0})
         '
         'Panel6
         '
@@ -302,8 +297,6 @@ Partial Class FalconX
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Checked = Global.FalconX3.My.MySettings.Default.s_centerbetweentoolbars
-        Me.CheckBox1.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "s_centerbetweentoolbars", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.CheckBox1.Location = New System.Drawing.Point(9, 258)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(145, 17)
@@ -330,25 +323,22 @@ Partial Class FalconX
         '
         'NumericUpDown2
         '
-        Me.NumericUpDown2.DataBindings.Add(New System.Windows.Forms.Binding("Value", Global.FalconX3.My.MySettings.Default, "s_offset", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.NumericUpDown2.Location = New System.Drawing.Point(9, 208)
         Me.NumericUpDown2.Maximum = New Decimal(New Integer() {1000000, 0, 0, 0})
         Me.NumericUpDown2.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericUpDown2.Name = "NumericUpDown2"
         Me.NumericUpDown2.Size = New System.Drawing.Size(120, 20)
         Me.NumericUpDown2.TabIndex = 11
-        Me.NumericUpDown2.Value = Global.FalconX3.My.MySettings.Default.s_offset
         '
         'NumericUpDown1
         '
-        Me.NumericUpDown1.DataBindings.Add(New System.Windows.Forms.Binding("Value", Global.FalconX3.My.MySettings.Default, "s_speed", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.NumericUpDown1.Location = New System.Drawing.Point(9, 43)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Name = "NumericUpDown1"
         Me.NumericUpDown1.Size = New System.Drawing.Size(120, 20)
         Me.NumericUpDown1.TabIndex = 9
-        Me.NumericUpDown1.Value = Global.FalconX3.My.MySettings.Default.s_speed
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {500, 0, 0, 0})
         '
         'Label6
         '
@@ -442,8 +432,6 @@ Partial Class FalconX
         'CheckBox7
         '
         Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Checked = Global.FalconX3.My.MySettings.Default.runatstartup
-        Me.CheckBox7.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.FalconX3.My.MySettings.Default, "runatstartup", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.CheckBox7.Location = New System.Drawing.Point(13, 288)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(95, 17)
