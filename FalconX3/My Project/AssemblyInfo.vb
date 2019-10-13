@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("FalconX centers your Taskbar icons.")>
 <Assembly: AssemblyCompany("Chris Andriessen")>
 <Assembly: AssemblyProduct("FalconX3")>
-<Assembly: AssemblyCopyright("Copyright ©  2019")>
+<Assembly: AssemblyCopyright("Copyright © Chris Andriessen 2019")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.2.3.0")>
-<Assembly: AssemblyFileVersion("1.2.3.0")>
+<Assembly: AssemblyVersion("1.2.4.0")>
+<Assembly: AssemblyFileVersion("1.2.4.0")>
