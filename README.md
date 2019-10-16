@@ -29,6 +29,10 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 16.10.2019 1.2.6.0 October
+* Bug fixes and small performance improvements.
+* Merged VisualEffects into FalconX
+
 FalconX Build 13.10.2019 1.2.5.0 October
 * Added Expirimental Taskbar Transparancy.
 * Bug fixes for Multi Monitor support.
