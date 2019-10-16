@@ -520,10 +520,21 @@ Public Class FalconX
 
                                   Label1.Text = CType(position, String)
 
-                                  If Not MSTaskListWClass.Current.BoundingRectangle.Left = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Left + 1 = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Left - 1 = TaskbarNewPos + TaskbarLeft Then
-                                      If MainAnimator.IsMoving = False Then
-                                          Label1.Text = CType(CInt(Label1.Text) + 5, String)
-                                          Console.WriteLine("Taskbar is at Wrong pos!")
+                                  If Horizontal = True Then
+                                      If Not MSTaskListWClass.Current.BoundingRectangle.Left = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Left + 1 = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Left - 1 = TaskbarNewPos + TaskbarLeft Then
+                                          If MainAnimator.IsMoving = False Then
+                                              Label1.Text = CType(CInt(Label1.Text) + 5, String)
+                                              Console.WriteLine(MSTaskListWClass.Current.BoundingRectangle.Left & " " & TaskbarNewPos + TaskbarLeft)
+                                              Console.WriteLine("Taskbar is at Wrong pos!")
+                                          End If
+                                      End If
+                                  Else
+                                      If Not MSTaskListWClass.Current.BoundingRectangle.Top = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Top + 1 = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Top - 1 = TaskbarNewPos + TaskbarLeft Then
+                                          If MainAnimator.IsMoving = False Then
+                                              Label1.Text = CType(CInt(Label1.Text) + 5, String)
+                                              Console.WriteLine(MSTaskListWClass.Current.BoundingRectangle.Left & " " & TaskbarNewPos + TaskbarLeft)
+                                              Console.WriteLine("Taskbar is at Wrong pos!")
+                                          End If
                                       End If
                                   End If
 
