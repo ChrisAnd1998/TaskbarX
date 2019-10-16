@@ -1,11 +1,11 @@
 ﻿Imports System.Runtime.InteropServices
-Imports VisualEffects
-Imports VisualEffects.Animations.Effects
-Imports VisualEffects.Easing
+Imports FalconX3.VisualEffects
+Imports FalconX3.VisualEffects.Animations.Effects
+Imports FalconX3.VisualEffects.Easing
 
 Public Class SecondaryAnimator2
 
-    Dim IsMoving As Boolean
+    Dim IsMoving As Boolean = False
 
     <DllImport("user32.dll")>
     Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal wMsg As Int32, ByVal wParam As Boolean, ByVal lParam As Int32) As Integer
@@ -27,17 +27,32 @@ Public Class SecondaryAnimator2
 
     End Sub
 
-    Dim SPEED As Integer
-    Dim EFFECT As String
-    Dim POS As Integer
+    Dim SPEED As Integer = 0
+    Dim EFFECT As String = "None"
+    Dim POS As Integer = 0
+    Dim OldPos As Integer = 0
 
     Sub AnimatorMove()
 
         POS = FalconX.SecondTaskbarPos
 
-        SPEED = FalconX.NumericUpDown1.Value
+        SPEED = CInt(FalconX.NumericUpDown1.Value)
 
         EFFECT = FalconX.ComboBox1.Text
+
+        If POS = OldPos + 1 Then
+            EFFECT = "Linear"
+        End If
+
+        If POS = OldPos Then
+            EFFECT = "Linear"
+        End If
+
+        If POS = OldPos - 1 Then
+            EFFECT = "Linear"
+        End If
+
+        OldPos = POS
 
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Go)
         t1.Start()
@@ -233,6 +248,7 @@ Public Class SecondaryAnimator2
 
     Sub IsAnimated()
         IsMoving = False
+        FalconX.SaveMemory()
     End Sub
 
 End Class

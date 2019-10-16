@@ -1,12 +1,12 @@
 ﻿Imports System.Runtime.InteropServices
-Imports VisualEffects
-Imports VisualEffects.Animations.Effects
-Imports VisualEffects.Easing
+Imports FalconX3.VisualEffects
+Imports FalconX3.VisualEffects.Animations.Effects
+Imports FalconX3.VisualEffects.Easing
 
 Public Class MainAnimator
 
-    Dim IsMoving As Boolean
-    Dim POS As Integer
+    Public IsMoving As Boolean = False
+    Dim POS As Integer = 0
 
     <DllImport("user32.dll")>
     Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal wMsg As Int32, ByVal wParam As Boolean, ByVal lParam As Int32) As Integer
@@ -30,16 +30,32 @@ Public Class MainAnimator
         SendMessage(FalconX.ReBarWindow32Ptr, FalconX.WM_SETREDRAW, False, 0)
     End Sub
 
-    Dim SPEED As Integer
-    Dim EFFECT As String
+    Dim SPEED As Integer = 0
+    Dim EFFECT As String = "None"
+
+    Dim OldPos As Integer = 0
 
     Sub AnimatorMove()
 
         POS = FalconX.TaskbarNewPos
 
-        SPEED = FalconX.NumericUpDown1.Value
+        SPEED = CInt(FalconX.NumericUpDown1.Value)
 
         EFFECT = FalconX.ComboBox1.Text
+
+        If POS = OldPos + 1 Then
+            EFFECT = "Linear"
+        End If
+
+        If POS = OldPos Then
+            EFFECT = "Linear"
+        End If
+
+        If POS = OldPos - 1 Then
+            EFFECT = "Linear"
+        End If
+
+        OldPos = POS
 
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Go)
         t1.Start()
@@ -47,6 +63,10 @@ Public Class MainAnimator
     End Sub
 
     Sub Go()
+
+        Dim CurrentProcess As Process = Process.GetCurrentProcess
+        CurrentProcess.PriorityClass = ProcessPriorityClass.High
+
         Do Until IsMoving = False
             System.Threading.Thread.Sleep(10) : Application.DoEvents()
         Loop
@@ -56,11 +76,15 @@ Public Class MainAnimator
         If EFFECT = "" Then
             Panel1.Left = POS
             IsMoving = False
+
+            CurrentProcess.PriorityClass = ProcessPriorityClass.Normal
         End If
 
         If EFFECT = "None" Then
             Panel1.Left = POS
             IsMoving = False
+
+            CurrentProcess.PriorityClass = ProcessPriorityClass.Normal
         End If
 
         If EFFECT = "Linear" Then
@@ -236,6 +260,9 @@ Public Class MainAnimator
 
     Sub IsAnimated()
         IsMoving = False
+        FalconX.SaveMemory()
+        Dim CurrentProcess As Process = Process.GetCurrentProcess
+        CurrentProcess.PriorityClass = ProcessPriorityClass.Normal
     End Sub
 
 End Class
