@@ -141,7 +141,7 @@ Partial Class FalconX
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(103, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "16.10.2019 - 1.2.6.0"
+        Me.Label3.Text = "18.10.2019 - 1.2.7.0"
         '
         'Label4
         '
@@ -236,9 +236,9 @@ Partial Class FalconX
         Me.CheckBox3.AutoSize = True
         Me.CheckBox3.Location = New System.Drawing.Point(9, 303)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(169, 17)
+        Me.CheckBox3.Size = New System.Drawing.Size(125, 17)
         Me.CheckBox3.TabIndex = 17
-        Me.CheckBox3.Text = "Transparant Taskbar (Testing)"
+        Me.CheckBox3.Text = "Transparant Taskbar"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'PictureBox5

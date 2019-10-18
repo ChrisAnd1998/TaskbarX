@@ -58,6 +58,7 @@ Public Class FalconX
         ACCENT_ENABLE_BLURBEHIND = 3
         ACCENT_ENABLE_TRANSPARANT = 6
         ACCENT_ENABLE_ACRYLICBLURBEHIND = 4
+        ACCENT_NORMAL = 150
     End Enum
 
     <StructLayout(LayoutKind.Sequential)>
@@ -520,24 +521,6 @@ Public Class FalconX
 
                                   Label1.Text = CType(position, String)
 
-                                  If Horizontal = True Then
-                                      If Not MSTaskListWClass.Current.BoundingRectangle.Left = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Left + 1 = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Left - 1 = TaskbarNewPos + TaskbarLeft Then
-                                          If MainAnimator.IsMoving = False Then
-                                              Label1.Text = CType(CInt(Label1.Text) + 5, String)
-                                              Console.WriteLine(MSTaskListWClass.Current.BoundingRectangle.Left & " " & TaskbarNewPos + TaskbarLeft)
-                                              Console.WriteLine("Taskbar is at Wrong pos!")
-                                          End If
-                                      End If
-                                  Else
-                                      If Not MSTaskListWClass.Current.BoundingRectangle.Top = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Top + 1 = TaskbarNewPos + TaskbarLeft And Not MSTaskListWClass.Current.BoundingRectangle.Top - 1 = TaskbarNewPos + TaskbarLeft Then
-                                          If MainAnimator.IsMoving = False Then
-                                              Label1.Text = CType(CInt(Label1.Text) + 5, String)
-                                              Console.WriteLine(MSTaskListWClass.Current.BoundingRectangle.Left & " " & TaskbarNewPos + TaskbarLeft)
-                                              Console.WriteLine("Taskbar is at Wrong pos!")
-                                          End If
-                                      End If
-                                  End If
-
                               End Sub)
 
                 End If
@@ -794,6 +777,7 @@ Public Class FalconX
     End Sub
 
     Friend Sub EnableTaskbarStyle()
+        Dim Progman As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Progman", CType(0, IntPtr)))
 
         Dim desktops As AutomationElement = AutomationElement.RootElement
         Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_SecondaryTrayWnd"))
@@ -802,7 +786,8 @@ Public Class FalconX
         Dim accent = New AccentPolicy()
         Dim accentStructSize = Marshal.SizeOf(accent)
 
-        accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
+        accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
+        accent.GradientColor = 255
 
         Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
         Marshal.StructureToPtr(accent, accentPtr, False)
@@ -812,12 +797,21 @@ Public Class FalconX
             .Data = accentPtr
         }
 
+        Dim trays As New ArrayList
+
+        For Each trayWnd As AutomationElement In lists
+            trays.Add(trayWnd.Current.NativeWindowHandle.ToString)
+        Next
+
         Do
-            For Each trayWnd As AutomationElement In lists
-                SetWindowCompositionAttribute(CType(trayWnd.Current.NativeWindowHandle, IntPtr), data)
+            For Each tray In trays
+                Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
+                SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
             Next
-            System.Threading.Thread.Sleep(10)
+            System.Threading.Thread.Sleep(14)
         Loop Until CheckBox3.Checked = False
+
+        SaveSettings()
 
         Marshal.FreeHGlobal(accentPtr)
 

@@ -43,16 +43,8 @@ Public Class MainAnimator
 
         EFFECT = FalconX.ComboBox1.Text
 
-        If POS = OldPos + 1 Then
-            EFFECT = "Linear"
-        End If
-
         If POS = OldPos Then
-            EFFECT = "Linear"
-        End If
-
-        If POS = OldPos - 1 Then
-            EFFECT = "Linear"
+            EFFECT = "None"
         End If
 
         OldPos = POS
