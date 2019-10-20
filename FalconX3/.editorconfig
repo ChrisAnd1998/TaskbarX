@@ -1,0 +1,7 @@
+﻿[*.vb]
+
+# BC42016: Implicit conversion
+dotnet_diagnostic.BC42016.severity = none
+
+# BC42025: Access of shared member, constant member, enum member or nested type through an instance
+dotnet_diagnostic.BC42025.severity = none
