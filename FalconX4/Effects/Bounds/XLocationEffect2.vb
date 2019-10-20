@@ -2,7 +2,7 @@
 
 Namespace VisualEffects.Animations.Effects
 
-    Public Class XLocationEffect
+    Public Class XLocationEffect2
 
         Implements IEffect
 
@@ -16,9 +16,9 @@ Namespace VisualEffects.Animations.Effects
         Public SWP_NOSENDCHANGING As UInt32 = 1024
         Public SWP_NOZORDER As UInt32 = 4
 
-        Public Shared FirstTaskbarPtr As IntPtr = CType(0, IntPtr)
-        Public Shared FirstTaskbarPosition As Integer = 0
-        Public Shared FirstTaskbarOldPosition As Integer = 0
+        Public Shared SecondTaskbarPtr As IntPtr = CType(0, IntPtr)
+        Public Shared SecondTaskbarPosition As Integer = 0
+        Public Shared SecondTaskbarOldPosition As Integer = 0
 
         Public Function GetCurrentValue(ByVal control As Control) As Integer Implements IEffect.GetCurrentValue
             Return control.Left
@@ -28,9 +28,9 @@ Namespace VisualEffects.Animations.Effects
         Public Sub SetValue(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValue
 
             If Taskbar.Horizontal = True Then
-                SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
             Else
-                SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, 0, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, 0, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
             End If
 
         End Sub
