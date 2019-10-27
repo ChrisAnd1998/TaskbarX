@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("FalconX")>
-<Assembly: AssemblyDescription("Automated taskbar centering.")>
+<Assembly: AssemblyDescription("Automated Taskbar Centering...")>
 <Assembly: AssemblyCompany("Chris Andriessen")>
 <Assembly: AssemblyProduct("FalconX")>
 <Assembly: AssemblyCopyright("Copyright © Chris Andriessen 2019")>
@@ -31,6 +31,6 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.2.8.0")>
-<Assembly: AssemblyFileVersion("1.2.8.0")>
+<Assembly: AssemblyVersion("1.2.9.0")>
+<Assembly: AssemblyFileVersion("1.2.9.0")>
 <Assembly: NeutralResourcesLanguage("en")>
