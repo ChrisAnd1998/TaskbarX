@@ -5,6 +5,7 @@ FalconX automate's your taskbar position to the center.
 ## Features
 
 - 42 different Animations including "none"
+- 0% CPU Usage at Idle (Very optimized and lightweight looping)
 - Change animation speed
 - Change custom offset position based on center
 - Center between startbutton, search, taskview etc... and left tray icons, clock etc...
@@ -29,6 +30,11 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 27.10.2019 1.2.9.0 October
+* Added option to set a custom position for secondary taskbars separately. * Added Taskbar Style (Blur).
+* Added Taskbar Style (Acrylic) <-- not fully stable yet.
+* Config now saves in Appdata instead of your Documents folder.
+
 FalconX Build 20.10.2019 1.2.8.0 October
 * FalconX rewritten to clean up and optimize all code.
 
