@@ -31,7 +31,8 @@ FalconX automate's your taskbar position to the center.
 
 ```
 FalconX Build 27.10.2019 1.2.9.0 October
-* Added option to set a custom position for secondary taskbars separately. * Added Taskbar Style (Blur).
+* Added option to set a custom position for secondary taskbars separately. 
+* Added Taskbar Style (Blur).
 * Added Taskbar Style (Acrylic) <-- not fully stable yet.
 * Config now saves in Appdata instead of your Documents folder.
 
