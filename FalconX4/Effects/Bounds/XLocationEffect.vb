@@ -26,6 +26,10 @@ Namespace VisualEffects.Animations.Effects
         End Function
 
         Public Sub SetValue(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValue
+            If Taskbar.AppClosing = True Then
+                SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                Exit Sub
+            End If
 
             If Taskbar.Horizontal = True Then
                 SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
