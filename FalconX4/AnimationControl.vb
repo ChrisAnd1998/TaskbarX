@@ -5,6 +5,7 @@ Imports FalconX4.VisualEffects.Easing
 Public Class AnimationControl
     Public Shared AnimationSelection As String
     Public Shared AnimationSpeed As Integer
+    Public Shared AnimationSpeed2 As Integer
     Public Shared TaskbarRefresh As Boolean
     Public Shared Animation As String
 
@@ -17,9 +18,12 @@ Public Class AnimationControl
 
             Console.WriteLine("Taskbar1 || " & VisualEffects.Animations.Effects.XLocationEffect.FirstTaskbarPosition)
 
+            Dim Speed As Integer
+            Dim Position As Integer
+
             Animation = AnimationSelection.ToString
-            Dim Position = VisualEffects.Animations.Effects.XLocationEffect.FirstTaskbarPosition
-            Dim Speed = AnimationSpeed
+            Position = VisualEffects.Animations.Effects.XLocationEffect.FirstTaskbarPosition
+            Speed = AnimationSpeed
 
             If TaskbarRefresh = True Then
                 TaskbarRefresh = False
@@ -207,9 +211,12 @@ Public Class AnimationControl
 
             Console.WriteLine("Taskbar2 || " & VisualEffects.Animations.Effects.XLocationEffect2.SecondTaskbarPosition)
 
+            Dim Speed As Integer
+            Dim Position As Integer
+
             Animation = AnimationSelection.ToString
-            Dim Position = VisualEffects.Animations.Effects.XLocationEffect2.SecondTaskbarPosition
-            Dim Speed = AnimationSpeed
+            Position = VisualEffects.Animations.Effects.XLocationEffect2.SecondTaskbarPosition
+            Speed = AnimationSpeed
 
             If Animation = "None" Then
                 Animate2(New XLocationEffect2(), AddressOf EasingFunctions.Linear, Position, 100, 0)
@@ -391,9 +398,12 @@ Public Class AnimationControl
 
             Console.WriteLine("Taskbar3 || " & VisualEffects.Animations.Effects.XLocationEffect3.ThirdTaskbarPosition)
 
+            Dim Speed As Integer
+            Dim Position As Integer
+
             Animation = AnimationSelection.ToString
-            Dim Position = VisualEffects.Animations.Effects.XLocationEffect3.ThirdTaskbarPosition
-            Dim Speed = AnimationSpeed
+            Position = VisualEffects.Animations.Effects.XLocationEffect3.ThirdTaskbarPosition
+            Speed = AnimationSpeed
 
             If Animation = "None" Then
                 Animate3(New XLocationEffect3(), AddressOf EasingFunctions.Linear, Position, 100, 0)

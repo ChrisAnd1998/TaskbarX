@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Environment
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
@@ -43,9 +44,10 @@ Public Class Gui
     End Sub
 
     Private Sub Gui_Load(sender As Object, e As EventArgs) Handles Me.Load
+
         Taskbar.RefreshWindowsExplorer()
-        Dim CurrentProcess As Process = Process.GetCurrentProcess
-        CurrentProcess.PriorityClass = ProcessPriorityClass.BelowNormal
+        Dim currentProcess As Process = Process.GetCurrentProcess
+        currentProcess.PriorityClass = ProcessPriorityClass.BelowNormal
         Launch = True
         Me.Opacity = 0
         ComboBox1.Text = "BackEaseOut"
@@ -72,10 +74,18 @@ Public Class Gui
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
 
         If CheckBox1.Checked = True Then
+
+            RadioButton1.Enabled = True
+            RadioButton2.Enabled = True
+            RadioButton3.Enabled = True
+
             Taskbar.TaskbarTransparant = True
             Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Taskbar.EnableTaskbarStyle)
             t1.Start()
         Else
+            RadioButton1.Enabled = False
+            RadioButton2.Enabled = False
+            RadioButton3.Enabled = False
             Taskbar.TaskbarTransparant = False
         End If
 
@@ -100,8 +110,10 @@ Public Class Gui
         Me.Size = New Size(Panel2.Width + 15, Panel2.Location.Y + TitlebarHeight + Panel2.Height)
 
         Me.Location = New Size(Screen.PrimaryScreen.Bounds.Width / 2 - Me.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - Me.Height / 2)
-        Me.Opacity = 100
+
         Me.Show()
+
+        Me.Opacity = 100
     End Sub
 
     Private Sub Gui_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -163,7 +175,7 @@ Public Class Gui
 
         Try
 
-            Dim path As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\FalconX.cfg"
+            Dim path As String = GetFolderPath(SpecialFolder.ApplicationData) + "\FalconX.cfg"
 
             If File.Exists(path) Then
 
@@ -189,6 +201,18 @@ Public Class Gui
                     CheckBox1.Checked = False
                 End If
 
+                If System.IO.File.ReadAllLines(path)(6) = "1" Then
+                    RadioButton1.Checked = True
+                End If
+                If System.IO.File.ReadAllLines(path)(6) = "2" Then
+                    RadioButton2.Checked = True
+                End If
+                If System.IO.File.ReadAllLines(path)(6) = "3" Then
+                    RadioButton3.Checked = True
+                End If
+
+                NumericUpDown3.Value = CDec(System.IO.File.ReadAllLines(path)(7))
+
             End If
         Catch
         End Try
@@ -198,7 +222,7 @@ Public Class Gui
     Sub SaveSettings()
         Try
 
-            Dim path As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\FalconX.cfg"
+            Dim path As String = GetFolderPath(SpecialFolder.ApplicationData) + "\FalconX.cfg"
             Dim fs As FileStream = File.Create(path)
 
             Dim Animation = ComboBox1.Text
@@ -207,6 +231,19 @@ Public Class Gui
             Dim RunAtStartUp As Boolean
             Dim Transparant As Boolean
             Dim CBT As Boolean
+            Dim TaskbarStyle As Integer
+
+            Dim Offset2 = NumericUpDown3.Value
+
+            If RadioButton1.Checked = True Then
+                TaskbarStyle = 1
+            End If
+            If RadioButton2.Checked = True Then
+                TaskbarStyle = 2
+            End If
+            If RadioButton3.Checked = True Then
+                TaskbarStyle = 3
+            End If
 
             If CheckBox3.Checked = False Then
                 RunAtStartUp = False
@@ -227,7 +264,7 @@ Public Class Gui
             End If
 
             ' Add text to the file.
-            Dim info As Byte() = New UTF8Encoding(True).GetBytes(Animation.ToString & Environment.NewLine & Speed.ToString & Environment.NewLine & Offset.ToString & Environment.NewLine & RunAtStartUp.ToString & Environment.NewLine & CBT.ToString & Environment.NewLine & Transparant.ToString)
+            Dim info As Byte() = New UTF8Encoding(True).GetBytes(Animation.ToString & Environment.NewLine & Speed.ToString & Environment.NewLine & Offset.ToString & Environment.NewLine & RunAtStartUp.ToString & Environment.NewLine & CBT.ToString & Environment.NewLine & Transparant.ToString & Environment.NewLine & TaskbarStyle.ToString & Environment.NewLine & Offset2.ToString)
 
             fs.Write(info, 0, info.Length)
             fs.Close()
@@ -252,29 +289,33 @@ Public Class Gui
 
     Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
         Taskbar.OffsetPosition = CInt(NumericUpDown2.Value.ToString)
-
-    End Sub
-
-    Private Sub NumericUpDown2_KeyPress(sender As Object, e As KeyPressEventArgs) Handles NumericUpDown2.KeyPress
         Taskbar.UpdateTaskbar = True
     End Sub
 
-End Class
-
-Public Class CenteredComboBox
-    Inherits ComboBox
-
-    Sub New()
-        Me.DrawMode = Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.DropDownStyle = ComboBoxStyle.DropDownList
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked = True Then
+            Taskbar.TaskbarStyle = 1
+        End If
+        Taskbar.UpdateTaskbarStyle = True
     End Sub
 
-    Private Sub CenteredComboBox_DrawItem(ByVal sender As Object, ByVal e As System.Windows.Forms.DrawItemEventArgs) Handles Me.DrawItem
-        e.DrawBackground()
-        Dim txt As String = ""
-        If e.Index >= 0 Then txt = Me.Items(e.Index).ToString
-        TextRenderer.DrawText(e.Graphics, txt, e.Font, e.Bounds, e.ForeColor, TextFormatFlags.HorizontalCenter)
-        e.DrawFocusRectangle()
+    Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
+        If RadioButton2.Checked = True Then
+            Taskbar.TaskbarStyle = 2
+        End If
+        Taskbar.UpdateTaskbarStyle = True
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        If RadioButton3.Checked = True Then
+            Taskbar.TaskbarStyle = 3
+        End If
+        Taskbar.UpdateTaskbarStyle = True
+    End Sub
+
+    Private Sub NumericUpDown3_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown3.ValueChanged
+        Taskbar.OffsetPosition2 = CInt(NumericUpDown3.Value.ToString)
+        Taskbar.UpdateTaskbar = True
     End Sub
 
 End Class

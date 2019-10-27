@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Windows
 Imports System.Windows.Automation
 Imports FalconX4.VisualEffects
 Imports FalconX4.VisualEffects.Animations.Effects
@@ -35,11 +36,20 @@ Public Class Taskbar
     Private Shared Function SetWindowPos(ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As UInt32) As Boolean
     End Function
 
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
+    End Function
+
     Public Shared SWP_NOSIZE As UInt32 = 1
     Public Shared SWP_ASYNCWINDOWPOS As UInt32 = 16384
     Public Shared SWP_NOACTIVATE As UInt32 = 16
     Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
     Public Shared SWP_NOZORDER As UInt32 = 4
+
+    Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
+    Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
+    Public Shared WM_THEMECHANGED As Integer = &H31A
+    Public Shared WM_STYLECHANGED As Integer = &H7D
 
     Friend Structure WindowCompositionAttributeData
         Public Attribute As WindowCompositionAttribute
@@ -91,9 +101,16 @@ Public Class Taskbar
     Public Shared CenterBetween As Boolean
     Public Shared UpdateTaskbar As Boolean
     Public Shared OffsetPosition As Integer
+    Public Shared OffsetPosition2 As Integer
+    Public Shared TaskbarStyle As Integer
+    Public Shared UpdateTaskbarStyle As Boolean
+
+    Public Shared AppClosing As Boolean
 
     Public Shared Sub Main()
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
+
+        Console.WriteLine(MSTaskListWClass.Current.ControlType.LocalizedControlType)
 
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarCalculator)
         t1.Start()
@@ -102,6 +119,9 @@ Public Class Taskbar
     Public Shared Sub TaskbarCalculator()
         Do
             Try
+                If AppClosing = True Then
+                    Exit Sub
+                End If
                 Dim Laps As Integer
                 Dim TaskbarCount As Integer = 0
                 Dim OldPosition1 As Integer
@@ -211,7 +231,7 @@ Public Class Taskbar
                                     Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 + OffsetPosition).ToString.Replace("-", ""))
                                 End If
                             Else
-                                Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 + OffsetPosition).ToString.Replace("-", ""))
+                                Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 + OffsetPosition2).ToString.Replace("-", ""))
                             End If
 
                             XLocationEffect.FirstTaskbarPtr = CType(TaskList.Current.NativeWindowHandle, IntPtr)
@@ -282,7 +302,7 @@ Public Class Taskbar
                                     Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2 + OffsetPosition).ToString.Replace("-", ""))
                                 End If
                             Else
-                                Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2 + OffsetPosition).ToString.Replace("-", ""))
+                                Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2 + OffsetPosition2).ToString.Replace("-", ""))
                             End If
 
                             XLocationEffect2.SecondTaskbarPtr = CType(TaskList.Current.NativeWindowHandle, IntPtr)
@@ -290,11 +310,13 @@ Public Class Taskbar
                             XLocationEffect2.SecondTaskbarOldPosition = CInt(OldPosition2.ToString.Replace("-", ""))
 
                             If Not OldPosition2 = Position2 Then
+
                                 Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl.AnimateTaskbar2)
                                 t2.Start()
                             End If
 
                             If Position2 = OldPosition2 Then
+
                                 Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl.AnimateTaskbar2)
                                 t2.Start()
                             End If
@@ -346,7 +368,7 @@ Public Class Taskbar
                                     Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3 + OffsetPosition).ToString.Replace("-", ""))
                                 End If
                             Else
-                                Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3 + OffsetPosition).ToString.Replace("-", ""))
+                                Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3 + OffsetPosition2).ToString.Replace("-", ""))
                             End If
 
                             XLocationEffect3.ThirdTaskbarPtr = CType(TaskList.Current.NativeWindowHandle, IntPtr)
@@ -354,11 +376,13 @@ Public Class Taskbar
                             XLocationEffect3.ThirdTaskbarOldPosition = CInt(OldPosition3.ToString.Replace("-", ""))
 
                             If Not OldPosition3 = Position3 Then
+
                                 Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl.AnimateTaskbar3)
                                 t3.Start()
                             End If
 
                             If Position3 = OldPosition3 Then
+
                                 Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl.AnimateTaskbar3)
                                 t3.Start()
                             End If
@@ -411,8 +435,9 @@ Public Class Taskbar
     End Sub
 
     Public Shared Sub RefreshWindowsExplorer()
+
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
-        SHChangeNotify(134217728, 4096, IntPtr.Zero, IntPtr.Zero)
+        '  SHChangeNotify(134217728, 4096, IntPtr.Zero, IntPtr.Zero)
         Dim CLSID_ShellApplication As Guid = New Guid("13709620-C279-11CE-A49E-444553540000")
         Dim shellApplicationType As Type = Type.GetTypeFromCLSID(CLSID_ShellApplication, True)
         Dim shellApplication As Object = Activator.CreateInstance(shellApplicationType)
@@ -438,6 +463,9 @@ Public Class Taskbar
     End Function
 
     Public Shared Sub EnableTaskbarStyle()
+
+        Console.WriteLine("!")
+
         Dim Progman As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Progman", CType(0, IntPtr)))
 
         Dim desktops As AutomationElement = AutomationElement.RootElement
@@ -447,8 +475,19 @@ Public Class Taskbar
         Dim accent = New AccentPolicy()
         Dim accentStructSize = Marshal.SizeOf(accent)
 
-        accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
-        accent.GradientColor = 255
+        If TaskbarStyle = 1 Then
+            accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
+            accent.GradientColor = 255
+        End If
+
+        If TaskbarStyle = 3 Then
+            accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
+            accent.GradientColor = &H0 Or &H0
+        End If
+
+        If TaskbarStyle = 2 Then
+            accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND
+        End If
 
         Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
         Marshal.StructureToPtr(accent, accentPtr, False)
@@ -462,26 +501,66 @@ Public Class Taskbar
 
         For Each trayWnd As AutomationElement In lists
             trays.Add(trayWnd.Current.NativeWindowHandle.ToString)
+
         Next
 
         Do
             For Each tray In trays
                 Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
+
                 SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
             Next
             System.Threading.Thread.Sleep(14)
 
-        Loop Until TaskbarTransparant = False
-
-        Console.WriteLine("!")
+        Loop Until TaskbarTransparant = False Or UpdateTaskbarStyle = True
 
         RefreshWindowsExplorer()
 
+        For Each tray In trays
+            Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
+            SendMessage(trayptr, WM_THEMECHANGED, True, 0)
+            SendMessage(trayptr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
+            SendMessage(trayptr, WM_DWMCOMPOSITIONCHANGED, True, 0)
+        Next
+
         Marshal.FreeHGlobal(accentPtr)
+
+        Console.WriteLine(TaskbarStyle.ToString)
+
+        If UpdateTaskbarStyle = True Then
+            If TaskbarTransparant = True Then
+                UpdateTaskbarStyle = False
+                Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Taskbar.EnableTaskbarStyle)
+                t1.Start()
+            End If
+        End If
 
     End Sub
 
     Public Shared Sub Closing()
+
+        AppClosing = True
+
+        SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
+
+        TaskbarTransparant = False
+
+        System.Threading.Thread.Sleep(50) : Application.DoEvents()
+
+        SendMessage(XLocationEffect.FirstTaskbarPtr, WM_THEMECHANGED, True, 0)
+        SendMessage(XLocationEffect.FirstTaskbarPtr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
+        SendMessage(XLocationEffect.FirstTaskbarPtr, WM_DWMCOMPOSITIONCHANGED, True, 0)
+
+        SendMessage(XLocationEffect2.SecondTaskbarPtr, WM_THEMECHANGED, True, 0)
+        SendMessage(XLocationEffect2.SecondTaskbarPtr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
+        SendMessage(XLocationEffect2.SecondTaskbarPtr, WM_DWMCOMPOSITIONCHANGED, True, 0)
+
+        SendMessage(XLocationEffect3.ThirdTaskbarPtr, WM_THEMECHANGED, True, 0)
+        SendMessage(XLocationEffect3.ThirdTaskbarPtr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
+        SendMessage(XLocationEffect3.ThirdTaskbarPtr, WM_DWMCOMPOSITIONCHANGED, True, 0)
+
+        System.Threading.Thread.Sleep(500) : Application.DoEvents()
+
         SetWindowPos(XLocationEffect.FirstTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
         SetWindowPos(XLocationEffect2.SecondTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
         SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
