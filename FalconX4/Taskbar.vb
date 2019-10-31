@@ -124,22 +124,6 @@ Public Class Taskbar
 
     End Sub
 
-    Public Shared Sub WinEventProc(ByVal hWinEventHook As IntPtr, ByVal eventType As UInteger, ByVal hwnd As IntPtr, ByVal idObject As Integer, ByVal idChild As Integer, ByVal dwEventThread As UInteger, ByVal dwmsEventTime As UInteger)
-
-        If Not hwnd = 0 Then
-
-            If hwnd = MSTaskListWClassPtr Then
-                Dim hwndparent As IntPtr = GetParent(hwnd)
-                If Not hwndparent = Shell_TrayWndPtr Then
-                    Gui.Timer1.Stop()
-                    Gui.Timer1.Start()
-                End If
-            End If
-
-        End If
-
-    End Sub
-
     Public Shared Sub TaskbarCalculator()
         Do
             Try

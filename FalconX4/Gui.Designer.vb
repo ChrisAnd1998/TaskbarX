@@ -71,7 +71,6 @@ Partial Class Gui
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Panel2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -224,7 +223,7 @@ Partial Class Gui
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.CheckForUpdatesToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(172, 83)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 105)
         '
         'OpenSettingsToolStripMenuItem
         '
@@ -233,7 +232,7 @@ Partial Class Gui
         Me.OpenSettingsToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.OpenSettingsToolStripMenuItem.Image = CType(resources.GetObject("OpenSettingsToolStripMenuItem.Image"), System.Drawing.Image)
         Me.OpenSettingsToolStripMenuItem.Name = "OpenSettingsToolStripMenuItem"
-        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.OpenSettingsToolStripMenuItem.Text = "Settings"
         '
         'ToolStripSeparator1
@@ -242,14 +241,14 @@ Partial Class Gui
         Me.ToolStripSeparator1.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.ToolStripSeparator1.ForeColor = System.Drawing.Color.White
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(168, 15)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 15)
         '
         'CheckForUpdatesToolStripMenuItem
         '
         Me.CheckForUpdatesToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.CheckForUpdatesToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
-        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.CheckForUpdatesToolStripMenuItem.Text = "Check for Updates"
         '
         'ExitToolStripMenuItem
@@ -258,7 +257,7 @@ Partial Class Gui
         Me.ExitToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
         Me.ExitToolStripMenuItem.Padding = New System.Windows.Forms.Padding(0)
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(171, 20)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 20)
         Me.ExitToolStripMenuItem.Text = "Exit"
         Me.ExitToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
@@ -621,10 +620,6 @@ Partial Class Gui
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Position Options"
         '
-        'Timer1
-        '
-        Me.Timer1.Interval = 500
-        '
         'Gui
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -717,5 +712,4 @@ Partial Class Gui
     Friend WithEvents Label7 As Label
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents PictureBox9 As PictureBox
-    Friend WithEvents Timer1 As Timer
 End Class

@@ -48,6 +48,7 @@ Public Class Gui
     End Sub
 
     Private Sub Gui_Load(sender As Object, e As EventArgs) Handles Me.Load
+
         ContextMenuStrip1.Renderer = New MyRenderer
         Taskbar.UpdateTaskbar = True
         Taskbar.RefreshWindowsExplorer()
@@ -135,6 +136,7 @@ Public Class Gui
             Try
                 If Application.StartupPath.Contains("40210ChrisAndriessen") Then
                     CheckBox3.Visible = False
+                    CheckForUpdatesToolStripMenuItem.Visible = False
 
                     Dim strxx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
                     If File.Exists(strxx + "\FalconX.lnk") Then
@@ -451,14 +453,6 @@ Public Class Gui
         If e.KeyChar <> ControlChars.Back Then
             e.Handled = Not (Char.IsDigit(e.KeyChar) Or e.KeyChar = "-")
         End If
-    End Sub
-
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-
-        Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Taskbar.TaskbarCalculator)
-        t1.Start()
-
-        Timer1.Stop()
     End Sub
 
 End Class
