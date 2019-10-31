@@ -30,6 +30,12 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 31.10.2019 1.3.0.0 October
+* Added right click tray menu.
+* Added (check for updates).
+* Little UI Change.
+* Fixed animation triggering twice.
+
 FalconX Build 27.10.2019 1.2.9.0 October
 * Added option to set a custom position for secondary taskbars separately. 
 * Added Taskbar Style (Blur).
