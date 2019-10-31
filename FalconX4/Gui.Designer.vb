@@ -25,7 +25,6 @@ Partial Class Gui
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Gui))
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -35,11 +34,29 @@ Partial Class Gui
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.OpenSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CheckForUpdatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.PictureBox9 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
+        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
+        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.TrackBar3 = New System.Windows.Forms.TrackBar()
+        Me.TrackBar2 = New System.Windows.Forms.TrackBar()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
@@ -52,22 +69,32 @@ Partial Class Gui
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.NumericUpDown3 = New System.Windows.Forms.NumericUpDown()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Panel2.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TrackBar3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TrackBar2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
-        CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
         '
-        Me.Label1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.Black
         Me.Label1.Location = New System.Drawing.Point(8, 27)
         Me.Label1.Name = "Label1"
@@ -75,20 +102,10 @@ Partial Class Gui
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Animation"
         '
-        'NumericUpDown1
-        '
-        Me.NumericUpDown1.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown1.Location = New System.Drawing.Point(9, 103)
-        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {2000, 0, 0, 0})
-        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {100, 0, 0, 0})
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(352, 22)
-        Me.NumericUpDown1.TabIndex = 4
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {500, 0, 0, 0})
-        '
         'Button1
         '
         Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -104,6 +121,7 @@ Partial Class Gui
         'Button2
         '
         Me.Button2.BackColor = System.Drawing.Color.Transparent
+        Me.Button2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -118,13 +136,13 @@ Partial Class Gui
         '
         'Label2
         '
-        Me.Label2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.Black
         Me.Label2.Location = New System.Drawing.Point(8, 85)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(296, 18)
+        Me.Label2.Size = New System.Drawing.Size(198, 18)
         Me.Label2.TabIndex = 10
-        Me.Label2.Text = "Animation Speed in Milliseconds"
+        Me.Label2.Text = "Animation Speed"
         '
         'Panel2
         '
@@ -133,7 +151,7 @@ Partial Class Gui
         Me.Panel2.Controls.Add(Me.CheckBox3)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Controls.Add(Me.Button2)
-        Me.Panel2.Location = New System.Drawing.Point(0, 499)
+        Me.Panel2.Location = New System.Drawing.Point(0, 527)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(550, 50)
         Me.Panel2.TabIndex = 12
@@ -141,6 +159,7 @@ Partial Class Gui
         'Button3
         '
         Me.Button3.BackColor = System.Drawing.Color.Transparent
+        Me.Button3.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -156,6 +175,7 @@ Partial Class Gui
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Cursor = System.Windows.Forms.Cursors.Hand
         Me.CheckBox3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox3.ForeColor = System.Drawing.Color.Black
         Me.CheckBox3.Location = New System.Drawing.Point(359, 17)
@@ -168,6 +188,7 @@ Partial Class Gui
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.CheckBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox1.ForeColor = System.Drawing.Color.Black
         Me.CheckBox1.Location = New System.Drawing.Point(9, 20)
@@ -180,9 +201,10 @@ Partial Class Gui
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.CheckBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox2.ForeColor = System.Drawing.Color.Black
-        Me.CheckBox2.Location = New System.Drawing.Point(9, 261)
+        Me.CheckBox2.Location = New System.Drawing.Point(9, 146)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(360, 17)
         Me.CheckBox2.TabIndex = 17
@@ -191,42 +213,132 @@ Partial Class Gui
         '
         'NotifyIcon1
         '
+        Me.NotifyIcon1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
         Me.NotifyIcon1.Text = "FalconX"
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
+        Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(14, 14)
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.CheckForUpdatesToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(172, 83)
+        '
+        'OpenSettingsToolStripMenuItem
+        '
+        Me.OpenSettingsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
+        Me.OpenSettingsToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OpenSettingsToolStripMenuItem.ForeColor = System.Drawing.Color.White
+        Me.OpenSettingsToolStripMenuItem.Image = CType(resources.GetObject("OpenSettingsToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.OpenSettingsToolStripMenuItem.Name = "OpenSettingsToolStripMenuItem"
+        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.OpenSettingsToolStripMenuItem.Text = "Settings"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.AutoSize = False
+        Me.ToolStripSeparator1.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
+        Me.ToolStripSeparator1.ForeColor = System.Drawing.Color.White
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(168, 15)
+        '
+        'CheckForUpdatesToolStripMenuItem
+        '
+        Me.CheckForUpdatesToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
+        Me.CheckForUpdatesToolStripMenuItem.ForeColor = System.Drawing.Color.White
+        Me.CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
+        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.CheckForUpdatesToolStripMenuItem.Text = "Check for Updates"
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
+        Me.ExitToolStripMenuItem.ForeColor = System.Drawing.Color.White
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Padding = New System.Windows.Forms.Padding(0)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(171, 20)
+        Me.ExitToolStripMenuItem.Text = "Exit"
+        Me.ExitToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.Label8)
-        Me.GroupBox2.Controls.Add(Me.CheckBox2)
-        Me.GroupBox2.Controls.Add(Me.Label9)
-        Me.GroupBox2.Controls.Add(Me.NumericUpDown3)
+        Me.GroupBox2.Controls.Add(Me.PictureBox9)
         Me.GroupBox2.Controls.Add(Me.Label7)
-        Me.GroupBox2.Controls.Add(Me.ComboBox1)
-        Me.GroupBox2.Controls.Add(Me.Label6)
-        Me.GroupBox2.Controls.Add(Me.NumericUpDown2)
         Me.GroupBox2.Controls.Add(Me.Label2)
-        Me.GroupBox2.Controls.Add(Me.NumericUpDown1)
+        Me.GroupBox2.Controls.Add(Me.PictureBox6)
+        Me.GroupBox2.Controls.Add(Me.PictureBox3)
+        Me.GroupBox2.Controls.Add(Me.TrackBar1)
+        Me.GroupBox2.Controls.Add(Me.TextBox1)
+        Me.GroupBox2.Controls.Add(Me.ComboBox1)
         Me.GroupBox2.Controls.Add(Me.Label1)
         Me.GroupBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox2.ForeColor = System.Drawing.Color.Black
         Me.GroupBox2.Location = New System.Drawing.Point(12, 200)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(370, 287)
+        Me.GroupBox2.Size = New System.Drawing.Size(370, 139)
         Me.GroupBox2.TabIndex = 21
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Taskbar Options"
+        Me.GroupBox2.Text = "Animation Options"
+        '
+        'PictureBox9
+        '
+        Me.PictureBox9.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.PictureBox9.Location = New System.Drawing.Point(0, 137)
+        Me.PictureBox9.Name = "PictureBox9"
+        Me.PictureBox9.Size = New System.Drawing.Size(283, 1)
+        Me.PictureBox9.TabIndex = 34
+        Me.PictureBox9.TabStop = False
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(223, 142)
+        Me.Label7.Location = New System.Drawing.Point(338, 106)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(142, 13)
-        Me.Label7.TabIndex = 15
-        Me.Label7.Text = "(Push ENTER to confirm)"
+        Me.Label7.Size = New System.Drawing.Size(24, 13)
+        Me.Label7.TabIndex = 30
+        Me.Label7.Text = "ms"
+        '
+        'PictureBox6
+        '
+        Me.PictureBox6.Location = New System.Drawing.Point(2, 98)
+        Me.PictureBox6.Name = "PictureBox6"
+        Me.PictureBox6.Size = New System.Drawing.Size(255, 10)
+        Me.PictureBox6.TabIndex = 27
+        Me.PictureBox6.TabStop = False
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.Location = New System.Drawing.Point(2, 120)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(255, 10)
+        Me.PictureBox3.TabIndex = 24
+        Me.PictureBox3.TabStop = False
+        '
+        'TrackBar1
+        '
+        Me.TrackBar1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.TrackBar1.LargeChange = 1
+        Me.TrackBar1.Location = New System.Drawing.Point(2, 104)
+        Me.TrackBar1.Maximum = 2000
+        Me.TrackBar1.Minimum = 100
+        Me.TrackBar1.Name = "TrackBar1"
+        Me.TrackBar1.Size = New System.Drawing.Size(254, 45)
+        Me.TrackBar1.TabIndex = 21
+        Me.TrackBar1.Value = 100
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(264, 103)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(67, 21)
+        Me.TextBox1.TabIndex = 18
+        Me.TextBox1.Text = "500"
         '
         'ComboBox1
         '
+        Me.ComboBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox1.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBox1.FormattingEnabled = True
@@ -236,25 +348,95 @@ Partial Class Gui
         Me.ComboBox1.Size = New System.Drawing.Size(352, 22)
         Me.ComboBox1.TabIndex = 14
         '
+        'Label9
+        '
+        Me.Label9.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.Black
+        Me.Label9.Location = New System.Drawing.Point(8, 85)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(198, 18)
+        Me.Label9.TabIndex = 12
+        Me.Label9.Text = "Secondary Offset Position"
+        '
         'Label6
         '
-        Me.Label6.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.Color.Black
-        Me.Label6.Location = New System.Drawing.Point(8, 142)
+        Me.Label6.Location = New System.Drawing.Point(8, 27)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(296, 18)
+        Me.Label6.Size = New System.Drawing.Size(198, 18)
         Me.Label6.TabIndex = 12
-        Me.Label6.Text = "Primary Offset Position in Pixels"
+        Me.Label6.Text = "Primary Offset Position"
         '
-        'NumericUpDown2
+        'PictureBox8
         '
-        Me.NumericUpDown2.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown2.Location = New System.Drawing.Point(9, 160)
-        Me.NumericUpDown2.Maximum = New Decimal(New Integer() {99999999, 0, 0, 0})
-        Me.NumericUpDown2.Minimum = New Decimal(New Integer() {99999999, 0, 0, -2147483648})
-        Me.NumericUpDown2.Name = "NumericUpDown2"
-        Me.NumericUpDown2.Size = New System.Drawing.Size(352, 22)
-        Me.NumericUpDown2.TabIndex = 11
+        Me.PictureBox8.Location = New System.Drawing.Point(1, 98)
+        Me.PictureBox8.Name = "PictureBox8"
+        Me.PictureBox8.Size = New System.Drawing.Size(256, 10)
+        Me.PictureBox8.TabIndex = 29
+        Me.PictureBox8.TabStop = False
+        '
+        'PictureBox7
+        '
+        Me.PictureBox7.Location = New System.Drawing.Point(3, 40)
+        Me.PictureBox7.Name = "PictureBox7"
+        Me.PictureBox7.Size = New System.Drawing.Size(254, 10)
+        Me.PictureBox7.TabIndex = 28
+        Me.PictureBox7.TabStop = False
+        '
+        'PictureBox5
+        '
+        Me.PictureBox5.Location = New System.Drawing.Point(1, 120)
+        Me.PictureBox5.Name = "PictureBox5"
+        Me.PictureBox5.Size = New System.Drawing.Size(256, 10)
+        Me.PictureBox5.TabIndex = 26
+        Me.PictureBox5.TabStop = False
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Location = New System.Drawing.Point(2, 62)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(255, 10)
+        Me.PictureBox4.TabIndex = 25
+        Me.PictureBox4.TabStop = False
+        '
+        'TrackBar3
+        '
+        Me.TrackBar3.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.TrackBar3.LargeChange = 1
+        Me.TrackBar3.Location = New System.Drawing.Point(3, 104)
+        Me.TrackBar3.Maximum = 5000
+        Me.TrackBar3.Minimum = -5000
+        Me.TrackBar3.Name = "TrackBar3"
+        Me.TrackBar3.Size = New System.Drawing.Size(254, 45)
+        Me.TrackBar3.TabIndex = 23
+        '
+        'TrackBar2
+        '
+        Me.TrackBar2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.TrackBar2.LargeChange = 1
+        Me.TrackBar2.Location = New System.Drawing.Point(3, 46)
+        Me.TrackBar2.Maximum = 5000
+        Me.TrackBar2.Minimum = -5000
+        Me.TrackBar2.Name = "TrackBar2"
+        Me.TrackBar2.Size = New System.Drawing.Size(254, 45)
+        Me.TrackBar2.TabIndex = 22
+        '
+        'TextBox3
+        '
+        Me.TextBox3.Location = New System.Drawing.Point(264, 103)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.Size = New System.Drawing.Size(67, 21)
+        Me.TextBox3.TabIndex = 20
+        Me.TextBox3.Text = "0"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(264, 45)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(67, 21)
+        Me.TextBox2.TabIndex = 19
+        Me.TextBox2.Text = "0"
         '
         'GroupBox3
         '
@@ -266,7 +448,7 @@ Partial Class Gui
         Me.GroupBox3.ForeColor = System.Drawing.Color.Black
         Me.GroupBox3.Location = New System.Drawing.Point(388, 200)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(150, 287)
+        Me.GroupBox3.Size = New System.Drawing.Size(150, 315)
         Me.GroupBox3.TabIndex = 21
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Taskbar Style Options"
@@ -274,6 +456,7 @@ Partial Class Gui
         'RadioButton3
         '
         Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Cursor = System.Windows.Forms.Cursors.Hand
         Me.RadioButton3.Enabled = False
         Me.RadioButton3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton3.Location = New System.Drawing.Point(9, 89)
@@ -286,6 +469,7 @@ Partial Class Gui
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.RadioButton2.Enabled = False
         Me.RadioButton2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton2.Location = New System.Drawing.Point(9, 66)
@@ -299,6 +483,7 @@ Partial Class Gui
         '
         Me.RadioButton1.AutoSize = True
         Me.RadioButton1.Checked = True
+        Me.RadioButton1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.RadioButton1.Enabled = False
         Me.RadioButton1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton1.Location = New System.Drawing.Point(9, 43)
@@ -306,7 +491,7 @@ Partial Class Gui
         Me.RadioButton1.Size = New System.Drawing.Size(84, 17)
         Me.RadioButton1.TabIndex = 14
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Transparant"
+        Me.RadioButton1.Text = "Transparent"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'PictureBox1
@@ -346,6 +531,7 @@ Partial Class Gui
         'LinkLabel1
         '
         Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
+        Me.LinkLabel1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.LinkLabel1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel1.LinkColor = System.Drawing.Color.Gray
         Me.LinkLabel1.Location = New System.Drawing.Point(19, 160)
@@ -365,7 +551,7 @@ Partial Class Gui
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(526, 19)
         Me.Label3.TabIndex = 16
-        Me.Label3.Text = "27.10.2019 - 1.2.9.0"
+        Me.Label3.Text = "31.10.2019 - 1.3.0.0"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label5
@@ -397,39 +583,56 @@ Partial Class Gui
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(223, 200)
+        Me.Label8.Location = New System.Drawing.Point(339, 48)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(142, 13)
-        Me.Label8.TabIndex = 15
-        Me.Label8.Text = "(Push ENTER to confirm)"
+        Me.Label8.Size = New System.Drawing.Size(21, 13)
+        Me.Label8.TabIndex = 31
+        Me.Label8.Text = "px"
         '
-        'Label9
+        'Label10
         '
-        Me.Label9.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.ForeColor = System.Drawing.Color.Black
-        Me.Label9.Location = New System.Drawing.Point(8, 200)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(296, 18)
-        Me.Label9.TabIndex = 12
-        Me.Label9.Text = "Secondary Offset Position in Pixels"
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(338, 106)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(21, 13)
+        Me.Label10.TabIndex = 32
+        Me.Label10.Text = "px"
         '
-        'NumericUpDown3
+        'GroupBox1
         '
-        Me.NumericUpDown3.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown3.Location = New System.Drawing.Point(9, 218)
-        Me.NumericUpDown3.Maximum = New Decimal(New Integer() {99999999, 0, 0, 0})
-        Me.NumericUpDown3.Minimum = New Decimal(New Integer() {99999999, 0, 0, -2147483648})
-        Me.NumericUpDown3.Name = "NumericUpDown3"
-        Me.NumericUpDown3.Size = New System.Drawing.Size(352, 22)
-        Me.NumericUpDown3.TabIndex = 11
+        Me.GroupBox1.Controls.Add(Me.Label6)
+        Me.GroupBox1.Controls.Add(Me.PictureBox7)
+        Me.GroupBox1.Controls.Add(Me.Label9)
+        Me.GroupBox1.Controls.Add(Me.CheckBox2)
+        Me.GroupBox1.Controls.Add(Me.Label10)
+        Me.GroupBox1.Controls.Add(Me.PictureBox4)
+        Me.GroupBox1.Controls.Add(Me.Label8)
+        Me.GroupBox1.Controls.Add(Me.PictureBox5)
+        Me.GroupBox1.Controls.Add(Me.TrackBar3)
+        Me.GroupBox1.Controls.Add(Me.TrackBar2)
+        Me.GroupBox1.Controls.Add(Me.TextBox3)
+        Me.GroupBox1.Controls.Add(Me.TextBox2)
+        Me.GroupBox1.Controls.Add(Me.PictureBox8)
+        Me.GroupBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 345)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(370, 170)
+        Me.GroupBox1.TabIndex = 33
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Position Options"
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 500
         '
         'Gui
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(550, 549)
+        Me.ClientSize = New System.Drawing.Size(550, 577)
         Me.ControlBox = False
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.Panel2)
@@ -442,23 +645,32 @@ Partial Class Gui
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FalconX"
         Me.TopMost = True
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TrackBar3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TrackBar2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
-        CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents Label1 As Label
-    Friend WithEvents NumericUpDown1 As NumericUpDown
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents Label2 As Label
@@ -470,13 +682,11 @@ Partial Class Gui
     Friend WithEvents CheckBox3 As CheckBox
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents Label6 As Label
-    Friend WithEvents NumericUpDown2 As NumericUpDown
     Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents RadioButton3 As RadioButton
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents RadioButton1 As RadioButton
-    Friend WithEvents Label7 As Label
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label4 As Label
@@ -484,7 +694,28 @@ Partial Class Gui
     Friend WithEvents Label3 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents Label8 As Label
     Friend WithEvents Label9 As Label
-    Friend WithEvents NumericUpDown3 As NumericUpDown
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents CheckForUpdatesToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OpenSettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents TrackBar3 As TrackBar
+    Friend WithEvents TrackBar2 As TrackBar
+    Friend WithEvents TrackBar1 As TrackBar
+    Friend WithEvents TextBox3 As TextBox
+    Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents PictureBox5 As PictureBox
+    Friend WithEvents PictureBox4 As PictureBox
+    Friend WithEvents PictureBox3 As PictureBox
+    Friend WithEvents PictureBox8 As PictureBox
+    Friend WithEvents PictureBox7 As PictureBox
+    Friend WithEvents PictureBox6 As PictureBox
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label7 As Label
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents PictureBox9 As PictureBox
+    Friend WithEvents Timer1 As Timer
 End Class

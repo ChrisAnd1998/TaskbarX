@@ -11,7 +11,7 @@
     <AssemblyName>FalconX</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -86,23 +86,35 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimationControl.Designer.vb">
+    <Compile Include="Animators\AnimationControl.Designer.vb">
       <DependentUpon>AnimationControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="AnimationControl.vb">
+    <Compile Include="Animators\AnimationControl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Animators\AnimationControl2.Designer.vb">
+      <DependentUpon>AnimationControl2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Animators\AnimationControl2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Animators\AnimationControl3.Designer.vb">
+      <DependentUpon>AnimationControl3.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Animators\AnimationControl3.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Animators\AnimationStatus.vb" />
     <Compile Include="Animators\Animator3.vb" />
     <Compile Include="Animators\Animator2.vb" />
     <Compile Include="Animators\Animator.vb" />
-    <Compile Include="EasingFunctions.vb" />
-    <Compile Include="Effects\Bounds\XLocationEffect3.vb" />
-    <Compile Include="Effects\Bounds\XLocationEffect.vb" />
-    <Compile Include="Effects\EffectInteractions.vb" />
-    <Compile Include="Effects\IAnimationEffect.vb" />
-    <Compile Include="Effects\Bounds\XLocationEffect2.vb" />
-    <Compile Include="Extensions\AnimationExtensions.vb" />
+    <Compile Include="Animators\EasingFunctions.vb" />
+    <Compile Include="Animators\Effects\Bounds\XLocationEffect3.vb" />
+    <Compile Include="Animators\Effects\Bounds\XLocationEffect.vb" />
+    <Compile Include="Animators\Effects\EffectInteractions.vb" />
+    <Compile Include="Animators\Effects\IAnimationEffect.vb" />
+    <Compile Include="Animators\Effects\Bounds\XLocationEffect2.vb" />
+    <Compile Include="Animators\Extensions\AnimationExtensions.vb" />
     <Compile Include="Gui.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -128,8 +140,14 @@
     <Compile Include="Taskbar.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AnimationControl.resx">
+    <EmbeddedResource Include="Animators\AnimationControl.resx">
       <DependentUpon>AnimationControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Animators\AnimationControl2.resx">
+      <DependentUpon>AnimationControl2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Animators\AnimationControl3.resx">
+      <DependentUpon>AnimationControl3.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui.resx">
       <DependentUpon>Gui.vb</DependentUpon>

@@ -1,6 +1,8 @@
 ﻿Imports System.ComponentModel
+Imports System.Drawing.Drawing2D
 Imports System.Environment
 Imports System.IO
+Imports System.Net
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports FalconX4.VisualEffects
@@ -33,9 +35,11 @@ Public Class Gui
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         NotifyIcon1.Visible = False
         SaveSettings()
+
+        Taskbar.Closing()
+        System.Threading.Thread.Sleep(500) : Application.DoEvents()
         Taskbar.RefreshWindowsExplorer()
         Taskbar.Closing()
-
         End
     End Sub
 
@@ -44,10 +48,11 @@ Public Class Gui
     End Sub
 
     Private Sub Gui_Load(sender As Object, e As EventArgs) Handles Me.Load
-
+        ContextMenuStrip1.Renderer = New MyRenderer
+        Taskbar.UpdateTaskbar = True
         Taskbar.RefreshWindowsExplorer()
         Dim currentProcess As Process = Process.GetCurrentProcess
-        currentProcess.PriorityClass = ProcessPriorityClass.BelowNormal
+        currentProcess.PriorityClass = ProcessPriorityClass.High
         Launch = True
         Me.Opacity = 0
         ComboBox1.Text = "BackEaseOut"
@@ -55,18 +60,22 @@ Public Class Gui
         System.Threading.Thread.Sleep(500) : Application.DoEvents()
         RunAtStartUp()
         Taskbar.Main()
+
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         AnimationControl.AnimationSelection = ComboBox1.Text
-
+        AnimationControl2.AnimationSelection = ComboBox1.Text
+        AnimationControl3.AnimationSelection = ComboBox1.Text
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         SaveSettings()
         NotifyIcon1.Visible = False
         Taskbar.Closing()
+        ' Taskbar.Updating = False
         Taskbar.RefreshWindowsExplorer()
+
         Application.Restart()
         End
     End Sub
@@ -91,11 +100,6 @@ Public Class Gui
 
     End Sub
 
-    Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
-        AnimationControl.AnimationSpeed = CInt(NumericUpDown1.Value.ToString)
-
-    End Sub
-
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Me.Opacity = 0
         SaveSettings()
@@ -103,17 +107,21 @@ Public Class Gui
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.Click
-        LoadSettings()
-        Me.WindowState = WindowState.Normal
 
-        Dim TitlebarHeight As Integer = Me.Height - Me.ClientSize.Height - 2
-        Me.Size = New Size(Panel2.Width + 15, Panel2.Location.Y + TitlebarHeight + Panel2.Height)
+        If e.Button = MouseButtons.Left Then
+            LoadSettings()
+            Me.WindowState = WindowState.Normal
 
-        Me.Location = New Size(Screen.PrimaryScreen.Bounds.Width / 2 - Me.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - Me.Height / 2)
+            Dim TitlebarHeight As Integer = Me.Height - Me.ClientSize.Height - 2
+            Me.Size = New Size(Panel2.Width + 15, Panel2.Location.Y + TitlebarHeight + Panel2.Height)
 
-        Me.Show()
+            Me.Location = New Size(Screen.PrimaryScreen.Bounds.Width / 2 - Me.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - Me.Height / 2)
 
-        Me.Opacity = 100
+            Me.Show()
+
+            Me.Opacity = 100
+        End If
+
     End Sub
 
     Private Sub Gui_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -180,8 +188,8 @@ Public Class Gui
             If File.Exists(path) Then
 
                 ComboBox1.Text = System.IO.File.ReadAllLines(path)(0)
-                NumericUpDown1.Value = CDec(System.IO.File.ReadAllLines(path)(1))
-                NumericUpDown2.Value = CDec(System.IO.File.ReadAllLines(path)(2))
+                TextBox1.Text = CDec(System.IO.File.ReadAllLines(path)(1))
+                TextBox2.Text = CDec(System.IO.File.ReadAllLines(path)(2))
 
                 If System.IO.File.ReadAllLines(path)(3) = "True" Then
                     CheckBox3.Checked = True
@@ -211,7 +219,7 @@ Public Class Gui
                     RadioButton3.Checked = True
                 End If
 
-                NumericUpDown3.Value = CDec(System.IO.File.ReadAllLines(path)(7))
+                TextBox3.Text = CDec(System.IO.File.ReadAllLines(path)(7))
 
             End If
         Catch
@@ -226,14 +234,14 @@ Public Class Gui
             Dim fs As FileStream = File.Create(path)
 
             Dim Animation = ComboBox1.Text
-            Dim Speed = NumericUpDown1.Value
-            Dim Offset = NumericUpDown2.Value
+            Dim Speed = TextBox1.Text
+            Dim Offset = TextBox2.Text
             Dim RunAtStartUp As Boolean
             Dim Transparant As Boolean
             Dim CBT As Boolean
             Dim TaskbarStyle As Integer
 
-            Dim Offset2 = NumericUpDown3.Value
+            Dim Offset2 = TextBox3.Text
 
             If RadioButton1.Checked = True Then
                 TaskbarStyle = 1
@@ -287,35 +295,238 @@ Public Class Gui
         Taskbar.UpdateTaskbar = True
     End Sub
 
-    Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
-        Taskbar.OffsetPosition = CInt(NumericUpDown2.Value.ToString)
-        Taskbar.UpdateTaskbar = True
-    End Sub
-
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
         If RadioButton1.Checked = True Then
             Taskbar.TaskbarStyle = 1
         End If
-        Taskbar.UpdateTaskbarStyle = True
+        Taskbar.UpdateTaskbar = True
     End Sub
 
     Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
         If RadioButton2.Checked = True Then
             Taskbar.TaskbarStyle = 2
         End If
-        Taskbar.UpdateTaskbarStyle = True
+        Taskbar.UpdateTaskbar = True
     End Sub
 
     Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
         If RadioButton3.Checked = True Then
             Taskbar.TaskbarStyle = 3
         End If
-        Taskbar.UpdateTaskbarStyle = True
+        Taskbar.UpdateTaskbar = True
     End Sub
 
-    Private Sub NumericUpDown3_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown3.ValueChanged
-        Taskbar.OffsetPosition2 = CInt(NumericUpDown3.Value.ToString)
-        Taskbar.UpdateTaskbar = True
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        NotifyIcon1.Visible = False
+        SaveSettings()
+        Taskbar.RefreshWindowsExplorer()
+        Taskbar.Closing()
+
+        End
+    End Sub
+
+    Private Sub CheckForUpdatesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CheckForUpdatesToolStripMenuItem.Click
+        Try
+            Dim address As String = "https://chrisandriessen.nl/web/version/FalconX.txt"
+            Dim client As WebClient = New WebClient()
+            Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
+
+            Dim latest = reader.ReadToEnd.ToString
+
+            If latest = Application.ProductVersion Then
+                MessageBox.Show("You are up to date!")
+            Else
+                Console.WriteLine(latest)
+                MessageBox.Show("Update " & latest & " is available!")
+                Process.Start("https://chrisandriessen.nl/web/FalconX.html")
+            End If
+
+            reader.Dispose()
+            client.Dispose()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub OpenSettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenSettingsToolStripMenuItem.Click
+        LoadSettings()
+        Me.WindowState = WindowState.Normal
+
+        Dim TitlebarHeight As Integer = Me.Height - Me.ClientSize.Height - 2
+        Me.Size = New Size(Panel2.Width + 15, Panel2.Location.Y + TitlebarHeight + Panel2.Height)
+
+        Me.Location = New Size(Screen.PrimaryScreen.Bounds.Width / 2 - Me.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - Me.Height / 2)
+
+        Me.Show()
+
+        Me.Opacity = 100
+    End Sub
+
+    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+        TextBox1.Text = TrackBar1.Value
+    End Sub
+
+    Private Sub TrackBar2_Scroll(sender As Object, e As EventArgs) Handles TrackBar2.Scroll
+        TextBox2.Text = TrackBar2.Value
+    End Sub
+
+    Private Sub TrackBar3_Scroll(sender As Object, e As EventArgs) Handles TrackBar3.Scroll
+        TextBox3.Text = TrackBar3.Value
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        Try
+            TrackBar1.Value = TextBox1.Text
+            AnimationControl.AnimationSpeed = CInt(TextBox1.Text)
+            AnimationControl2.AnimationSpeed = CInt(TextBox1.Text)
+            AnimationControl3.AnimationSpeed = CInt(TextBox1.Text)
+        Catch
+            If TextBox1.Text = "" Then
+                AnimationControl.AnimationSpeed = 100
+                AnimationControl2.AnimationSpeed = 100
+                AnimationControl3.AnimationSpeed = 100
+                TrackBar1.Value = 100
+                Exit Try
+            End If
+
+            If TextBox1.Text <= TrackBar1.Minimum Then
+                AnimationControl.AnimationSpeed = 100
+                AnimationControl2.AnimationSpeed = 100
+                AnimationControl3.AnimationSpeed = 100
+                TrackBar1.Value = 100
+            Else
+                AnimationControl.AnimationSpeed = 2000
+                AnimationControl2.AnimationSpeed = 2000
+                AnimationControl3.AnimationSpeed = 2000
+                TrackBar1.Value = 2000
+            End If
+
+        End Try
+
+    End Sub
+
+    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
+        Try
+
+            TrackBar2.Value = TextBox2.Text
+            Taskbar.OffsetPosition = TextBox2.Text
+            Taskbar.UpdateTaskbar = True
+        Catch
+            If TextBox1.Text = "" Then
+                TrackBar2.Value = 0
+                Taskbar.OffsetPosition = 0
+                Exit Try
+            End If
+        End Try
+    End Sub
+
+    Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
+
+        Try
+
+            TrackBar3.Value = TextBox3.Text
+            Taskbar.OffsetPosition2 = TextBox3.Text
+            Taskbar.UpdateTaskbar = True
+        Catch
+            If TextBox1.Text = "" Then
+                TrackBar3.Value = 0
+                Taskbar.OffsetPosition2 = 0
+                Exit Try
+            End If
+        End Try
+    End Sub
+
+    Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox1.KeyPress
+        If e.KeyChar <> ControlChars.Back Then
+            e.Handled = Not (Char.IsDigit(e.KeyChar))
+        End If
+    End Sub
+
+    Private Sub TextBox2_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox2.KeyPress
+        If e.KeyChar <> ControlChars.Back Then
+            e.Handled = Not (Char.IsDigit(e.KeyChar) Or e.KeyChar = "-")
+        End If
+    End Sub
+
+    Private Sub TextBox3_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox3.KeyPress
+        If e.KeyChar <> ControlChars.Back Then
+            e.Handled = Not (Char.IsDigit(e.KeyChar) Or e.KeyChar = "-")
+        End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+
+        Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf Taskbar.TaskbarCalculator)
+        t1.Start()
+
+        Timer1.Stop()
+    End Sub
+
+End Class
+
+Public Class MyColorTable
+    Inherits ProfessionalColorTable
+
+    Public Overrides ReadOnly Property MenuItemBorder As Color
+        Get
+            Return Color.FromArgb(65, 65, 65)
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property MenuItemSelected As Color
+        Get
+            Return Color.FromArgb(65, 65, 65)
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ToolStripDropDownBackground As Color
+        Get
+            Return Color.FromArgb(43, 43, 43)
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ImageMarginGradientBegin As Color
+        Get
+            Return Color.FromArgb(43, 43, 43)
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ImageMarginGradientMiddle As Color
+        Get
+            Return Color.FromArgb(43, 43, 43)
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ImageMarginGradientEnd As Color
+        Get
+            Return Color.FromArgb(43, 43, 43)
+        End Get
+    End Property
+
+End Class
+
+Public Class MyRenderer
+    Inherits ToolStripProfessionalRenderer
+
+    Public Sub New()
+        MyBase.New(New MyColorTable)
+
+    End Sub
+
+    Protected Overrides Sub OnRenderArrow(ByVal e As ToolStripArrowRenderEventArgs)
+        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
+        Dim r = New Rectangle(e.ArrowRectangle.Location, e.ArrowRectangle.Size)
+        r.Inflate(-2, -6)
+        e.Graphics.DrawLines(Pens.Black, New Point() {New Point(r.Left, r.Top), New Point(r.Right, (r.Top _
+                                    + (r.Height / 2))), New Point(r.Left, (r.Top + r.Height))})
+    End Sub
+
+    Protected Overrides Sub OnRenderItemCheck(ByVal e As ToolStripItemImageRenderEventArgs)
+        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
+        Dim r = New Rectangle(e.ImageRectangle.Location, e.ImageRectangle.Size)
+        r.Inflate(-4, -6)
+        e.Graphics.DrawLines(Pens.Black, New Point() {New Point(r.Left, (r.Bottom _
+                                    - (r.Height / 2))), New Point((r.Left _
+                                    + (r.Width / 3)), r.Bottom), New Point(r.Right, r.Top)})
     End Sub
 
 End Class
