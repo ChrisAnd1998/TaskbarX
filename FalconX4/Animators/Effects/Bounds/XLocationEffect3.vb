@@ -2,7 +2,7 @@
 
 Namespace VisualEffects.Animations.Effects
 
-    Public Class XLocationEffect
+    Public Class XLocationEffect3
 
         Implements IEffect
 
@@ -16,9 +16,9 @@ Namespace VisualEffects.Animations.Effects
         Public SWP_NOSENDCHANGING As UInt32 = 1024
         Public SWP_NOZORDER As UInt32 = 4
 
-        Public Shared FirstTaskbarPtr As IntPtr = CType(0, IntPtr)
-        Public Shared FirstTaskbarPosition As Integer = 0
-        Public Shared FirstTaskbarOldPosition As Integer = 0
+        Public Shared ThirdTaskbarPtr As IntPtr = CType(0, IntPtr)
+        Public Shared ThirdTaskbarPosition As Integer = 0
+        Public Shared ThirdTaskbarOldPosition As Integer = 0
 
         Public Function GetCurrentValue(ByVal control As Control) As Integer Implements IEffect.GetCurrentValue
             Return control.Left
@@ -27,13 +27,13 @@ Namespace VisualEffects.Animations.Effects
 
         Public Sub SetValueX(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueX
 
-            SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
         End Sub
 
         Public Sub SetValueY(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueY
 
-            SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, 0, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, 0, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
         End Sub
 
