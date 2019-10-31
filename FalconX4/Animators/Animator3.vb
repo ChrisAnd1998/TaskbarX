@@ -1,4 +1,5 @@
-﻿Imports System.Threading
+﻿Imports System.Runtime.InteropServices
+Imports System.Threading
 Imports FalconX4.VisualEffects.Animations.Effects
 Imports FalconX4.VisualEffects.Animators
 Imports FalconX4.VisualEffects.Easing
@@ -9,12 +10,28 @@ Namespace VisualEffects
 
         Public Event Animated As EventHandler(Of AnimationStatus)
 
+        <DllImport("user32.dll", SetLastError:=True)>
+        Private Shared Function SetWindowPos(ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As UInt32) As Boolean
+        End Function
+
+        Public Shared SWP_NOSIZE As UInt32 = 1
+        Public Shared SWP_ASYNCWINDOWPOS As UInt32 = 16384
+        Public Shared SWP_NOACTIVATE As UInt32 = 16
+        Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
+        Public Shared SWP_NOZORDER As UInt32 = 4
+
         Public Shared IsAnimated As Boolean = True
 
         Public Shared Function Animate(ByVal control As Control, ByVal iEffect As IEffect, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal delay As Integer, Optional ByVal reverse As Boolean = False, Optional ByVal loops As Integer = 1) As AnimationStatus
             '  Try
-            Dim CurrentProcess As Process = Process.GetCurrentProcess
-            CurrentProcess.PriorityClass = ProcessPriorityClass.High
+
+            If Not XLocationEffect3.ThirdTaskbarOldPosition = 0 Then
+                If Taskbar.Horizontal = True Then
+                    SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, XLocationEffect3.ThirdTaskbarOldPosition, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                Else
+                    SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, 0, XLocationEffect3.ThirdTaskbarOldPosition, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                End If
+            End If
 
             IsAnimated = False
             'used to calculate animation frame based on how much time has effectively passed
@@ -68,13 +85,8 @@ Namespace VisualEffects
             Dim actualValueChange As Integer = Math.Abs(originalValue - valueToReach)
 
             Dim animationTimer As New System.Timers.Timer With {
-                .Interval = 1
+                .Interval = 0.1
             }
-
-            'because of naive interval calculation this is required
-            If iEffect.Interaction = EffectInteractions.COLOR Then
-                animationTimer.Interval = 10
-            End If
 
             'main animation timer tick
             AddHandler animationTimer.Elapsed, Sub(o, e2)
@@ -101,7 +113,11 @@ Namespace VisualEffects
                                                    End If
 
                                                    'control.BeginInvoke(New MethodInvoker(Sub()
-                                                   iEffect.SetValue(control, originalValue, valueToReach, newValue)
+                                                   If Taskbar.Horizontal = True Then
+                                                       iEffect.SetValueX(control, originalValue, valueToReach, newValue)
+                                                   ElseIf Taskbar.Horizontal = False Then
+                                                       iEffect.SetValueY(control, originalValue, valueToReach, newValue)
+                                                   End If
 
                                                    Dim timeout As Boolean = stopwatch.ElapsedMilliseconds >= duration
                                                    If timeout Then
@@ -122,11 +138,10 @@ Namespace VisualEffects
                                                        Else
                                                            animationStatus.IsCompleted = True
                                                            animationTimer.Stop()
-                                                           stopwatch.Stop()
+                                                           '   stopwatch.Stop()
 
                                                            IsAnimated = True
 
-                                                           CurrentProcess.PriorityClass = ProcessPriorityClass.BelowNormal
                                                            'RaiseEvent Animated(control, animationStatus)
                                                        End If
                                                    End If
