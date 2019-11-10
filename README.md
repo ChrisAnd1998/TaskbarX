@@ -28,6 +28,10 @@ FalconX automate's your taskbar position to the center.
 - VisualEffects  | https://www.codeproject.com/Articles/827808/Control-Animation-in-Winforms  
 - UIAComWrapperX | https://github.com/technoscavenger/UIAComWrapperX
 
+## Screenshots
+
+![alt-text-1](https://chrisandriessen.nl/web/img/p3.jpg "title-1") ![alt-text-2](https://chrisandriessen.nl/web/img/p4.jpg "title-2") ![alt-text-2](https://chrisandriessen.nl/web/img/p5.jpg "title-2")
+
 ## Changelog
 
 ```
