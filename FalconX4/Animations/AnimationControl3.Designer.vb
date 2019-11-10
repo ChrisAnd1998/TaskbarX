@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class AnimationControl
+Partial Class AnimationControl3
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,13 +24,13 @@ Partial Class AnimationControl
     Private Sub InitializeComponent()
         Me.SuspendLayout()
         '
-        'AnimationControl
+        'AnimationControl3
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(120, 0)
-        Me.Name = "AnimationControl"
-        Me.Text = "AnimationControl"
+        Me.Name = "AnimationControl3"
+        Me.Text = "AnimationControl3"
         Me.ResumeLayout(False)
 
     End Sub
