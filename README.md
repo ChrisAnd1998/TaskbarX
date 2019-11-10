@@ -12,7 +12,7 @@ FalconX automate's your taskbar position to the center.
 - All taskbar settings supported
 - Vertical taskbar supported
 - Multiple monitors supported max (3)
-- Change taskbar style's to Transparent, Blur and Acrylic
+- Change taskbar style to Transparent, Blur and Acrylic
 
 ## Preview
 
