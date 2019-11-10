@@ -1,5 +1,6 @@
 # FalconX
 
+<img src="https://chrisandriessen.nl/web/img/insta.gif" width="100%" />
 FalconX automate's your taskbar position to the center.
 
 ## Features
@@ -15,8 +16,6 @@ FalconX automate's your taskbar position to the center.
 - Change taskbar style to Transparent, Blur and Acrylic
 
 ## Preview
-
-<img src="https://chrisandriessen.nl/web/img/insta.gif" width="100%" />
  
 [![Alt text](https://img.youtube.com/vi/diPj9AKCpb4/0.jpg)](https://www.youtube.com/watch?v=diPj9AKCpb4) 
 
