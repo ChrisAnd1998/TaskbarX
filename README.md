@@ -31,8 +31,8 @@ FalconX automate's your taskbar position to the center.
 ## Screenshots
 
 <p float="left">
-  <img src="https://chrisandriessen.nl/web/img/p1.jpg" width="48%" />
-  <img src="https://chrisandriessen.nl/web/img/p2.jpg" width="48%" /> 
+  <img src="https://chrisandriessen.nl/web/img/p1.jpg" width="49%" />
+  <img src="https://chrisandriessen.nl/web/img/p2.jpg" width="49%" /> 
 </p>
 
 <p float="left">
