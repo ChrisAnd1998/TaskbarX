@@ -12,6 +12,7 @@ FalconX automate's your taskbar position to the center.
 - All taskbar settings supported
 - Vertical taskbar supported
 - Multiple monitors supported max (3)
+- Change taskbar style's to Transparent, Blur and Acrylic
 
 ## Preview
 
@@ -30,6 +31,13 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 10.11.2019 1.3.1.0 November
+* FIXED | "Shadow buttons" - shows pointer cursor instead of normal (Issue opened by Martin5001)
+* FIXED | Taskbar styling options not working until refresh (Issue opened by Martin5001)
+* FIXED | Using tray when Settings opened freezes Settings window (Issue opened by Martin5001)
+* FIXED | Update check error (Issue opened by Martin5001)
+* ADDED | Update check improvements (Issue opened by Martin5001)
+
 FalconX Build 31.10.2019 1.3.0.0 October
 * Added right click tray menu.
 * Added (check for updates).
