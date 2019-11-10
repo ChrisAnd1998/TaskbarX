@@ -117,6 +117,7 @@ Public Class Taskbar
     Public Shared AppClosing As Boolean
 
     Public Shared Sub Main()
+
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarCalculator)
@@ -256,7 +257,7 @@ Public Class Taskbar
                             XLocationEffect.FirstTaskbarPosition = CInt(Position1.ToString.Replace("-", ""))
                             XLocationEffect.FirstTaskbarOldPosition = CInt(OldPosition1.ToString.Replace("-", ""))
 
-                            Console.WriteLine(XLocationEffect.FirstTaskbarOldPosition)
+                            'Console.WriteLine(XLocationEffect.FirstTaskbarOldPosition)
 
                             SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
@@ -375,7 +376,7 @@ Public Class Taskbar
                                 Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3).ToString.Replace("-", "")) + OffsetPosition2
                             End If
 
-                            Console.WriteLine(Position3)
+                            ' Console.WriteLine(Position3)
 
                             XLocationEffect3.ThirdTaskbarPtr = CType(TaskList.Current.NativeWindowHandle, IntPtr)
                             XLocationEffect3.ThirdTaskbarPosition = CInt(Position3.ToString.Replace("-", ""))

@@ -5,15 +5,22 @@ Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
 Imports System.Text
-Imports FalconX4.VisualEffects
-Imports FalconX4.VisualEffects.Animations.Effects
-Imports FalconX4.VisualEffects.Easing
 Imports Microsoft.VisualBasic.CompilerServices
 
 Public Class Gui
     Public Launch As Boolean
 
     Public Const WM_NCLBUTTONDBLCLK As Integer = &HA3
+
+    Private Const CP_NOCLOSE_BUTTON As Integer = &H200
+
+    Protected Overloads Overrides ReadOnly Property CreateParams() As CreateParams
+        Get
+            Dim myCp As CreateParams = MyBase.CreateParams
+            myCp.ClassStyle = myCp.ClassStyle Or CP_NOCLOSE_BUTTON
+            Return myCp
+        End Get
+    End Property
 
     Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
         If m.Msg = WM_NCLBUTTONDBLCLK Then Return
@@ -33,6 +40,7 @@ Public Class Gui
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Button2.Text = "Closing..."
         NotifyIcon1.Visible = False
         SaveSettings()
 
@@ -50,17 +58,19 @@ Public Class Gui
     Private Sub Gui_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ContextMenuStrip1.Renderer = New MyRenderer
+
         Taskbar.UpdateTaskbar = True
         Taskbar.RefreshWindowsExplorer()
         Dim currentProcess As Process = Process.GetCurrentProcess
         currentProcess.PriorityClass = ProcessPriorityClass.High
         Launch = True
-        Me.Opacity = 0
+
         ComboBox1.Text = "BackEaseOut"
         LoadSettings()
         System.Threading.Thread.Sleep(500) : Application.DoEvents()
         RunAtStartUp()
         Taskbar.Main()
+        Me.Hide()
 
     End Sub
 
@@ -71,6 +81,7 @@ Public Class Gui
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Button3.Text = "Refreshing..."
         SaveSettings()
         NotifyIcon1.Visible = False
         Taskbar.Closing()
@@ -102,6 +113,7 @@ Public Class Gui
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
         Me.Opacity = 0
         SaveSettings()
         Me.Hide()
@@ -121,6 +133,7 @@ Public Class Gui
             Me.Show()
 
             Me.Opacity = 100
+
         End If
 
     End Sub
@@ -137,6 +150,7 @@ Public Class Gui
                 If Application.StartupPath.Contains("40210ChrisAndriessen") Then
                     CheckBox3.Visible = False
                     CheckForUpdatesToolStripMenuItem.Visible = False
+                    Button5.Visible = False
 
                     Dim strxx As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\Microsoft\Windows\Start Menu\Programs\Startup"
                     If File.Exists(strxx + "\FalconX.lnk") Then
@@ -298,24 +312,30 @@ Public Class Gui
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        ' CheckBox1.Checked = True
         If RadioButton1.Checked = True Then
             Taskbar.TaskbarStyle = 1
         End If
         Taskbar.UpdateTaskbar = True
+        Taskbar.UpdateTaskbarStyle = True
     End Sub
 
     Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
+        'CheckBox1.Checked = True
         If RadioButton2.Checked = True Then
             Taskbar.TaskbarStyle = 2
         End If
         Taskbar.UpdateTaskbar = True
+        Taskbar.UpdateTaskbarStyle = True
     End Sub
 
     Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        ' CheckBox1.Checked = True
         If RadioButton3.Checked = True Then
             Taskbar.TaskbarStyle = 3
         End If
         Taskbar.UpdateTaskbar = True
+        Taskbar.UpdateTaskbarStyle = True
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
@@ -328,6 +348,7 @@ Public Class Gui
     End Sub
 
     Private Sub CheckForUpdatesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CheckForUpdatesToolStripMenuItem.Click
+
         Try
             Dim address As String = "https://chrisandriessen.nl/web/version/FalconX.txt"
             Dim client As WebClient = New WebClient()
@@ -338,9 +359,10 @@ Public Class Gui
             If latest = Application.ProductVersion Then
                 MessageBox.Show("You are up to date!")
             Else
-                Console.WriteLine(latest)
-                MessageBox.Show("Update " & latest & " is available!")
-                Process.Start("https://chrisandriessen.nl/web/FalconX.html")
+                Dim result As Integer = MessageBox.Show("Update " & latest & " is available!", "FalconX Update", MessageBoxButtons.OKCancel)
+                If result = DialogResult.OK Then
+                    Process.Start("https://chrisandriessen.nl/web/FalconX.html")
+                End If
             End If
 
             reader.Dispose()
@@ -453,6 +475,44 @@ Public Class Gui
         If e.KeyChar <> ControlChars.Back Then
             e.Handled = Not (Char.IsDigit(e.KeyChar) Or e.KeyChar = "-")
         End If
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        Process.Start("https://chrisandriessen.nl")
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Process.Start("https://github.com/ChrisAnd1998/FalconX-Center-Taskbar/issues")
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+
+        Try
+            Dim address As String = "https://chrisandriessen.nl/web/version/FalconX.txt"
+            Dim client As WebClient = New WebClient()
+            Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
+
+            Dim latest = reader.ReadToEnd.ToString
+
+            If latest = Application.ProductVersion Then
+                MessageBox.Show("You are up to date!")
+            Else
+
+                Dim result As Integer = MessageBox.Show("Update " & latest & " is available!", "FalconX Update", MessageBoxButtons.OKCancel)
+                If result = DialogResult.OK Then
+                    Process.Start("https://chrisandriessen.nl/web/FalconX.html")
+                End If
+
+            End If
+
+            reader.Dispose()
+            client.Dispose()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
+        Process.Start("https://github.com/ChrisAnd1998/FalconX-Center-Taskbar/issues")
     End Sub
 
 End Class

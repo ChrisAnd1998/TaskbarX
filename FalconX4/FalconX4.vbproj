@@ -54,11 +54,28 @@
   <PropertyGroup>
     <ApplicationIcon>FalconX48.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>FalconX.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DocumentationFile>FalconX.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.UIAutomationClient, Version=12.0.21213.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\Interop.UIAutomationClient.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -69,7 +86,8 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="UIAComWrapperX, Version=1.1.0.16, Culture=neutral, PublicKeyToken=78cbcf77433a85e5, processorArchitecture=MSIL">
-      <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\UIAComWrapperX.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ComWrapper\UiaComWrapperX\bin\debug\UIAComWrapperX.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -86,35 +104,35 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animators\AnimationControl.Designer.vb">
+    <Compile Include="Animations\AnimationControl.Designer.vb">
       <DependentUpon>AnimationControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Animators\AnimationControl.vb">
+    <Compile Include="Animations\AnimationControl.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Animators\AnimationControl2.Designer.vb">
+    <Compile Include="Animations\AnimationControl2.Designer.vb">
       <DependentUpon>AnimationControl2.vb</DependentUpon>
     </Compile>
-    <Compile Include="Animators\AnimationControl2.vb">
+    <Compile Include="Animations\AnimationControl2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Animators\AnimationControl3.Designer.vb">
+    <Compile Include="Animations\AnimationControl3.Designer.vb">
       <DependentUpon>AnimationControl3.vb</DependentUpon>
     </Compile>
-    <Compile Include="Animators\AnimationControl3.vb">
+    <Compile Include="Animations\AnimationControl3.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Animators\AnimationStatus.vb" />
-    <Compile Include="Animators\Animator3.vb" />
-    <Compile Include="Animators\Animator2.vb" />
-    <Compile Include="Animators\Animator.vb" />
-    <Compile Include="Animators\EasingFunctions.vb" />
-    <Compile Include="Animators\Effects\Bounds\XLocationEffect3.vb" />
-    <Compile Include="Animators\Effects\Bounds\XLocationEffect.vb" />
-    <Compile Include="Animators\Effects\EffectInteractions.vb" />
-    <Compile Include="Animators\Effects\IAnimationEffect.vb" />
-    <Compile Include="Animators\Effects\Bounds\XLocationEffect2.vb" />
-    <Compile Include="Animators\Extensions\AnimationExtensions.vb" />
+    <Compile Include="Animations\AnimationStatus.vb" />
+    <Compile Include="Animations\Animator3.vb" />
+    <Compile Include="Animations\Animator2.vb" />
+    <Compile Include="Animations\Animator.vb" />
+    <Compile Include="Animations\EasingFunctions.vb" />
+    <Compile Include="Animations\XLocationEffect3.vb" />
+    <Compile Include="Animations\XLocationEffect.vb" />
+    <Compile Include="Animations\EffectInteractions.vb" />
+    <Compile Include="Animations\IAnimationEffect.vb" />
+    <Compile Include="Animations\XLocationEffect2.vb" />
+    <Compile Include="Animations\AnimationExtensions.vb" />
     <Compile Include="Gui.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -140,13 +158,13 @@
     <Compile Include="Taskbar.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Animators\AnimationControl.resx">
+    <EmbeddedResource Include="Animations\AnimationControl.resx">
       <DependentUpon>AnimationControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Animators\AnimationControl2.resx">
+    <EmbeddedResource Include="Animations\AnimationControl2.resx">
       <DependentUpon>AnimationControl2.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Animators\AnimationControl3.resx">
+    <EmbeddedResource Include="Animations\AnimationControl3.resx">
       <DependentUpon>AnimationControl3.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui.resx">
@@ -171,10 +189,21 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FalconX48.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="UIAutomationClient">
+      <Guid>{944DE083-8FB8-45CF-BCB7-C477ACB2F897}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

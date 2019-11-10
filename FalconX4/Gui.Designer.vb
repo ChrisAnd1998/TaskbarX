@@ -71,6 +71,11 @@ Partial Class Gui
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.PictureBox10 = New System.Windows.Forms.PictureBox()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -89,11 +94,13 @@ Partial Class Gui
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
         '
-        Me.Label1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.Black
         Me.Label1.Location = New System.Drawing.Point(8, 27)
         Me.Label1.Name = "Label1"
@@ -104,13 +111,13 @@ Partial Class Gui
         'Button1
         '
         Me.Button1.BackColor = System.Drawing.Color.Transparent
-        Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Button1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.ForeColor = System.Drawing.Color.White
-        Me.Button1.Location = New System.Drawing.Point(463, 13)
+        Me.Button1.Location = New System.Drawing.Point(481, 13)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 8
@@ -120,11 +127,11 @@ Partial Class Gui
         'Button2
         '
         Me.Button2.BackColor = System.Drawing.Color.Transparent
-        Me.Button2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Button2.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button2.ForeColor = System.Drawing.Color.White
         Me.Button2.Location = New System.Drawing.Point(12, 13)
         Me.Button2.Name = "Button2"
@@ -135,7 +142,7 @@ Partial Class Gui
         '
         'Label2
         '
-        Me.Label2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.Black
         Me.Label2.Location = New System.Drawing.Point(8, 85)
         Me.Label2.Name = "Label2"
@@ -150,19 +157,19 @@ Partial Class Gui
         Me.Panel2.Controls.Add(Me.CheckBox3)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Controls.Add(Me.Button2)
-        Me.Panel2.Location = New System.Drawing.Point(0, 527)
+        Me.Panel2.Location = New System.Drawing.Point(0, 537)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(550, 50)
+        Me.Panel2.Size = New System.Drawing.Size(568, 50)
         Me.Panel2.TabIndex = 12
         '
         'Button3
         '
         Me.Button3.BackColor = System.Drawing.Color.Transparent
-        Me.Button3.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Button3.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
         Me.Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button3.ForeColor = System.Drawing.Color.White
         Me.Button3.Location = New System.Drawing.Point(93, 13)
         Me.Button3.Name = "Button3"
@@ -174,12 +181,12 @@ Partial Class Gui
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.CheckBox3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox3.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CheckBox3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox3.ForeColor = System.Drawing.Color.Black
-        Me.CheckBox3.Location = New System.Drawing.Point(359, 17)
+        Me.CheckBox3.Location = New System.Drawing.Point(373, 16)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(98, 17)
+        Me.CheckBox3.Size = New System.Drawing.Size(102, 19)
         Me.CheckBox3.TabIndex = 18
         Me.CheckBox3.Text = "Run at StartUp"
         Me.CheckBox3.UseVisualStyleBackColor = True
@@ -187,12 +194,12 @@ Partial Class Gui
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.CheckBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CheckBox1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox1.ForeColor = System.Drawing.Color.Black
-        Me.CheckBox1.Location = New System.Drawing.Point(9, 20)
+        Me.CheckBox1.Location = New System.Drawing.Point(9, 28)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(134, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(141, 17)
         Me.CheckBox1.TabIndex = 13
         Me.CheckBox1.Text = "Enable Taskbar Styling"
         Me.CheckBox1.UseVisualStyleBackColor = True
@@ -200,12 +207,12 @@ Partial Class Gui
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.CheckBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox2.Cursor = System.Windows.Forms.Cursors.Default
+        Me.CheckBox2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox2.ForeColor = System.Drawing.Color.Black
         Me.CheckBox2.Location = New System.Drawing.Point(9, 146)
         Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(360, 17)
+        Me.CheckBox2.Size = New System.Drawing.Size(363, 17)
         Me.CheckBox2.TabIndex = 17
         Me.CheckBox2.Text = "Center between Start, Search etc... and Tray (Primary Taskbar Only)"
         Me.CheckBox2.UseVisualStyleBackColor = True
@@ -220,20 +227,25 @@ Partial Class Gui
         '
         Me.ContextMenuStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(14, 14)
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.CheckForUpdatesToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.ToolStripMenuItem1, Me.CheckForUpdatesToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 105)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(172, 123)
         '
         'OpenSettingsToolStripMenuItem
         '
+        Me.OpenSettingsToolStripMenuItem.AutoSize = False
         Me.OpenSettingsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.OpenSettingsToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OpenSettingsToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.OpenSettingsToolStripMenuItem.Image = CType(resources.GetObject("OpenSettingsToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.OpenSettingsToolStripMenuItem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.OpenSettingsToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 5, 0, 5)
         Me.OpenSettingsToolStripMenuItem.Name = "OpenSettingsToolStripMenuItem"
-        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OpenSettingsToolStripMenuItem.Padding = New System.Windows.Forms.Padding(0, 5, 0, 5)
+        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 30)
         Me.OpenSettingsToolStripMenuItem.Text = "Settings"
+        Me.OpenSettingsToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'ToolStripSeparator1
         '
@@ -272,11 +284,11 @@ Partial Class Gui
         Me.GroupBox2.Controls.Add(Me.TextBox1)
         Me.GroupBox2.Controls.Add(Me.ComboBox1)
         Me.GroupBox2.Controls.Add(Me.Label1)
-        Me.GroupBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox2.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 200)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 210)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(370, 139)
+        Me.GroupBox2.Size = New System.Drawing.Size(376, 139)
         Me.GroupBox2.TabIndex = 21
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Animation Options"
@@ -293,9 +305,9 @@ Partial Class Gui
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(338, 106)
+        Me.Label7.Location = New System.Drawing.Point(342, 106)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(24, 13)
+        Me.Label7.Size = New System.Drawing.Size(23, 15)
         Me.Label7.TabIndex = 30
         Me.Label7.Text = "ms"
         '
@@ -317,7 +329,7 @@ Partial Class Gui
         '
         'TrackBar1
         '
-        Me.TrackBar1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.TrackBar1.Cursor = System.Windows.Forms.Cursors.Default
         Me.TrackBar1.LargeChange = 1
         Me.TrackBar1.Location = New System.Drawing.Point(2, 104)
         Me.TrackBar1.Maximum = 2000
@@ -325,31 +337,32 @@ Partial Class Gui
         Me.TrackBar1.Name = "TrackBar1"
         Me.TrackBar1.Size = New System.Drawing.Size(254, 45)
         Me.TrackBar1.TabIndex = 21
+        Me.TrackBar1.TickStyle = System.Windows.Forms.TickStyle.None
         Me.TrackBar1.Value = 100
         '
         'TextBox1
         '
         Me.TextBox1.Location = New System.Drawing.Point(264, 103)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(67, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(67, 23)
         Me.TextBox1.TabIndex = 18
         Me.TextBox1.Text = "500"
         '
         'ComboBox1
         '
-        Me.ComboBox1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ComboBox1.Cursor = System.Windows.Forms.Cursors.Default
         Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox1.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComboBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"None", "Linear", "ExpoEaseOut", "ExpoEaseIn", "ExpoEaseInOut", "ExpoEaseOutIn", "CircEaseOut", "CircEaseIn", "CircEaseInOut", "CircEaseOutIn", "QuadEaseOut", "QuadEaseIn", "QuadEaseInOut", "QuadEaseOutIn", "SineEaseOut", "SineEaseIn", "SineEaseInOut", "SineEaseOutIn", "CubicEaseOut", "CubicEaseIn", "CubicEaseInOut", "CubicEaseOutIn", "QuartEaseOut", "QuartEaseIn", "QuartEaseInOut", "QuartEaseOutIn", "QuintEaseOut", "QuintEaseIn", "QuintEaseInOut", "QuintEaseOutIn", "ElasticEaseOut", "ElasticEaseIn", "ElasticEaseInOut", "ElasticEaseOutIn", "BounceEaseOut", "BounceEaseIn", "BounceEaseInOut", "BounceEaseOutIn", "BackEaseOut", "BackEaseIn", "BackEaseInOut", "BackEaseOutIn"})
         Me.ComboBox1.Location = New System.Drawing.Point(9, 45)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(352, 22)
+        Me.ComboBox1.Size = New System.Drawing.Size(358, 23)
         Me.ComboBox1.TabIndex = 14
         '
         'Label9
         '
-        Me.Label9.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.Color.Black
         Me.Label9.Location = New System.Drawing.Point(8, 85)
         Me.Label9.Name = "Label9"
@@ -359,7 +372,7 @@ Partial Class Gui
         '
         'Label6
         '
-        Me.Label6.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.Color.Black
         Me.Label6.Location = New System.Drawing.Point(8, 27)
         Me.Label6.Name = "Label6"
@@ -401,7 +414,7 @@ Partial Class Gui
         '
         'TrackBar3
         '
-        Me.TrackBar3.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.TrackBar3.Cursor = System.Windows.Forms.Cursors.Default
         Me.TrackBar3.LargeChange = 1
         Me.TrackBar3.Location = New System.Drawing.Point(3, 104)
         Me.TrackBar3.Maximum = 5000
@@ -409,10 +422,11 @@ Partial Class Gui
         Me.TrackBar3.Name = "TrackBar3"
         Me.TrackBar3.Size = New System.Drawing.Size(254, 45)
         Me.TrackBar3.TabIndex = 23
+        Me.TrackBar3.TickStyle = System.Windows.Forms.TickStyle.None
         '
         'TrackBar2
         '
-        Me.TrackBar2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.TrackBar2.Cursor = System.Windows.Forms.Cursors.Default
         Me.TrackBar2.LargeChange = 1
         Me.TrackBar2.Location = New System.Drawing.Point(3, 46)
         Me.TrackBar2.Maximum = 5000
@@ -420,12 +434,13 @@ Partial Class Gui
         Me.TrackBar2.Name = "TrackBar2"
         Me.TrackBar2.Size = New System.Drawing.Size(254, 45)
         Me.TrackBar2.TabIndex = 22
+        Me.TrackBar2.TickStyle = System.Windows.Forms.TickStyle.None
         '
         'TextBox3
         '
         Me.TextBox3.Location = New System.Drawing.Point(264, 103)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(67, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(67, 23)
         Me.TextBox3.TabIndex = 20
         Me.TextBox3.Text = "0"
         '
@@ -433,7 +448,7 @@ Partial Class Gui
         '
         Me.TextBox2.Location = New System.Drawing.Point(264, 45)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(67, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(67, 23)
         Me.TextBox2.TabIndex = 19
         Me.TextBox2.Text = "0"
         '
@@ -443,11 +458,11 @@ Partial Class Gui
         Me.GroupBox3.Controls.Add(Me.RadioButton2)
         Me.GroupBox3.Controls.Add(Me.RadioButton1)
         Me.GroupBox3.Controls.Add(Me.CheckBox1)
-        Me.GroupBox3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox3.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox3.Location = New System.Drawing.Point(388, 200)
+        Me.GroupBox3.Location = New System.Drawing.Point(394, 210)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(150, 315)
+        Me.GroupBox3.Size = New System.Drawing.Size(162, 138)
         Me.GroupBox3.TabIndex = 21
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Taskbar Style Options"
@@ -455,12 +470,12 @@ Partial Class Gui
         'RadioButton3
         '
         Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.RadioButton3.Cursor = System.Windows.Forms.Cursors.Default
         Me.RadioButton3.Enabled = False
-        Me.RadioButton3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton3.Location = New System.Drawing.Point(9, 89)
+        Me.RadioButton3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton3.Location = New System.Drawing.Point(9, 97)
         Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(110, 17)
+        Me.RadioButton3.Size = New System.Drawing.Size(113, 17)
         Me.RadioButton3.TabIndex = 16
         Me.RadioButton3.Text = "Acrylic (UnStable)"
         Me.RadioButton3.UseVisualStyleBackColor = True
@@ -468,12 +483,12 @@ Partial Class Gui
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.RadioButton2.Cursor = System.Windows.Forms.Cursors.Default
         Me.RadioButton2.Enabled = False
-        Me.RadioButton2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton2.Location = New System.Drawing.Point(9, 66)
+        Me.RadioButton2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton2.Location = New System.Drawing.Point(9, 74)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(43, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(45, 17)
         Me.RadioButton2.TabIndex = 15
         Me.RadioButton2.Text = "Blur"
         Me.RadioButton2.UseVisualStyleBackColor = True
@@ -482,12 +497,12 @@ Partial Class Gui
         '
         Me.RadioButton1.AutoSize = True
         Me.RadioButton1.Checked = True
-        Me.RadioButton1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.RadioButton1.Cursor = System.Windows.Forms.Cursors.Default
         Me.RadioButton1.Enabled = False
-        Me.RadioButton1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton1.Location = New System.Drawing.Point(9, 43)
+        Me.RadioButton1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton1.Location = New System.Drawing.Point(9, 51)
         Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(84, 17)
+        Me.RadioButton1.Size = New System.Drawing.Size(86, 17)
         Me.RadioButton1.TabIndex = 14
         Me.RadioButton1.TabStop = True
         Me.RadioButton1.Text = "Transparent"
@@ -497,9 +512,9 @@ Partial Class Gui
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(247, 14)
+        Me.PictureBox1.Location = New System.Drawing.Point(251, 14)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(64, 64)
+        Me.PictureBox1.Size = New System.Drawing.Size(75, 75)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
@@ -507,22 +522,23 @@ Partial Class Gui
         'PictureBox2
         '
         Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(521, 14)
+        Me.PictureBox2.Location = New System.Drawing.Point(531, 11)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox2.Size = New System.Drawing.Size(34, 34)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox2.TabIndex = 14
         Me.PictureBox2.TabStop = False
         '
         'Label4
         '
         Me.Label4.BackColor = System.Drawing.Color.Transparent
-        Me.Label4.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(19, 94)
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.Black
+        Me.Label4.Location = New System.Drawing.Point(19, 92)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(526, 19)
+        Me.Label4.Size = New System.Drawing.Size(544, 19)
         Me.Label4.TabIndex = 13
         Me.Label4.Text = "FalconX"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -530,12 +546,12 @@ Partial Class Gui
         'LinkLabel1
         '
         Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.LinkLabel1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.LinkLabel1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel1.LinkColor = System.Drawing.Color.Gray
-        Me.LinkLabel1.Location = New System.Drawing.Point(19, 160)
+        Me.LinkLabel1.Location = New System.Drawing.Point(19, 162)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(526, 23)
+        Me.LinkLabel1.Size = New System.Drawing.Size(544, 23)
         Me.LinkLabel1.TabIndex = 15
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "https://chrisandriessen.nl"
@@ -544,56 +560,56 @@ Partial Class Gui
         'Label3
         '
         Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.White
-        Me.Label3.Location = New System.Drawing.Point(19, 113)
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.Black
+        Me.Label3.Location = New System.Drawing.Point(19, 121)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(526, 19)
+        Me.Label3.Size = New System.Drawing.Size(544, 19)
         Me.Label3.TabIndex = 16
-        Me.Label3.Text = "31.10.2019 - 1.3.0.0"
+        Me.Label3.Text = "00.11.2019 - 1.3.1.0"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label5
         '
         Me.Label5.BackColor = System.Drawing.Color.Transparent
-        Me.Label5.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(19, 132)
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.Color.Black
+        Me.Label5.Location = New System.Drawing.Point(19, 144)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(526, 19)
+        Me.Label5.Size = New System.Drawing.Size(544, 19)
         Me.Label5.TabIndex = 17
         Me.Label5.Text = "Chris Andriessen"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Panel1
         '
-        Me.Panel1.BackgroundImage = CType(resources.GetObject("Panel1.BackgroundImage"), System.Drawing.Image)
+        Me.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Controls.Add(Me.Label5)
         Me.Panel1.Controls.Add(Me.Label3)
-        Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.PictureBox2)
         Me.Panel1.Controls.Add(Me.PictureBox1)
         Me.Panel1.Location = New System.Drawing.Point(-7, -2)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(557, 194)
+        Me.Panel1.Size = New System.Drawing.Size(575, 194)
         Me.Panel1.TabIndex = 16
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(339, 48)
+        Me.Label8.Location = New System.Drawing.Point(343, 48)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(21, 13)
+        Me.Label8.Size = New System.Drawing.Size(20, 15)
         Me.Label8.TabIndex = 31
         Me.Label8.Text = "px"
         '
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(338, 106)
+        Me.Label10.Location = New System.Drawing.Point(343, 106)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(21, 13)
+        Me.Label10.Size = New System.Drawing.Size(20, 15)
         Me.Label10.TabIndex = 32
         Me.Label10.Text = "px"
         '
@@ -607,39 +623,99 @@ Partial Class Gui
         Me.GroupBox1.Controls.Add(Me.PictureBox4)
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.PictureBox5)
-        Me.GroupBox1.Controls.Add(Me.TrackBar3)
         Me.GroupBox1.Controls.Add(Me.TrackBar2)
         Me.GroupBox1.Controls.Add(Me.TextBox3)
         Me.GroupBox1.Controls.Add(Me.TextBox2)
         Me.GroupBox1.Controls.Add(Me.PictureBox8)
-        Me.GroupBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 345)
+        Me.GroupBox1.Controls.Add(Me.TrackBar3)
+        Me.GroupBox1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 355)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(370, 170)
+        Me.GroupBox1.Size = New System.Drawing.Size(376, 170)
         Me.GroupBox1.TabIndex = 33
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Position Options"
+        '
+        'PictureBox10
+        '
+        Me.PictureBox10.BackColor = System.Drawing.Color.Silver
+        Me.PictureBox10.Location = New System.Drawing.Point(13, 196)
+        Me.PictureBox10.Name = "PictureBox10"
+        Me.PictureBox10.Size = New System.Drawing.Size(543, 1)
+        Me.PictureBox10.TabIndex = 18
+        Me.PictureBox10.TabStop = False
+        '
+        'Button4
+        '
+        Me.Button4.BackColor = System.Drawing.Color.Transparent
+        Me.Button4.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
+        Me.Button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button4.ForeColor = System.Drawing.Color.White
+        Me.Button4.Location = New System.Drawing.Point(6, 17)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(150, 23)
+        Me.Button4.TabIndex = 19
+        Me.Button4.Text = "Report Bug"
+        Me.Button4.UseVisualStyleBackColor = False
+        '
+        'Button5
+        '
+        Me.Button5.BackColor = System.Drawing.Color.Transparent
+        Me.Button5.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(29, Byte), Integer), CType(CType(51, Byte), Integer))
+        Me.Button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(83, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(105, Byte), Integer))
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button5.ForeColor = System.Drawing.Color.White
+        Me.Button5.Location = New System.Drawing.Point(6, 46)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(150, 23)
+        Me.Button5.TabIndex = 34
+        Me.Button5.Text = "Check for Updates"
+        Me.Button5.UseVisualStyleBackColor = False
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.Button4)
+        Me.GroupBox4.Controls.Add(Me.Button5)
+        Me.GroupBox4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.GroupBox4.Location = New System.Drawing.Point(394, 355)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(162, 170)
+        Me.GroupBox4.TabIndex = 35
+        Me.GroupBox4.TabStop = False
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.ForeColor = System.Drawing.Color.White
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem1.Text = "Report Bug"
         '
         'Gui
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(550, 577)
-        Me.ControlBox = False
+        Me.ClientSize = New System.Drawing.Size(568, 587)
+        Me.Controls.Add(Me.GroupBox4)
+        Me.Controls.Add(Me.PictureBox10)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(-1, -3)
+        Me.MaximizeBox = False
         Me.Name = "Gui"
-        Me.ShowInTaskbar = False
+        Me.Opacity = 0R
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FalconX"
-        Me.TopMost = True
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)
@@ -660,8 +736,11 @@ Partial Class Gui
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox4.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -712,4 +791,9 @@ Partial Class Gui
     Friend WithEvents Label7 As Label
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents PictureBox9 As PictureBox
+    Friend WithEvents PictureBox10 As PictureBox
+    Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
 End Class
