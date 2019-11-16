@@ -48,6 +48,11 @@ FalconX automate's your taskbar position to the center.
 ## Changelog
 
 ```
+FalconX Build 16.11.2019 1.3.2.0 November
+* Animations now use integers instead of doubles.
+# This was an attempt at fixing the (Taskbar icons continuously moving) bug but,
+resulted in smoother animations and better performance.
+
 FalconX Build 10.11.2019 1.3.1.0 November
 * FIXED | "Shadow buttons" - shows pointer cursor instead of normal (Issue opened by Martin5001)
 * FIXED | Taskbar styling options not working until refresh (Issue opened by Martin5001)
