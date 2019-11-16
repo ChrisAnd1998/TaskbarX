@@ -45,7 +45,7 @@ Public Class Gui
         SaveSettings()
 
         Taskbar.Closing()
-        System.Threading.Thread.Sleep(500) : Application.DoEvents()
+        System.Threading.Thread.Sleep(500)
         Taskbar.RefreshWindowsExplorer()
         Taskbar.Closing()
         End
@@ -67,7 +67,7 @@ Public Class Gui
 
         ComboBox1.Text = "BackEaseOut"
         LoadSettings()
-        System.Threading.Thread.Sleep(500) : Application.DoEvents()
+        System.Threading.Thread.Sleep(500)
         RunAtStartUp()
         Taskbar.Main()
         Me.Hide()

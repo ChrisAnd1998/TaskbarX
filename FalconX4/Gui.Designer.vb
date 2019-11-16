@@ -37,6 +37,7 @@ Partial Class Gui
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.OpenSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckForUpdatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -75,7 +76,6 @@ Partial Class Gui
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel2.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -230,20 +230,18 @@ Partial Class Gui
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSettingsToolStripMenuItem, Me.ToolStripSeparator1, Me.ToolStripMenuItem1, Me.CheckForUpdatesToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(172, 123)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(172, 103)
         '
         'OpenSettingsToolStripMenuItem
         '
-        Me.OpenSettingsToolStripMenuItem.AutoSize = False
         Me.OpenSettingsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.OpenSettingsToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OpenSettingsToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.OpenSettingsToolStripMenuItem.Image = CType(resources.GetObject("OpenSettingsToolStripMenuItem.Image"), System.Drawing.Image)
         Me.OpenSettingsToolStripMenuItem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.OpenSettingsToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 5, 0, 5)
         Me.OpenSettingsToolStripMenuItem.Name = "OpenSettingsToolStripMenuItem"
-        Me.OpenSettingsToolStripMenuItem.Padding = New System.Windows.Forms.Padding(0, 5, 0, 5)
-        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 30)
+        Me.OpenSettingsToolStripMenuItem.Padding = New System.Windows.Forms.Padding(0)
+        Me.OpenSettingsToolStripMenuItem.Size = New System.Drawing.Size(171, 20)
         Me.OpenSettingsToolStripMenuItem.Text = "Settings"
         Me.OpenSettingsToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
@@ -253,14 +251,21 @@ Partial Class Gui
         Me.ToolStripSeparator1.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.ToolStripSeparator1.ForeColor = System.Drawing.Color.White
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 15)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(168, 15)
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.ForeColor = System.Drawing.Color.White
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(171, 22)
+        Me.ToolStripMenuItem1.Text = "Report Bug"
         '
         'CheckForUpdatesToolStripMenuItem
         '
         Me.CheckForUpdatesToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer), CType(CType(43, Byte), Integer))
         Me.CheckForUpdatesToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
-        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
         Me.CheckForUpdatesToolStripMenuItem.Text = "Check for Updates"
         '
         'ExitToolStripMenuItem
@@ -269,7 +274,7 @@ Partial Class Gui
         Me.ExitToolStripMenuItem.ForeColor = System.Drawing.Color.White
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
         Me.ExitToolStripMenuItem.Padding = New System.Windows.Forms.Padding(0)
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 20)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(171, 20)
         Me.ExitToolStripMenuItem.Text = "Exit"
         Me.ExitToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
@@ -566,7 +571,7 @@ Partial Class Gui
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(544, 19)
         Me.Label3.TabIndex = 16
-        Me.Label3.Text = "00.11.2019 - 1.3.1.0"
+        Me.Label3.Text = "16.11.2019 - 1.3.2.0"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label5
@@ -687,13 +692,6 @@ Partial Class Gui
         Me.GroupBox4.Size = New System.Drawing.Size(162, 170)
         Me.GroupBox4.TabIndex = 35
         Me.GroupBox4.TabStop = False
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.ForeColor = System.Drawing.Color.White
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
-        Me.ToolStripMenuItem1.Text = "Report Bug"
         '
         'Gui
         '
