@@ -84,8 +84,10 @@ Namespace VisualEffects
             Dim actualValueChange As Integer = Math.Abs(originalValue - valueToReach)
 
             Dim animationTimer As New System.Timers.Timer With {
-                .Interval = 0.1
+                .Interval = 1
             }
+
+            Console.WriteLine("Animator 2 | From " & originalValue & " To " & valueToReach)
 
             'main animation timer tick
             AddHandler animationTimer.Elapsed, Sub(o, e2)
@@ -139,8 +141,14 @@ Namespace VisualEffects
                                                            animationTimer.Stop()
                                                            ' stopwatch.Stop()
                                                            IsAnimated = True
-
+                                                           Console.WriteLine("Animator 2 | Ended on " & newValue)
                                                            'RaiseEvent Animated(control, animationStatus)
+                                                           If Taskbar.Horizontal = True Then
+                                                               SetWindowPos(XLocationEffect2.SecondTaskbarPtr, IntPtr.Zero, valueToReach, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           Else
+                                                               SetWindowPos(XLocationEffect2.SecondTaskbarPtr, IntPtr.Zero, 0, valueToReach, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           End If
+                                                           Console.WriteLine("Animator 2 | Position Fixed on " & valueToReach)
                                                        End If
                                                    End If
                                                    'End Sub))
@@ -153,6 +161,7 @@ Namespace VisualEffects
             Return animationStatus
             '   Catch
             '   End Try
+            Console.WriteLine("Animator 2 | Fully closed")
 
         End Function
 

@@ -85,8 +85,10 @@ Namespace VisualEffects
             Dim actualValueChange As Integer = Math.Abs(originalValue - valueToReach)
 
             Dim animationTimer As New System.Timers.Timer With {
-                .Interval = 0.1
+                .Interval = 1
             }
+
+            Console.WriteLine("Animator 3 | From " & originalValue & " To " & valueToReach)
 
             'main animation timer tick
             AddHandler animationTimer.Elapsed, Sub(o, e2)
@@ -142,7 +144,14 @@ Namespace VisualEffects
 
                                                            IsAnimated = True
 
+                                                           Console.WriteLine("Animator 3 | Ended on " & newValue)
+                                                           If Taskbar.Horizontal = True Then
+                                                               SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, valueToReach, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           Else
+                                                               SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, 0, valueToReach, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           End If
                                                            'RaiseEvent Animated(control, animationStatus)
+                                                           Console.WriteLine("Animator 3 | Position Fixed on " & valueToReach)
                                                        End If
                                                    End If
                                                    'End Sub))
@@ -155,7 +164,7 @@ Namespace VisualEffects
             Return animationStatus
             '   Catch
             '   End Try
-
+            Console.WriteLine("Animator 3 | Fully closed")
         End Function
 
     End Class

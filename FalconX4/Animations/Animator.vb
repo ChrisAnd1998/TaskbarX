@@ -85,8 +85,10 @@ Namespace VisualEffects
             Dim actualValueChange As Integer = Math.Abs(originalValue - valueToReach)
 
             Dim animationTimer As New System.Timers.Timer With {
-                .Interval = 0.1
+                .Interval = 1
             }
+
+            Console.WriteLine("Animator 1 | From " & originalValue & " To " & valueToReach)
 
             'main animation timer tick
             AddHandler animationTimer.Elapsed, Sub(o, e2)
@@ -144,6 +146,16 @@ Namespace VisualEffects
 
                                                            Taskbar.ClearMemory()
 
+                                                           Console.WriteLine("Animator 1 | Ended on " & newValue)
+
+                                                           If Taskbar.Horizontal = True Then
+                                                               SetWindowPos(XLocationEffect.FirstTaskbarPtr, IntPtr.Zero, valueToReach, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           Else
+                                                               SetWindowPos(XLocationEffect.FirstTaskbarPtr, IntPtr.Zero, 0, valueToReach, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           End If
+
+                                                           Console.WriteLine("Animator 1 | Position Fixed on " & valueToReach)
+
                                                            'RaiseEvent Animated(control, animationStatus)
                                                        End If
                                                    End If
@@ -157,6 +169,7 @@ Namespace VisualEffects
             Return animationStatus
             '   Catch
             '   End Try
+            Console.WriteLine("Animator 1 | Fully closed")
 
         End Function
 
