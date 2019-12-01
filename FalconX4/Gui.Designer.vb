@@ -72,7 +72,6 @@ Partial Class Gui
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.PictureBox10 = New System.Windows.Forms.PictureBox()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -94,7 +93,6 @@ Partial Class Gui
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
-        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -540,7 +538,7 @@ Partial Class Gui
         '
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.Color.Black
+        Me.Label4.ForeColor = System.Drawing.Color.White
         Me.Label4.Location = New System.Drawing.Point(19, 92)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(544, 19)
@@ -552,8 +550,9 @@ Partial Class Gui
         '
         Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.LinkLabel1.DisabledLinkColor = System.Drawing.Color.Gainsboro
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.Gray
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.Silver
         Me.LinkLabel1.Location = New System.Drawing.Point(19, 162)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(544, 23)
@@ -566,19 +565,19 @@ Partial Class Gui
         '
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Black
+        Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(19, 121)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(544, 19)
         Me.Label3.TabIndex = 16
-        Me.Label3.Text = "16.11.2019 - 1.3.2.0"
+        Me.Label3.Text = "01.12.2019 - 1.3.3.0"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label5
         '
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.Black
+        Me.Label5.ForeColor = System.Drawing.Color.White
         Me.Label5.Location = New System.Drawing.Point(19, 144)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(544, 19)
@@ -589,15 +588,17 @@ Partial Class Gui
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.Panel1.BackgroundImage = CType(resources.GetObject("Panel1.BackgroundImage"), System.Drawing.Image)
+        Me.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Controls.Add(Me.Label5)
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.PictureBox2)
         Me.Panel1.Controls.Add(Me.PictureBox1)
-        Me.Panel1.Location = New System.Drawing.Point(-7, -2)
+        Me.Panel1.Location = New System.Drawing.Point(-7, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(575, 194)
+        Me.Panel1.Size = New System.Drawing.Size(575, 200)
         Me.Panel1.TabIndex = 16
         '
         'Label8
@@ -640,15 +641,6 @@ Partial Class Gui
         Me.GroupBox1.TabIndex = 33
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Position Options"
-        '
-        'PictureBox10
-        '
-        Me.PictureBox10.BackColor = System.Drawing.Color.Silver
-        Me.PictureBox10.Location = New System.Drawing.Point(13, 196)
-        Me.PictureBox10.Name = "PictureBox10"
-        Me.PictureBox10.Size = New System.Drawing.Size(543, 1)
-        Me.PictureBox10.TabIndex = 18
-        Me.PictureBox10.TabStop = False
         '
         'Button4
         '
@@ -700,7 +692,6 @@ Partial Class Gui
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(568, 587)
         Me.Controls.Add(Me.GroupBox4)
-        Me.Controls.Add(Me.PictureBox10)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
@@ -711,7 +702,6 @@ Partial Class Gui
         Me.Location = New System.Drawing.Point(-1, -3)
         Me.MaximizeBox = False
         Me.Name = "Gui"
-        Me.Opacity = 0R
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FalconX"
         Me.Panel2.ResumeLayout(False)
@@ -737,7 +727,6 @@ Partial Class Gui
         Me.Panel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
-        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox4.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -789,7 +778,6 @@ Partial Class Gui
     Friend WithEvents Label7 As Label
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents PictureBox9 As PictureBox
-    Friend WithEvents PictureBox10 As PictureBox
     Friend WithEvents Button4 As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents GroupBox4 As GroupBox
