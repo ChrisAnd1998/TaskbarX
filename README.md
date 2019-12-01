@@ -46,4 +46,4 @@ FalconX automate's your taskbar position to the center. FalconX has been in deve
 
 
 ## Tags
-center taskbar, center taskbar icons, center taskbar icons windows 10, center taskbar windows, windows center taskbar, windows center taskbar icons, center taskbar icons, windows 10 center taskbar icons, falcon10, falcon taskbar, taskbar, taskbar icons, taskbar buttons
+center taskbar, center taskbar icons, CenterTaskbar, center taskbar icons windows 10, center taskbar windows, windows center taskbar, windows center taskbar icons, center taskbar icons, windows 10 center taskbar icons, falcon10, falcon taskbar, taskbar, taskbar icons, taskbar buttons
