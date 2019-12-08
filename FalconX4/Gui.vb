@@ -4,10 +4,8 @@ Imports System.Environment
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
-
 Imports System.Text
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.Win32
 
 Public Class Gui
     Public Launch As Boolean
@@ -42,9 +40,7 @@ Public Class Gui
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-
         Button2.Text = "Closing..."
-        EnableForegroundFlashCount()
         NotifyIcon1.Visible = False
         SaveSettings()
 
@@ -61,7 +57,6 @@ Public Class Gui
 
     Private Sub Gui_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        DisableForegroundFlashCount()
         ContextMenuStrip1.Renderer = New MyRenderer
 
         Taskbar.UpdateTaskbar = True
@@ -86,21 +81,15 @@ Public Class Gui
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Try
+        Button3.Text = "Refreshing..."
+        SaveSettings()
+        NotifyIcon1.Visible = False
+        Taskbar.Closing()
+        ' Taskbar.Updating = False
+        Taskbar.RefreshWindowsExplorer()
 
-            Button3.Text = "Refreshing..."
-            SaveSettings()
-            NotifyIcon1.Visible = False
-            Taskbar.Closing()
-            ' Taskbar.Updating = False
-            Taskbar.RefreshWindowsExplorer()
-
-            Application.Restart()
-            End
-        Catch ex As Exception
-            Application.Restart()
-            End
-        End Try
+        Application.Restart()
+        End
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -128,7 +117,6 @@ Public Class Gui
         Me.Opacity = 0
         SaveSettings()
         Me.Hide()
-
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.Click
@@ -146,39 +134,12 @@ Public Class Gui
 
             Me.Opacity = 100
 
-            Me.BringToFront()
-
         End If
 
     End Sub
 
     Private Sub Gui_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         NotifyIcon1.Visible = False
-    End Sub
-
-    Sub DisableForegroundFlashCount()
-        Try
-
-            Dim regKey As Microsoft.Win32.RegistryKey
-            regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", True)
-            regKey.SetValue("ForegroundFlashCount", "1", RegistryValueKind.DWord)
-            regKey.SetValue("ForegroundLockTimeout", "0", RegistryValueKind.DWord)
-            regKey.Close()
-        Catch ex As Exception
-            'MsgBox(ex.ToString)
-        End Try
-    End Sub
-
-    Sub EnableForegroundFlashCount()
-        Try
-            Dim regKey As Microsoft.Win32.RegistryKey
-            regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", True)
-            regKey.SetValue("ForegroundFlashCount", "7", RegistryValueKind.DWord)
-            regKey.SetValue("ForegroundLockTimeout", "1830324", RegistryValueKind.DWord)
-            regKey.Close()
-        Catch ex As Exception
-            ' MsgBox(ex.ToString)
-        End Try
     End Sub
 
     Sub RunAtStartUp()
@@ -378,7 +339,6 @@ Public Class Gui
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
-        EnableForegroundFlashCount()
         NotifyIcon1.Visible = False
         SaveSettings()
         Taskbar.RefreshWindowsExplorer()
@@ -423,8 +383,6 @@ Public Class Gui
         Me.Show()
 
         Me.Opacity = 100
-        Me.WindowState = WindowState.Normal
-        Me.BringToFront()
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
