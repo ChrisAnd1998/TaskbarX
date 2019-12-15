@@ -33,6 +33,15 @@ Namespace VisualEffects
                 End If
             End If
 
+            If Not XLocationEffect3.ThirdTaskbarOldPosition = 0 Then
+
+                If XLocationEffect3.ThirdTaskbarPosition = XLocationEffect3.ThirdTaskbarOldPosition Or XLocationEffect3.ThirdTaskbarPosition = XLocationEffect3.ThirdTaskbarOldPosition + 1 Or XLocationEffect3.ThirdTaskbarPosition = XLocationEffect3.ThirdTaskbarOldPosition - 1 Or XLocationEffect3.ThirdTaskbarPosition = XLocationEffect3.ThirdTaskbarOldPosition - 2 Or XLocationEffect3.ThirdTaskbarPosition = XLocationEffect3.ThirdTaskbarOldPosition + 2 Then
+                    Console.WriteLine("Animator 3 | Aborted difference too small")
+                    Exit Function
+                End If
+
+            End If
+
             IsAnimated = False
             'used to calculate animation frame based on how much time has effectively passed
             Dim stopwatch = New Stopwatch()

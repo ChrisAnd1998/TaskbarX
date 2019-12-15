@@ -13,6 +13,9 @@ Public Class AnimationControl
     Dim Position As Integer
 
     Public Sub AnimateTaskbar()
+        InitializeComponent()
+        Me.DoubleBuffered = True
+
         Try
 
             Do

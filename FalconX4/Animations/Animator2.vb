@@ -24,11 +24,19 @@ Namespace VisualEffects
 
         Public Shared Function Animate(ByVal control As Control, ByVal iEffect As IEffect, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal delay As Integer, Optional ByVal reverse As Boolean = False, Optional ByVal loops As Integer = 1) As AnimationStatus
             '  Try
+
             If Not XLocationEffect2.SecondTaskbarOldPosition = 0 Then
                 If Taskbar.Horizontal = True Then
                     SetWindowPos(XLocationEffect2.SecondTaskbarPtr, IntPtr.Zero, XLocationEffect2.SecondTaskbarOldPosition, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
                 Else
                     SetWindowPos(XLocationEffect2.SecondTaskbarPtr, IntPtr.Zero, 0, XLocationEffect2.SecondTaskbarOldPosition, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                End If
+            End If
+
+            If Not XLocationEffect2.SecondTaskbarOldPosition = 0 Then
+                If XLocationEffect2.SecondTaskbarPosition = XLocationEffect2.SecondTaskbarOldPosition Or XLocationEffect2.SecondTaskbarPosition = XLocationEffect2.SecondTaskbarOldPosition + 1 Or XLocationEffect2.SecondTaskbarPosition = XLocationEffect2.SecondTaskbarOldPosition - 1 Or XLocationEffect2.SecondTaskbarPosition = XLocationEffect2.SecondTaskbarOldPosition - 2 Or XLocationEffect2.SecondTaskbarPosition = XLocationEffect2.SecondTaskbarOldPosition + 2 Then
+                    Console.WriteLine("Animator 2 | Aborted difference too small")
+                    Exit Function
                 End If
             End If
 

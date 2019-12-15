@@ -11,7 +11,11 @@ Public Class AnimationControl3
 
     Dim Speed As Integer
     Dim Position As Integer
+
     Sub AnimateTaskbar3()
+        InitializeComponent()
+        Me.DoubleBuffered = True
+
         Try
 
             Do
@@ -19,8 +23,6 @@ Public Class AnimationControl3
             Loop Until Animator3.IsAnimated = True
 
             Console.WriteLine("Taskbar3 || " & VisualEffects.Animations.Effects.XLocationEffect3.ThirdTaskbarPosition)
-
-
 
             Animation = AnimationSelection.ToString
             Position = VisualEffects.Animations.Effects.XLocationEffect3.ThirdTaskbarPosition
@@ -277,8 +279,6 @@ Public Class AnimationControl3
                 t1.Start()
                 ' Animate(New XLocationEffect(), AddressOf EasingFunctions.BackEaseOutIn, Position, Speed, 0)
             End If
-
-
         Catch ex As Exception
 
         End Try
@@ -404,13 +404,11 @@ Public Class AnimationControl3
         Taskbar.Updating = False
     End Sub
 
-
-
-
     Sub aQuartEaseInOut()
         Animate3(New XLocationEffect3(), AddressOf EasingFunctions.QuartEaseInOut, Position, Speed, 0)
         Taskbar.Updating = False
     End Sub
+
     Sub aQuartEaseOutIn()
         Animate3(New XLocationEffect3(), AddressOf EasingFunctions.QuartEaseOutIn, Position, Speed, 0)
         Taskbar.Updating = False

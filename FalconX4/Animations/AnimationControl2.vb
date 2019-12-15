@@ -13,6 +13,9 @@ Public Class AnimationControl2
     Dim Position As Integer
 
     Sub AnimateTaskbar2()
+        InitializeComponent()
+        Me.DoubleBuffered = True
+
         Try
 
             Do
@@ -20,8 +23,6 @@ Public Class AnimationControl2
             Loop Until Animator2.IsAnimated = True
 
             Console.WriteLine("Taskbar2 || " & VisualEffects.Animations.Effects.XLocationEffect2.SecondTaskbarPosition)
-
-
 
             Animation = AnimationSelection.ToString
             Position = VisualEffects.Animations.Effects.XLocationEffect2.SecondTaskbarPosition
@@ -278,8 +279,6 @@ Public Class AnimationControl2
                 t1.Start()
                 ' Animate(New XLocationEffect(), AddressOf EasingFunctions.BackEaseOutIn, Position, Speed, 0)
             End If
-
-
         Catch ex As Exception
 
         End Try
@@ -406,13 +405,11 @@ Public Class AnimationControl2
         Taskbar.Updating = False
     End Sub
 
-
-
-
     Sub aQuartEaseInOut()
         Animate2(New XLocationEffect2(), AddressOf EasingFunctions.QuartEaseInOut, Position, Speed, 0)
         Taskbar.Updating = False
     End Sub
+
     Sub aQuartEaseOutIn()
         Animate2(New XLocationEffect2(), AddressOf EasingFunctions.QuartEaseOutIn, Position, Speed, 0)
         Taskbar.Updating = False

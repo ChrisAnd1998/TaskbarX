@@ -25,11 +25,19 @@ Namespace VisualEffects
 
         Public Shared Function Animate(ByVal control As Control, ByVal iEffect As IEffect, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal delay As Integer, Optional ByVal reverse As Boolean = False, Optional ByVal loops As Integer = 1) As AnimationStatus
             '  Try
+
             If Not XLocationEffect.FirstTaskbarOldPosition = 0 Then
                 If Taskbar.Horizontal = True Then
                     SetWindowPos(XLocationEffect.FirstTaskbarPtr, IntPtr.Zero, XLocationEffect.FirstTaskbarOldPosition, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
                 Else
                     SetWindowPos(XLocationEffect.FirstTaskbarPtr, IntPtr.Zero, 0, XLocationEffect.FirstTaskbarOldPosition, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                End If
+            End If
+
+            If Not XLocationEffect.FirstTaskbarOldPosition = 0 Then
+                If XLocationEffect.FirstTaskbarPosition = XLocationEffect.FirstTaskbarOldPosition Or XLocationEffect.FirstTaskbarPosition = XLocationEffect.FirstTaskbarOldPosition + 1 Or XLocationEffect.FirstTaskbarPosition = XLocationEffect.FirstTaskbarOldPosition - 1 Or XLocationEffect.FirstTaskbarPosition = XLocationEffect.FirstTaskbarOldPosition - 2 Or XLocationEffect.FirstTaskbarPosition = XLocationEffect.FirstTaskbarOldPosition + 2 Then
+                    Console.WriteLine("Animator 1 | Aborted difference too small")
+                    Exit Function
                 End If
             End If
 
@@ -89,6 +97,8 @@ Namespace VisualEffects
             }
 
             Console.WriteLine("Animator 1 | From " & originalValue & " To " & valueToReach)
+
+            ' Taskbar.SendMessage(Taskbar.MSTaskSwWClassPtr, Taskbar.WM_SETREDRAW, False, 0)
 
             'main animation timer tick
             AddHandler animationTimer.Elapsed, Sub(o, e2)
@@ -155,6 +165,8 @@ Namespace VisualEffects
                                                            End If
 
                                                            Console.WriteLine("Animator 1 | Position Fixed on " & valueToReach)
+
+                                                           'Taskbar.SendMessage(Taskbar.MSTaskSwWClassPtr, Taskbar.WM_SETREDRAW, True, 0)
 
                                                            'RaiseEvent Animated(control, animationStatus)
                                                        End If
