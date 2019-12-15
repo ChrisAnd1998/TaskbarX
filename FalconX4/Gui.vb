@@ -4,6 +4,7 @@ Imports System.Environment
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CompilerServices
 
@@ -13,6 +14,19 @@ Public Class Gui
     Public Const WM_NCLBUTTONDBLCLK As Integer = &HA3
 
     Private Const CP_NOCLOSE_BUTTON As Integer = &H200
+
+    Declare Function SetProcessDPIAware Lib "user32.dll" () As Boolean
+
+    <DllImport("SHCore.dll", SetLastError:=True)>
+    Private Shared Function SetProcessDpiAwareness(ByVal awareness As PROCESS_DPI_AWARENESS) As Boolean
+
+    End Function
+
+    Private Enum PROCESS_DPI_AWARENESS
+        Process_DPI_Unaware = 0
+        Process_System_DPI_Aware = 1
+        Process_Per_Monitor_DPI_Aware = 2
+    End Enum
 
     Protected Overloads Overrides ReadOnly Property CreateParams() As CreateParams
         Get
@@ -55,7 +69,15 @@ Public Class Gui
         Process.Start("https://chrisandriessen.nl")
     End Sub
 
+    Sub main()
+        Dim appPath As String = String.Format("{0}\{1}.exe", My.Application.Info.DirectoryPath, My.Application.Info.AssemblyName)
+        My.Computer.Registry.SetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers", appPath, "HIGHDPIAWARE")
+    End Sub
+
     Private Sub Gui_Load(sender As Object, e As EventArgs) Handles Me.Load
+
+        Me.DoubleBuffered = True
+        SetProcessDpiAwareness(PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
 
         ContextMenuStrip1.Renderer = New MyRenderer
 
@@ -89,6 +111,7 @@ Public Class Gui
         Taskbar.RefreshWindowsExplorer()
 
         Application.Restart()
+
         End
     End Sub
 
@@ -133,6 +156,8 @@ Public Class Gui
             Me.Show()
 
             Me.Opacity = 100
+
+            Me.BringToFront()
 
         End If
 
@@ -383,6 +408,8 @@ Public Class Gui
         Me.Show()
 
         Me.Opacity = 100
+
+        Me.BringToFront()
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
@@ -513,6 +540,10 @@ Public Class Gui
 
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
         Process.Start("https://github.com/ChrisAnd1998/FalconX-Center-Taskbar/issues")
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        Process.Start("https://easings.net/")
     End Sub
 
 End Class

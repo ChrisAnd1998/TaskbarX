@@ -41,6 +41,7 @@ Partial Class Gui
         Me.CheckForUpdatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox9 = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
@@ -148,7 +149,7 @@ Partial Class Gui
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(198, 18)
         Me.Label2.TabIndex = 10
-        Me.Label2.Text = "Animation Speed"
+        Me.Label2.Text = "Animation speed"
         '
         'Panel2
         '
@@ -186,9 +187,9 @@ Partial Class Gui
         Me.CheckBox3.ForeColor = System.Drawing.Color.Black
         Me.CheckBox3.Location = New System.Drawing.Point(373, 16)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(102, 19)
+        Me.CheckBox3.Size = New System.Drawing.Size(100, 19)
         Me.CheckBox3.TabIndex = 18
-        Me.CheckBox3.Text = "Run at StartUp"
+        Me.CheckBox3.Text = "Run at startup"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -199,9 +200,9 @@ Partial Class Gui
         Me.CheckBox1.ForeColor = System.Drawing.Color.Black
         Me.CheckBox1.Location = New System.Drawing.Point(9, 28)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(141, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(139, 17)
         Me.CheckBox1.TabIndex = 13
-        Me.CheckBox1.Text = "Enable Taskbar Styling"
+        Me.CheckBox1.Text = "Enable taskbar styling"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -212,9 +213,9 @@ Partial Class Gui
         Me.CheckBox2.ForeColor = System.Drawing.Color.Black
         Me.CheckBox2.Location = New System.Drawing.Point(9, 146)
         Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(363, 17)
+        Me.CheckBox2.Size = New System.Drawing.Size(358, 17)
         Me.CheckBox2.TabIndex = 17
-        Me.CheckBox2.Text = "Center between Start, Search etc... and Tray (Primary Taskbar Only)"
+        Me.CheckBox2.Text = "Center between start, search etc... and tray (primary taskbar only)"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'NotifyIcon1
@@ -280,6 +281,7 @@ Partial Class Gui
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.LinkLabel2)
         Me.GroupBox2.Controls.Add(Me.PictureBox9)
         Me.GroupBox2.Controls.Add(Me.Label7)
         Me.GroupBox2.Controls.Add(Me.Label2)
@@ -296,7 +298,23 @@ Partial Class Gui
         Me.GroupBox2.Size = New System.Drawing.Size(376, 139)
         Me.GroupBox2.TabIndex = 21
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Animation Options"
+        Me.GroupBox2.Text = "Animation options"
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel2.Image = CType(resources.GetObject("LinkLabel2.Image"), System.Drawing.Image)
+        Me.LinkLabel2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.Highlight
+        Me.LinkLabel2.Location = New System.Drawing.Point(262, 42)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(104, 29)
+        Me.LinkLabel2.TabIndex = 36
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "          Easings help"
+        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.LinkLabel2.VisitedLinkColor = System.Drawing.SystemColors.Highlight
         '
         'PictureBox9
         '
@@ -362,7 +380,7 @@ Partial Class Gui
         Me.ComboBox1.Items.AddRange(New Object() {"None", "Linear", "ExpoEaseOut", "ExpoEaseIn", "ExpoEaseInOut", "ExpoEaseOutIn", "CircEaseOut", "CircEaseIn", "CircEaseInOut", "CircEaseOutIn", "QuadEaseOut", "QuadEaseIn", "QuadEaseInOut", "QuadEaseOutIn", "SineEaseOut", "SineEaseIn", "SineEaseInOut", "SineEaseOutIn", "CubicEaseOut", "CubicEaseIn", "CubicEaseInOut", "CubicEaseOutIn", "QuartEaseOut", "QuartEaseIn", "QuartEaseInOut", "QuartEaseOutIn", "QuintEaseOut", "QuintEaseIn", "QuintEaseInOut", "QuintEaseOutIn", "ElasticEaseOut", "ElasticEaseIn", "ElasticEaseInOut", "ElasticEaseOutIn", "BounceEaseOut", "BounceEaseIn", "BounceEaseInOut", "BounceEaseOutIn", "BackEaseOut", "BackEaseIn", "BackEaseInOut", "BackEaseOutIn"})
         Me.ComboBox1.Location = New System.Drawing.Point(9, 45)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(358, 23)
+        Me.ComboBox1.Size = New System.Drawing.Size(240, 23)
         Me.ComboBox1.TabIndex = 14
         '
         'Label9
@@ -373,7 +391,7 @@ Partial Class Gui
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(198, 18)
         Me.Label9.TabIndex = 12
-        Me.Label9.Text = "Secondary Offset Position"
+        Me.Label9.Text = "Secondary offset position"
         '
         'Label6
         '
@@ -383,7 +401,7 @@ Partial Class Gui
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(198, 18)
         Me.Label6.TabIndex = 12
-        Me.Label6.Text = "Primary Offset Position"
+        Me.Label6.Text = "Primary offset position"
         '
         'PictureBox8
         '
@@ -470,7 +488,7 @@ Partial Class Gui
         Me.GroupBox3.Size = New System.Drawing.Size(162, 138)
         Me.GroupBox3.TabIndex = 21
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Taskbar Style Options"
+        Me.GroupBox3.Text = "Taskbar style options"
         '
         'RadioButton3
         '
@@ -480,9 +498,9 @@ Partial Class Gui
         Me.RadioButton3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton3.Location = New System.Drawing.Point(9, 97)
         Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(113, 17)
+        Me.RadioButton3.Size = New System.Drawing.Size(111, 17)
         Me.RadioButton3.TabIndex = 16
-        Me.RadioButton3.Text = "Acrylic (UnStable)"
+        Me.RadioButton3.Text = "Acrylic (unstable)"
         Me.RadioButton3.UseVisualStyleBackColor = True
         '
         'RadioButton2
@@ -553,7 +571,8 @@ Partial Class Gui
         Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel1.Cursor = System.Windows.Forms.Cursors.Default
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.Gray
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.SystemColors.Highlight
         Me.LinkLabel1.Location = New System.Drawing.Point(19, 162)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(544, 23)
@@ -571,7 +590,7 @@ Partial Class Gui
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(544, 19)
         Me.Label3.TabIndex = 16
-        Me.Label3.Text = "08.12.2019 - 1.3.4.0"
+        Me.Label3.Text = "15.12.2019 - 1.3.5.0"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label5
@@ -639,7 +658,7 @@ Partial Class Gui
         Me.GroupBox1.Size = New System.Drawing.Size(376, 170)
         Me.GroupBox1.TabIndex = 33
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Position Options"
+        Me.GroupBox1.Text = "Position options"
         '
         'PictureBox10
         '
@@ -663,7 +682,7 @@ Partial Class Gui
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(150, 23)
         Me.Button4.TabIndex = 19
-        Me.Button4.Text = "Report Bug"
+        Me.Button4.Text = "Report bug"
         Me.Button4.UseVisualStyleBackColor = False
         '
         'Button5
@@ -679,7 +698,7 @@ Partial Class Gui
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(150, 23)
         Me.Button5.TabIndex = 34
-        Me.Button5.Text = "Check for Updates"
+        Me.Button5.Text = "Check for updates"
         Me.Button5.UseVisualStyleBackColor = False
         '
         'GroupBox4
@@ -695,10 +714,9 @@ Partial Class Gui
         '
         'Gui
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(568, 587)
+        Me.ClientSize = New System.Drawing.Size(608, 625)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.PictureBox10)
         Me.Controls.Add(Me.GroupBox1)
@@ -794,4 +812,5 @@ Partial Class Gui
     Friend WithEvents Button5 As Button
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents LinkLabel2 As LinkLabel
 End Class
