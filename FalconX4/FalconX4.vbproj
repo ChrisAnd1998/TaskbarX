@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AF782D50-8E38-47EB-8693-C079CA767669}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>FalconX4.My.MyApplication</StartupObject>
+    <StartupObject>FalconX4.Taskbar</StartupObject>
     <RootNamespace>FalconX4</RootNamespace>
     <AssemblyName>FalconX</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -50,7 +50,7 @@
     <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>FalconX48.ico</ApplicationIcon>
+    <ApplicationIcon>storelogo3_310_j9F_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -141,13 +141,6 @@
     <Compile Include="Animations\IAnimationEffect.vb" />
     <Compile Include="Animations\XLocationEffect2.vb" />
     <Compile Include="Animations\AnimationExtensions.vb" />
-    <Compile Include="Gui.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui.Designer.vb">
-      <DependentUpon>Gui.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -175,9 +168,6 @@
     <EmbeddedResource Include="Animations\AnimationControl3.resx">
       <DependentUpon>AnimationControl3.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui.resx">
-      <DependentUpon>Gui.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -200,6 +190,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FalconX48.ico" />
+    <Content Include="FalconX48ser.ico" />
+    <Content Include="falconx48_P95_icon.ico" />
+    <Content Include="storelogo3_310_j9F_icon.ico" />
+    <Content Include="storelogo3_310_yac_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="UIAutomationClient">
