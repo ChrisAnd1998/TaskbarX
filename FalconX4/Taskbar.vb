@@ -641,7 +641,7 @@ Public Class Taskbar
                                                 UpdateTaskbar = False
                                                 AnimationControl.TaskbarRefresh = True
                                             End If
-
+                                            RefreshWindowsExplorer()
                                             TaskbarChanged = False
 
                                         End If
