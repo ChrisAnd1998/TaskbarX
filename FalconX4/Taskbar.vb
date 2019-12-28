@@ -2,11 +2,9 @@
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
-Imports System.Windows
+
 Imports System.Windows.Automation
-Imports FalconX4.VisualEffects
 Imports FalconX4.VisualEffects.Animations.Effects
-Imports FalconX4.VisualEffects.Easing
 
 Public Class Taskbar
 
@@ -50,17 +48,80 @@ Public Class Taskbar
 
     End Function
 
+    <DllImport("user32.dll")>
+    Public Shared Function LockWindowUpdate(ByVal hWndLock As IntPtr) As Boolean
+    End Function
+
+
+
+    <DllImport("user32.dll")>
+    Private Shared Function RedrawWindow(hWnd As IntPtr, lprcUpdate As IntPtr, hrgnUpdate As IntPtr, flags As RedrawWindowFlags) As Boolean
+    End Function
+
+    <Flags()>
+    Private Enum RedrawWindowFlags As UInteger
+        ''' <summary>
+        ''' Invalidates the rectangle or region that you specify in lprcUpdate or hrgnUpdate.
+        ''' You can set only one of these parameters to a non-NULL value. If both are NULL, RDW_INVALIDATE invalidates the entire window.
+        ''' </summary>
+        Invalidate = &H1
+
+        ''' <summary>Causes the OS to post a WM_PAINT message to the window regardless of whether a portion of the window is invalid.</summary>
+        InternalPaint = &H2
+
+        ''' <summary>
+        ''' Causes the window to receive a WM_ERASEBKGND message when the window is repainted.
+        ''' Specify this value in combination with the RDW_INVALIDATE value; otherwise, RDW_ERASE has no effect.
+        ''' </summary>
+        [Erase] = &H4
+
+        ''' <summary>
+        ''' Validates the rectangle or region that you specify in lprcUpdate or hrgnUpdate.
+        ''' You can set only one of these parameters to a non-NULL value. If both are NULL, RDW_VALIDATE validates the entire window.
+        ''' This value does not affect internal WM_PAINT messages.
+        ''' </summary>
+        Validate = &H8
+
+        NoInternalPaint = &H10
+
+        ''' <summary>Suppresses any pending WM_ERASEBKGND messages.</summary>
+        NoErase = &H20
+
+        ''' <summary>Excludes child windows, if any, from the repainting operation.</summary>
+        NoChildren = &H40
+
+        ''' <summary>Includes child windows, if any, in the repainting operation.</summary>
+        AllChildren = &H80
+
+        ''' <summary>Causes the affected windows, which you specify by setting the RDW_ALLCHILDREN and RDW_NOCHILDREN values, to receive WM_ERASEBKGND and WM_PAINT messages before the RedrawWindow returns, if necessary.</summary>
+        UpdateNow = &H100
+
+        ''' <summary>
+        ''' Causes the affected windows, which you specify by setting the RDW_ALLCHILDREN and RDW_NOCHILDREN values, to receive WM_ERASEBKGND messages before RedrawWindow returns, if necessary.
+        ''' The affected windows receive WM_PAINT messages at the ordinary time.
+        ''' </summary>
+        EraseNow = &H200
+
+        Frame = &H400
+
+        NoFrame = &H800
+    End Enum
+
     Private Enum PROCESS_DPI_AWARENESS
         Process_DPI_Unaware = 0
         Process_System_DPI_Aware = 1
         Process_Per_Monitor_DPI_Aware = 2
     End Enum
 
+
+
     Public Shared SWP_NOSIZE As UInt32 = 1
+    Public Shared SWP_NOMOVE As UInt32 = 2
     Public Shared SWP_ASYNCWINDOWPOS As UInt32 = 16384
     Public Shared SWP_NOACTIVATE As UInt32 = 16
     Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
     Public Shared SWP_NOZORDER As UInt32 = 4
+
 
     Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
     Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
@@ -76,6 +137,7 @@ Public Class Taskbar
     Friend Enum WindowCompositionAttribute
         WCA_ACCENT_POLICY = 19
     End Enum
+
 
     Friend Enum AccentState
         ACCENT_DISABLED = 0
@@ -95,12 +157,7 @@ Public Class Taskbar
         Public AnimationId As Integer
     End Structure
 
-    ' Public Shared [Desktop] As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("[Desktop]", CType(0, IntPtr)))
-    Public Shared WorkerW As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("WorkerW", CType(0, IntPtr)))
 
-    Public Shared SHELLDLL_DefView As AutomationElement = WorkerW.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "SHELLDLL_DefView"))
-
-    ' Public Shared SysListView32 As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("SysListView32", CType(0, IntPtr)))
 
     Public Shared Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr)))
     Public Shared MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
@@ -338,7 +395,7 @@ Public Class Taskbar
                 Dim screencount As Integer
                 screencount = 0
 
-                For Each screenX In Screen.AllScreens
+                For Each screenX As Screen In Screen.AllScreens
                     screencount = screencount + screenX.Bounds.Width
                 Next
 
@@ -349,18 +406,19 @@ Public Class Taskbar
                 If Horizontal = True Then
                     'Resolution = Screen.PrimaryScreen.Bounds.Width
                     TaskbarCount = CInt(child.Current.BoundingRectangle.Left)
-                    If CenterBetween = True Then
-                        TrayNotifyWidth = CInt(TrayNotifyWnd.Current.BoundingRectangle.Left)
-                    End If
+                    '' If CenterBetween = True Then
+                    TrayNotifyWidth = CInt(TrayNotifyWnd.Current.BoundingRectangle.Left)
+                    '' End If
                 Else
                     'Resolution = Screen.PrimaryScreen.Bounds.Height
                     TaskbarCount = CInt(child.Current.BoundingRectangle.Top)
-                    If CenterBetween = True Then
-                        TrayNotifyWidth = CInt(TrayNotifyWnd.Current.BoundingRectangle.Top)
-                    End If
+                    '' If CenterBetween = True Then
+                    TrayNotifyWidth = CInt(TrayNotifyWnd.Current.BoundingRectangle.Top)
+                    '' End If
                 End If
 
                 SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
+
 
                 SendMessage(GetParent(Shell_TrayWndPtr), WM_SETREDRAW, False, 0) ' [Desktop]
 
@@ -377,9 +435,38 @@ Public Class Taskbar
                     End If
                 End If
 
-                System.Threading.Thread.Sleep(400)
+                If Not TrayNotifyWidth = OldTrayNotifyWidth Then
+
+                    If Not OldTrayNotifyWidth = 0 Then
+
+                        If Not MSTaskListWClass.Current.BoundingRectangle.X = 0 Then
+
+                            Dim rebar As AutomationElement = AutomationElement.FromHandle(GetParent(CType(MSTaskListWClassPtr, IntPtr)))
+                            Dim offset = CInt(rebar.Current.BoundingRectangle.Left.ToString.Replace("-", ""))
+
+                            Dim pos = MSTaskListWClass.Current.BoundingRectangle.X - offset
+
+
+                            SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
+                            SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
+
+
+                            If Taskbar.Horizontal = True Then
+                                SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, pos, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                            Else
+                                SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, 0, pos, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                            End If
+
+                        End If
+                    End If
+
+                End If
+
+                    System.Threading.Thread.Sleep(400)
                 '  If Not TaskbarCount = OldTaskbarCount Or UpdateTaskbar = True Or Not Resolution = OldResolution Or Not TrayNotifyWidth = OldTrayNotifyWidth Or TaskbarCount = OldTaskbarCount + 1 Or TaskbarCount = OldTaskbarCount + 2 Or TaskbarCount = OldTaskbarCount + 3 Or TaskbarCount = OldTaskbarCount + 4 Or TaskbarCount = OldTaskbarCount + 5 Or TaskbarCount = OldTaskbarCount - 1 Or TaskbarCount = OldTaskbarCount - 2 Or TaskbarCount = OldTaskbarCount - 3 Or TaskbarCount = OldTaskbarCount - 4 Or TaskbarCount = OldTaskbarCount - 5 Then
                 '   SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
+
+
 
                 If Not TaskbarCount = OldTaskbarCount Or UpdateTaskbar = True Or Not Resolution = OldResolution Or Not TrayNotifyWidth = OldTrayNotifyWidth Then
 
@@ -642,6 +729,8 @@ Public Class Taskbar
                                                 AnimationControl.TaskbarRefresh = True
                                             End If
 
+
+
                                             TaskbarChanged = False
 
                                         End If
@@ -698,7 +787,7 @@ Public Class Taskbar
     Public Shared Sub RefreshWindowsExplorer()
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
-        '  SHChangeNotify(134217728, 4096, IntPtr.Zero, IntPtr.Zero)
+        ''  SHChangeNotify(134217728, 4096, IntPtr.Zero, IntPtr.Zero)
         Dim CLSID_ShellApplication As Guid = New Guid("13709620-C279-11CE-A49E-444553540000")
         Dim shellApplicationType As Type = Type.GetTypeFromCLSID(CLSID_ShellApplication, True)
         Dim shellApplication As Object = Activator.CreateInstance(shellApplicationType)
@@ -717,6 +806,7 @@ Public Class Taskbar
         Loop
 
     End Sub
+
 
     Public Shared Function ClearMemory() As Int32
 
@@ -742,7 +832,9 @@ Public Class Taskbar
         End If
 
         If TaskbarStyle = 3 Then
+            Dim _blurBackgroundColor As UInteger = &H990000
             accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
+            ''accent.GradientColor = ((255 + 24) Or (_blurBackgroundColor And 16777215))
             accent.GradientColor = &H0 Or &H0
         End If
 
@@ -766,7 +858,7 @@ Public Class Taskbar
         Next
 
         Do
-            For Each tray In trays
+            For Each tray As String In trays
                 Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
 
                 SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
@@ -777,7 +869,7 @@ Public Class Taskbar
 
         RefreshWindowsExplorer()
 
-        For Each tray In trays
+        For Each tray As String In trays
             Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
             SendMessage(trayptr, WM_THEMECHANGED, True, 0)
             SendMessage(trayptr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
@@ -819,7 +911,7 @@ Public Class Taskbar
 
         RefreshWindowsExplorer()
 
-        For Each tray In trays
+        For Each tray As String In trays
             Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
             SendMessage(trayptr, WM_THEMECHANGED, True, 0)
             SendMessage(trayptr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
