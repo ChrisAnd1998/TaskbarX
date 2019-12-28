@@ -25,6 +25,8 @@ Namespace VisualEffects
 
         Public Shared Function Animate(ByVal control As Control, ByVal iEffect As IEffect, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal delay As Integer, Optional ByVal reverse As Boolean = False, Optional ByVal loops As Integer = 1) As AnimationStatus
             '  Try
+            '' Taskbar.SendMessage(Taskbar.ReBarWindow32Ptr, Taskbar.WM_SETREDRAW, True, 0)
+            ''Taskbar.SendMessage(Taskbar.ReBarWindow32Ptr, Taskbar.WM_SETREDRAW, False, 0)
 
             If Not XLocationEffect.FirstTaskbarOldPosition = 0 Then
                 If Taskbar.Horizontal = True Then
@@ -166,6 +168,8 @@ Namespace VisualEffects
 
                                                            Console.WriteLine("Animator 1 | Position Fixed on " & valueToReach)
 
+
+
                                                            'Taskbar.SendMessage(Taskbar.MSTaskSwWClassPtr, Taskbar.WM_SETREDRAW, True, 0)
 
                                                            'RaiseEvent Animated(control, animationStatus)
@@ -182,6 +186,8 @@ Namespace VisualEffects
             '   Catch
             '   End Try
             Console.WriteLine("Animator 1 | Fully closed")
+
+
 
         End Function
 
