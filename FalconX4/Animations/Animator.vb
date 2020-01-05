@@ -168,8 +168,6 @@ Namespace VisualEffects
 
                                                            Console.WriteLine("Animator 1 | Position Fixed on " & valueToReach)
 
-
-
                                                            'Taskbar.SendMessage(Taskbar.MSTaskSwWClassPtr, Taskbar.WM_SETREDRAW, True, 0)
 
                                                            'RaiseEvent Animated(control, animationStatus)
@@ -186,8 +184,6 @@ Namespace VisualEffects
             '   Catch
             '   End Try
             Console.WriteLine("Animator 1 | Fully closed")
-
-
 
         End Function
 
