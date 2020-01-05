@@ -48,72 +48,11 @@ Public Class Taskbar
 
     End Function
 
-    <DllImport("user32.dll")>
-    Public Shared Function LockWindowUpdate(ByVal hWndLock As IntPtr) As Boolean
-    End Function
-
-
-
-    <DllImport("user32.dll")>
-    Private Shared Function RedrawWindow(hWnd As IntPtr, lprcUpdate As IntPtr, hrgnUpdate As IntPtr, flags As RedrawWindowFlags) As Boolean
-    End Function
-
-    <Flags()>
-    Private Enum RedrawWindowFlags As UInteger
-        ''' <summary>
-        ''' Invalidates the rectangle or region that you specify in lprcUpdate or hrgnUpdate.
-        ''' You can set only one of these parameters to a non-NULL value. If both are NULL, RDW_INVALIDATE invalidates the entire window.
-        ''' </summary>
-        Invalidate = &H1
-
-        ''' <summary>Causes the OS to post a WM_PAINT message to the window regardless of whether a portion of the window is invalid.</summary>
-        InternalPaint = &H2
-
-        ''' <summary>
-        ''' Causes the window to receive a WM_ERASEBKGND message when the window is repainted.
-        ''' Specify this value in combination with the RDW_INVALIDATE value; otherwise, RDW_ERASE has no effect.
-        ''' </summary>
-        [Erase] = &H4
-
-        ''' <summary>
-        ''' Validates the rectangle or region that you specify in lprcUpdate or hrgnUpdate.
-        ''' You can set only one of these parameters to a non-NULL value. If both are NULL, RDW_VALIDATE validates the entire window.
-        ''' This value does not affect internal WM_PAINT messages.
-        ''' </summary>
-        Validate = &H8
-
-        NoInternalPaint = &H10
-
-        ''' <summary>Suppresses any pending WM_ERASEBKGND messages.</summary>
-        NoErase = &H20
-
-        ''' <summary>Excludes child windows, if any, from the repainting operation.</summary>
-        NoChildren = &H40
-
-        ''' <summary>Includes child windows, if any, in the repainting operation.</summary>
-        AllChildren = &H80
-
-        ''' <summary>Causes the affected windows, which you specify by setting the RDW_ALLCHILDREN and RDW_NOCHILDREN values, to receive WM_ERASEBKGND and WM_PAINT messages before the RedrawWindow returns, if necessary.</summary>
-        UpdateNow = &H100
-
-        ''' <summary>
-        ''' Causes the affected windows, which you specify by setting the RDW_ALLCHILDREN and RDW_NOCHILDREN values, to receive WM_ERASEBKGND messages before RedrawWindow returns, if necessary.
-        ''' The affected windows receive WM_PAINT messages at the ordinary time.
-        ''' </summary>
-        EraseNow = &H200
-
-        Frame = &H400
-
-        NoFrame = &H800
-    End Enum
-
     Private Enum PROCESS_DPI_AWARENESS
         Process_DPI_Unaware = 0
         Process_System_DPI_Aware = 1
         Process_Per_Monitor_DPI_Aware = 2
     End Enum
-
-
 
     Public Shared SWP_NOSIZE As UInt32 = 1
     Public Shared SWP_NOMOVE As UInt32 = 2
@@ -121,7 +60,6 @@ Public Class Taskbar
     Public Shared SWP_NOACTIVATE As UInt32 = 16
     Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
     Public Shared SWP_NOZORDER As UInt32 = 4
-
 
     Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
     Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
@@ -137,7 +75,6 @@ Public Class Taskbar
     Friend Enum WindowCompositionAttribute
         WCA_ACCENT_POLICY = 19
     End Enum
-
 
     Friend Enum AccentState
         ACCENT_DISABLED = 0
@@ -156,8 +93,6 @@ Public Class Taskbar
         Public GradientColor As Integer
         Public AnimationId As Integer
     End Structure
-
-
 
     Public Shared Shell_TrayWnd As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr)))
     Public Shared MSTaskListWClass As AutomationElement = Shell_TrayWnd.FindFirst(TreeScope.Descendants, New PropertyCondition(AutomationElement.ClassNameProperty, "MSTaskListWClass"))
@@ -212,7 +147,6 @@ Public Class Taskbar
 
             If File.Exists(path) Then
 
-
                 AnimationControl.AnimationSelection = System.IO.File.ReadAllLines(path)(0)
                 AnimationControl2.AnimationSelection = System.IO.File.ReadAllLines(path)(0)
                 AnimationControl3.AnimationSelection = System.IO.File.ReadAllLines(path)(0)
@@ -222,7 +156,6 @@ Public Class Taskbar
                 AnimationControl3.AnimationSpeed = CDec(System.IO.File.ReadAllLines(path)(1))
 
                 OffsetPosition = CDec(System.IO.File.ReadAllLines(path)(2))
-
 
                 If System.IO.File.ReadAllLines(path)(3) = "True" Then
                     '' CheckBox3.Checked = True ''startup
@@ -254,13 +187,11 @@ Public Class Taskbar
 
                 OffsetPosition2 = CDec(System.IO.File.ReadAllLines(path)(7))
 
-
                 If System.IO.File.ReadAllLines(path)(8) = "True" Then
                     PrimaryTaskbarOnly = True
                 Else
                     PrimaryTaskbarOnly = False
                 End If
-
             Else
                 SaveSettings()
                 LoadSettings()
@@ -286,8 +217,6 @@ Public Class Taskbar
 
             Dim Offset2 = "0"
 
-
-
             ' Add text to the file.
             Dim info As Byte() = New UTF8Encoding(True).GetBytes(Animation.ToString & Environment.NewLine & Speed.ToString & Environment.NewLine & Offset.ToString & Environment.NewLine & RunAtStartUp.ToString & Environment.NewLine & CBT.ToString & Environment.NewLine & Transparant.ToString & Environment.NewLine & TaskbarStyle.ToString & Environment.NewLine & Offset2.ToString)
 
@@ -299,11 +228,7 @@ Public Class Taskbar
 
     Public Shared Sub Main()
 
-
         SetProcessDpiAwareness(PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
-
-
-
 
         Try
             For Each prog As Process In Process.GetProcesses
@@ -317,35 +242,32 @@ Public Class Taskbar
         Catch
         End Try
 
+        Dim Handle As IntPtr
 
+        Do
 
+            Console.WriteLine("Waiting for Shell_TrayWnd")
+            Handle = Nothing
+            System.Threading.Thread.Sleep(250)
+            Handle = FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
 
-
-
-
+        Loop Until Not Handle = Nothing
 
         ResetTaskbarStyle()
-
 
         UpdateTaskbar = True
         RefreshWindowsExplorer()
 
-
         Dim currentProcess As Process = Process.GetCurrentProcess
         currentProcess.PriorityClass = ProcessPriorityClass.High
 
-
-
         LoadSettings()
         System.Threading.Thread.Sleep(500)
-
 
         If TaskbarTransparant = True Then
             Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf EnableTaskbarStyle)
             t2.Start()
         End If
-
-
 
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
@@ -419,12 +341,11 @@ Public Class Taskbar
 
                 SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
-
                 SendMessage(GetParent(Shell_TrayWndPtr), WM_SETREDRAW, False, 0) ' [Desktop]
 
                 If Not Resolution = OldResolution Then
                     If Not OldResolution = 0 Then
-
+                        SaveSettings()
                         Taskbar.Closing()
                         ' Taskbar.Updating = False
                         Taskbar.RefreshWindowsExplorer()
@@ -446,10 +367,8 @@ Public Class Taskbar
 
                             Dim pos = MSTaskListWClass.Current.BoundingRectangle.X - offset
 
-
                             SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, True, 0)
                             SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
-
 
                             If Taskbar.Horizontal = True Then
                                 SetWindowPos(MSTaskListWClassPtr, IntPtr.Zero, pos, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
@@ -462,11 +381,9 @@ Public Class Taskbar
 
                 End If
 
-                    System.Threading.Thread.Sleep(400)
+                System.Threading.Thread.Sleep(400)
                 '  If Not TaskbarCount = OldTaskbarCount Or UpdateTaskbar = True Or Not Resolution = OldResolution Or Not TrayNotifyWidth = OldTrayNotifyWidth Or TaskbarCount = OldTaskbarCount + 1 Or TaskbarCount = OldTaskbarCount + 2 Or TaskbarCount = OldTaskbarCount + 3 Or TaskbarCount = OldTaskbarCount + 4 Or TaskbarCount = OldTaskbarCount + 5 Or TaskbarCount = OldTaskbarCount - 1 Or TaskbarCount = OldTaskbarCount - 2 Or TaskbarCount = OldTaskbarCount - 3 Or TaskbarCount = OldTaskbarCount - 4 Or TaskbarCount = OldTaskbarCount - 5 Then
                 '   SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
-
-
 
                 If Not TaskbarCount = OldTaskbarCount Or UpdateTaskbar = True Or Not Resolution = OldResolution Or Not TrayNotifyWidth = OldTrayNotifyWidth Then
 
@@ -560,16 +477,9 @@ Public Class Taskbar
                                                     XLocationEffect.FirstTaskbarPosition = CInt(Position1.ToString.Replace("-", ""))
                                                     XLocationEffect.FirstTaskbarOldPosition = CInt(OldPosition1.ToString.Replace("-", ""))
 
-                                                    'Console.WriteLine(XLocationEffect.FirstTaskbarOldPosition)
-
                                                     SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
 
                                                     SendMessage(GetParent(Shell_TrayWndPtr), WM_SETREDRAW, False, 0) ' [Desktop]
-
-                                                    ' SendMessage(MSTaskListWClassPtr, WM_SETREDRAW, False, 0)
-
-                                                    '  SendMessage(GetParent(SHELLDLL_DefView.Current.NativeWindowHandle), WM_SETREDRAW, False, 0)
-                                                    'SetParent(Gui.Panel1.Handle, GetParent(Shell_TrayWndPtr))
 
                                                     Console.WriteLine("FirstTaskbarCalculation | OldLeft = " & OldLeft1 & " Left = " & TaskbarLeft1 + TaskbarWidth1 & " <-- If not the same we call the Animator")
 
@@ -721,15 +631,12 @@ Public Class Taskbar
                                                     End If
                                                 End If
 
-
                                             Next
 
                                             If UpdateTaskbar = True Then
                                                 UpdateTaskbar = False
                                                 AnimationControl.TaskbarRefresh = True
                                             End If
-
-
 
                                             TaskbarChanged = False
 
@@ -763,7 +670,6 @@ Public Class Taskbar
                         Handle = FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
 
                     Loop Until Not Handle = Nothing
-
 
                     Application.Restart()
 
@@ -807,7 +713,6 @@ Public Class Taskbar
 
     End Sub
 
-
     Public Shared Function ClearMemory() As Int32
 
         Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, 2097152, 2097152)
@@ -828,7 +733,7 @@ Public Class Taskbar
         If TaskbarStyle = 1 Then
             accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
             ' accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
-            ' accent.GradientColor = 255
+            '' accent.GradientColor = 255 Or 255 Or 255 Or 255
         End If
 
         If TaskbarStyle = 3 Then
@@ -898,16 +803,12 @@ Public Class Taskbar
         Dim condition As New OrCondition(New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_TrayWnd"), New PropertyCondition(AutomationElement.ClassNameProperty, "Shell_SecondaryTrayWnd"))
         Dim lists As AutomationElementCollection = desktops.FindAll(TreeScope.Children, condition)
 
-
-
         Dim trays As New ArrayList
 
         For Each trayWnd As AutomationElement In lists
             trays.Add(trayWnd.Current.NativeWindowHandle.ToString)
 
         Next
-
-
 
         RefreshWindowsExplorer()
 
@@ -917,10 +818,6 @@ Public Class Taskbar
             SendMessage(trayptr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
             SendMessage(trayptr, WM_DWMCOMPOSITIONCHANGED, True, 0)
         Next
-
-
-
-
 
     End Sub
 
@@ -955,6 +852,11 @@ Public Class Taskbar
         SetWindowPos(XLocationEffect2.SecondTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
         SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
+        End
+    End Sub
+
+    Public Shared Sub OnClose(sender As Object, e As EventArgs)
+        Closing()
     End Sub
 
 End Class
