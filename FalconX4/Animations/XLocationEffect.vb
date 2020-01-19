@@ -20,36 +20,17 @@ Namespace VisualEffects.Animations.Effects
         Public Shared FirstTaskbarPosition As Integer = 0
         Public Shared FirstTaskbarOldPosition As Integer = 0
 
-        Public Function GetCurrentValue(ByVal control As Control) As Integer Implements IEffect.GetCurrentValue
-            Return control.Left
-
-        End Function
-
-        Public Sub SetValueX(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueX
+        Public Sub SetValueX(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueX
 
             SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
         End Sub
 
-        Public Sub SetValueY(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueY
+        Public Sub SetValueY(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueY
 
             SetWindowPos(FirstTaskbarPtr, IntPtr.Zero, 0, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
         End Sub
-
-        Public Function GetMinimumValue(ByVal control As Control) As Integer Implements IEffect.GetMinimumValue
-            Return Int32.MinValue
-        End Function
-
-        Public Function GetMaximumValue(ByVal control As Control) As Integer Implements IEffect.GetMaximumValue
-            Return Int32.MaxValue
-        End Function
-
-        Public ReadOnly Property IEffect_Interaction As EffectInteractions Implements IEffect.Interaction
-            Get
-                Return EffectInteractions.X
-            End Get
-        End Property
 
     End Class
 

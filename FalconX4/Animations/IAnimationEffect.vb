@@ -3,17 +3,10 @@
 Namespace VisualEffects
 
     Public Interface IEffect
-        ReadOnly Property Interaction() As EffectInteractions
 
-        Function GetCurrentValue(ByVal control As Control) As Integer
+        Sub SetValueX(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer)
 
-        Sub SetValueX(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer)
-
-        Sub SetValueY(ByVal control As Control, ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer)
-
-        Function GetMinimumValue(ByVal control As Control) As Integer
-
-        Function GetMaximumValue(ByVal control As Control) As Integer
+        Sub SetValueY(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer)
 
     End Interface
 
