@@ -1,5 +1,5 @@
 [![Github all releases](https://img.shields.io/github/downloads/ChrisAnd1998/FalconX-Center-Taskbar/total.svg)](https://GitHub.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/)
-[![GitHub version](https://badge.fury.io/gh/ChrisAnd1998%2FFalconX-Center-Taskbar.svg)](https://github.com/ChrisAnd1998/FalconX-Center-Taskbar)
+[![GitHub release](https://img.shields.io/github/release/ChrisAnd1998/FalconX-Center-Taskbar.svg)](https://GitHub.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/)
 
 # FalconX
 
