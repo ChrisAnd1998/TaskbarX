@@ -1,3 +1,6 @@
+[![Github all releases](https://img.shields.io/github/downloads/ChrisAnd1998/FalconX-Center-Taskbar/total.svg)](https://GitHub.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/)
+
+
 # FalconX
 
 <img src="https://chrisandriessen.nl/web/img/insta.gif" width="100%" />
