@@ -22,13 +22,13 @@ Namespace VisualEffects.Animations.Effects
 
         Public Sub SetValueX(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueX
 
-            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, newValue, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, newValue, Taskbar.YforHTaskbar, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
         End Sub
 
         Public Sub SetValueY(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueY
 
-            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, 0, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+            SetWindowPos(ThirdTaskbarPtr, IntPtr.Zero, Taskbar.XforVTaskbar, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
 
         End Sub
 

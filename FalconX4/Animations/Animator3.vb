@@ -24,10 +24,10 @@ Namespace VisualEffects
             Try
 
                 If Not XLocationEffect3.ThirdTaskbarOldPosition = 0 Then
-                    If Taskbar.Horizontal = True Then
-                        SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, XLocationEffect3.ThirdTaskbarOldPosition, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                    If Taskbar.Orientation3 = True Then
+                        SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, XLocationEffect3.ThirdTaskbarOldPosition, Taskbar.YforHTaskbar, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
                     Else
-                        SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, 0, XLocationEffect3.ThirdTaskbarOldPosition, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                        SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, Taskbar.XforVTaskbar, XLocationEffect3.ThirdTaskbarOldPosition, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
                     End If
                 End If
 
@@ -72,9 +72,9 @@ Namespace VisualEffects
                                                            newValue = (originalValue + valueToReach) - newValue
                                                        End If
 
-                                                       If Taskbar.Horizontal = True Then
+                                                       If Taskbar.Orientation3 = True Then
                                                            iEffect.SetValueX(originalValue, valueToReach, newValue)
-                                                       ElseIf Taskbar.Horizontal = False Then
+                                                       ElseIf Taskbar.Orientation3 = False Then
                                                            iEffect.SetValueY(originalValue, valueToReach, newValue)
                                                        End If
 
@@ -86,10 +86,10 @@ Namespace VisualEffects
                                                            IsAnimated = True
 
                                                            Console.WriteLine("Animator 3 | Ended on " & newValue)
-                                                           If Taskbar.Horizontal = True Then
-                                                               SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, valueToReach, 0, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                           If Taskbar.Orientation3 = True Then
+                                                               SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, valueToReach, Taskbar.YforHTaskbar, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
                                                            Else
-                                                               SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, 0, valueToReach, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
+                                                               SetWindowPos(XLocationEffect3.ThirdTaskbarPtr, IntPtr.Zero, Taskbar.XforVTaskbar, valueToReach, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
                                                            End If
 
                                                            Console.WriteLine("Animator 3 | Position Fixed on " & valueToReach)
