@@ -129,12 +129,6 @@
     <Compile Include="Animations\IAnimationEffect.vb" />
     <Compile Include="Animations\XLocationEffect2.vb" />
     <Compile Include="Animations\AnimationExtensions.vb" />
-    <Compile Include="BuildString.designer.vb">
-      <DependentUpon>BuildString.vb</DependentUpon>
-    </Compile>
-    <Compile Include="BuildString.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
