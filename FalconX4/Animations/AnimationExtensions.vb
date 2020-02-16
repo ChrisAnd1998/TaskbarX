@@ -1,5 +1,4 @@
-﻿Imports FalconX4.VisualEffects.Animators
-Imports FalconX4.VisualEffects.Easing
+﻿Imports FalconX4.VisualEffects.Easing
 
 Namespace VisualEffects
     Public Module AnimationExtensions
