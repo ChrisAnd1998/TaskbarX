@@ -9,6 +9,6 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(False)>
 <Assembly: Guid("5cad66db-1e3d-4aae-b56c-ed060b09d4ff")>
-<Assembly: AssemblyVersion("1.4.1.0")>
-<Assembly: AssemblyFileVersion("1.4.1.0")>
+<Assembly: AssemblyVersion("1.4.2.0")>
+<Assembly: AssemblyFileVersion("1.4.2.0")>
 <Assembly: NeutralResourcesLanguage("en")>
