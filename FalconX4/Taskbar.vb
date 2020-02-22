@@ -204,8 +204,8 @@ Public Class Taskbar
                 '  SaveSettings()
                 '  LoadSettings()
             End If
-        Catch ex As Exception
-            MessageBox.Show("!!" & ex.Message)
+        Catch 'ex As Exception
+            '  MessageBox.Show("!!" & ex.Message)
         End Try
     End Sub
 
@@ -671,14 +671,16 @@ Public Class Taskbar
         Dim accentStructSize = Marshal.SizeOf(accent)
         If TaskbarStyle = 1 Then
             accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
+
         End If
         If TaskbarStyle = 3 Then
-            Dim _blurBackgroundColor As UInteger = &H990000
+
             accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
-            accent.GradientColor = &H0 Or &H0
+            accent.GradientColor = &H10000000 'AARRGGBB
         End If
         If TaskbarStyle = 2 Then
             accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND
+
         End If
         Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
         Marshal.StructureToPtr(accent, accentPtr, False)
