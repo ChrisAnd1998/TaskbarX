@@ -135,6 +135,7 @@ Public Class Taskbar
     Public Shared XforVTaskbar As Integer
     Public Shared Ready As Boolean
     Public Shared AppClosing As Boolean
+    Public Shared RefreshRate As Integer
 
     Public Shared Sub LoadSettings()
         Try
@@ -178,6 +179,8 @@ Public Class Taskbar
                 End If
                 XforVTaskbar = CDec(System.IO.File.ReadAllLines(path)(9))
                 YforHTaskbar = CDec(System.IO.File.ReadAllLines(path)(9))
+
+                RefreshRate = CDec(System.IO.File.ReadAllLines(path)(10))
             Else
 
                 AnimationControl.AnimationSelection = "CubicEaseInOut"
@@ -200,6 +203,8 @@ Public Class Taskbar
 
                 XforVTaskbar = 0
                 YforHTaskbar = 0
+
+                RefreshRate = 400
 
                 '  SaveSettings()
                 '  LoadSettings()
@@ -254,6 +259,14 @@ Public Class Taskbar
         Public cbData As Integer
         Public lpData As IntPtr
     End Structure
+
+    <Flags()>
+    Public Enum SendMessageTimeoutFlags
+        SMTO_NORMAL = 0
+        SMTO_BLOCK = 1
+        SMTO_ABORTIFHUNG = 2
+        SMTO_NOTIMEOUTIFNOTHUNG = 8
+    End Enum
 
     Public Shared Sub Main()
         SetProcessDpiAwareness(PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
@@ -389,7 +402,7 @@ Public Class Taskbar
                         End If
                     End If
                 End If
-                System.Threading.Thread.Sleep(400)
+                System.Threading.Thread.Sleep(RefreshRate)
                 OldResolution = Resolution
                 OldTrayNotifyWidth = TrayNotifyWidth
                 If Not TaskbarCount = OldTaskbarCount Or UpdateTaskbar = True Or Not Resolution = OldResolution Then
@@ -405,7 +418,7 @@ Public Class Taskbar
                                             Console.WriteLine("TaskbarCount = " & TaskbarCount & " | OldTaskbarCount = " & OldTaskbarCount)
                                             Console.WriteLine("Resolution = " & Resolution & " | OldResolution = " & OldResolution)
                                             Console.WriteLine("")
-                                            System.Threading.Thread.Sleep(400)
+                                            System.Threading.Thread.Sleep(RefreshRate)
                                             If Not Resolution = OldResolution Then
                                                 TaskbarChanged = True
                                             End If
@@ -662,6 +675,13 @@ Public Class Taskbar
         Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, 2097152, 2097152)
     End Function
 
+    Private Shared Function ToAbgr(ByVal color As Color) As UInteger
+        Return ((CType(color.A, UInteger) + 24) _
+                    Or ((CType(color.B, UInteger) + 16) _
+                    Or ((CType(color.G, UInteger) + 8) _
+                    Or color.R)))
+    End Function
+
     Public Shared Sub EnableTaskbarStyle()
         Dim Progman As AutomationElement = AutomationElement.FromHandle(FindWindowByClass("Progman", CType(0, IntPtr)))
         Dim desktops As AutomationElement = AutomationElement.RootElement
@@ -676,7 +696,7 @@ Public Class Taskbar
         If TaskbarStyle = 3 Then
 
             accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
-            accent.GradientColor = &H10000000 'AARRGGBB
+            accent.GradientColor = ToAbgr(blurColor) ''&H10000000 'AARRGGBB
         End If
         If TaskbarStyle = 2 Then
             accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND
