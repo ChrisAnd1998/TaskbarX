@@ -300,6 +300,11 @@ Public Class Taskbar
         End If
         SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
         SendMessage(GetParent(Shell_TrayWndPtr), WM_SETREDRAW, False, 0)
+
+        If RefreshRate <= 9 Then
+            RefreshRate = 400
+        End If
+
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf TaskbarCalculator)
         t1.Start()
     End Sub
@@ -341,11 +346,12 @@ Public Class Taskbar
                     screencount = screencount + screenX.Bounds.Width
                 Next
                 Resolution = screencount
+
                 If Horizontal = True Then
-                    TaskbarCount = CInt(child.Current.BoundingRectangle.Left)
+                    TaskbarCount = CInt(child.Current.BoundingRectangle.Left + child.Current.BoundingRectangle.Width)
                     TrayNotifyWidth = CInt(TrayNotifyWnd.Current.BoundingRectangle.Left)
                 Else
-                    TaskbarCount = CInt(child.Current.BoundingRectangle.Top)
+                    TaskbarCount = CInt(child.Current.BoundingRectangle.Top + child.Current.BoundingRectangle.Height)
                     TrayNotifyWidth = CInt(TrayNotifyWnd.Current.BoundingRectangle.Top)
                 End If
                 SendMessage(ReBarWindow32Ptr, WM_SETREDRAW, False, 0)
@@ -471,6 +477,7 @@ Public Class Taskbar
                                                     Dim Position1 As Integer
                                                     If trayWnd.Current.ClassName = "Shell_TrayWnd" Then
                                                         If CenterBetween = True Then
+
                                                             Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft1 \ 2))
                                                             Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 - offset).ToString.Replace("-", "")) + OffsetPosition
                                                         Else
