@@ -18,11 +18,11 @@ Namespace VisualEffects.Animations.Effects
         Public Shared SecondTaskbarPosition As Integer = 0
         Public Shared SecondTaskbarOldPosition As Integer = 0
 
-        Public Sub SetValuex(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueX
+        Public Sub SetValuex(ByVal originalValue As Double, ByVal valueToReach As Double, ByVal newValue As Double) Implements IEffect.SetValueX
             SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, newValue, Taskbar.YforHTaskbar, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
         End Sub
 
-        Public Sub SetValuey(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer) Implements IEffect.SetValueY
+        Public Sub SetValuey(ByVal originalValue As Double, ByVal valueToReach As Double, ByVal newValue As Double) Implements IEffect.SetValueY
             SetWindowPos(SecondTaskbarPtr, IntPtr.Zero, Taskbar.XforVTaskbar, newValue, 0, 0, SWP_NOSIZE Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE Or SWP_NOZORDER Or SWP_NOSENDCHANGING)
         End Sub
 

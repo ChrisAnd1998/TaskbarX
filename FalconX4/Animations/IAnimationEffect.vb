@@ -4,9 +4,9 @@ Namespace VisualEffects
 
     Public Interface IEffect
 
-        Sub SetValueX(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer)
+        Sub SetValueX(ByVal originalValue As Double, ByVal valueToReach As Double, ByVal newValue As Double)
 
-        Sub SetValueY(ByVal originalValue As Integer, ByVal valueToReach As Integer, ByVal newValue As Integer)
+        Sub SetValueY(ByVal originalValue As Double, ByVal valueToReach As Double, ByVal newValue As Double)
 
     End Interface
 

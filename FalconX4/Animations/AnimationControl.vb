@@ -10,12 +10,15 @@ Public Class AnimationControl
     Public Shared Animation As String
     Shared Speed As Integer
     Shared Position As Integer
+    Public Shared cc As Integer
 
     Public Shared Sub animateTaskbar()
         Try
+
             Do
                 System.Threading.Thread.Sleep(10) : Application.DoEvents()
             Loop Until Animator.IsAnimated = True
+
             Console.WriteLine("Taskbar1 || " & VisualEffects.Animations.Effects.XLocationEffect.FirstTaskbarPosition)
             Animation = AnimationSelection.ToString
             Position = VisualEffects.Animations.Effects.XLocationEffect.FirstTaskbarPosition
