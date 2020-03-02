@@ -478,10 +478,17 @@ Public Class Taskbar
                                                     If trayWnd.Current.ClassName = "Shell_TrayWnd" Then
                                                         If CenterBetween = True Then
 
-                                                            Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft1 \ 2))
-                                                            Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            If Orientation1 = True Then
+                                                                Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft1 \ 2))
+                                                                Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            Else
+                                                                Dim offset As Integer = (TrayNotify.Current.BoundingRectangle.Height / 2 - (TaskbarLeft1 \ 2))
+                                                                Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            End If
                                                         Else
+
                                                             Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1).ToString.Replace("-", "")) + OffsetPosition
+
                                                         End If
                                                     Else
                                                         Position1 = CInt((TrayWndWidth1 / 2 - (TaskbarWidth1 / 2) - TaskbarLeft1).ToString.Replace("-", "")) + OffsetPosition2
@@ -493,9 +500,11 @@ Public Class Taskbar
                                                     SendMessage(GetParent(Shell_TrayWndPtr), WM_SETREDRAW, False, 0)
                                                     Console.WriteLine("FirstTaskbarCalculation | OldLeft = " & OldLeft1 & " Left = " & TaskbarLeft1 + TaskbarWidth1 & " <-- If not the same we call the Animator")
                                                     If Not OldLeft1 = TaskbarLeft1 + TaskbarWidth1 Or UpdateTaskbar = True Or TaskbarChanged = True Then
+
                                                         Console.WriteLine("Call Animator 1")
                                                         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl.animateTaskbar)
                                                         t1.Start()
+
                                                     End If
                                                     OldPosition1 = Position1
                                                     OldLeft1 = TaskbarLeft1 + TaskbarWidth1
@@ -539,8 +548,14 @@ Public Class Taskbar
                                                     Dim Position2 As Integer
                                                     If trayWnd.Current.ClassName = "Shell_TrayWnd" Then
                                                         If CenterBetween = True Then
-                                                            Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft2 \ 2))
-                                                            Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2 - offset).ToString.Replace("-", "")) + OffsetPosition
+
+                                                            If Orientation2 = True Then
+                                                                Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft2 \ 2))
+                                                                Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            Else
+                                                                Dim offset = (TrayNotify.Current.BoundingRectangle.Height / 2 - (TaskbarLeft2 \ 2))
+                                                                Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            End If
                                                         Else
                                                             Position2 = CInt((TrayWndWidth2 / 2 - (TaskbarWidth2 / 2) - TaskbarLeft2).ToString.Replace("-", "")) + OffsetPosition
                                                         End If
@@ -552,6 +567,7 @@ Public Class Taskbar
                                                     XLocationEffect2.SecondTaskbarOldPosition = CInt(OldPosition2.ToString.Replace("-", ""))
                                                     Console.WriteLine("SecondTaskbarCalculation | OldLeft = " & OldLeft1 & " Left = " & TaskbarLeft2 + TaskbarWidth2 & " <-- If not the same we call the Animator")
                                                     If Not OldLeft2 = TaskbarLeft2 + TaskbarWidth2 Or UpdateTaskbar = True Or TaskbarChanged = True Then
+
                                                         Console.WriteLine("Call Animator 2")
                                                         Dim t2 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl2.animateTaskbar2)
                                                         t2.Start()
@@ -598,8 +614,14 @@ Public Class Taskbar
                                                     Dim Position3 As Integer
                                                     If trayWnd.Current.ClassName = "Shell_TrayWnd" Then
                                                         If CenterBetween = True Then
-                                                            Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft3 \ 2))
-                                                            Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3 - offset).ToString.Replace("-", "")) + OffsetPosition
+
+                                                            If Orientation3 = True Then
+                                                                Dim offset = (TrayNotify.Current.BoundingRectangle.Width / 2 - (TaskbarLeft3 \ 2))
+                                                                Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            Else
+                                                                Dim offset = (TrayNotify.Current.BoundingRectangle.Height / 2 - (TaskbarLeft3 \ 2))
+                                                                Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3 - offset).ToString.Replace("-", "")) + OffsetPosition
+                                                            End If
                                                         Else
                                                             Position3 = CInt((TrayWndWidth3 / 2 - (TaskbarWidth3 / 2) - TaskbarLeft3).ToString.Replace("-", "")) + OffsetPosition
                                                         End If
@@ -611,9 +633,11 @@ Public Class Taskbar
                                                     XLocationEffect3.ThirdTaskbarOldPosition = CInt(OldPosition3.ToString.Replace("-", ""))
                                                     Console.WriteLine("ThirdTaskbarCalculation | OldLeft = " & OldLeft3 & " Left = " & TaskbarLeft3 + TaskbarWidth3 & " <-- If not the same we call the Animator")
                                                     If Not OldLeft3 = TaskbarLeft3 + TaskbarWidth3 Or UpdateTaskbar = True Or TaskbarChanged = True Then
+
                                                         Console.WriteLine("Call Animator 3")
                                                         Dim t3 As System.Threading.Thread = New System.Threading.Thread(AddressOf AnimationControl3.animateTaskbar3)
                                                         t3.Start()
+
                                                     End If
                                                     OldPosition3 = Position3
                                                     OldLeft3 = TaskbarLeft3 + TaskbarWidth3
