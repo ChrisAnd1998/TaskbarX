@@ -1,8 +1,3 @@
-[![Github all releases](https://img.shields.io/github/downloads/ChrisAnd1998/FalconX-Center-Taskbar/total.svg)](https://GitHub.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/)
-[![Generic badge](https://img.shields.io/badge/website_downloads-8k+/month-<green>.svg)](https://chrisandriessen.nl/web/falconx/)
-[![Generic badge](https://img.shields.io/badge/store_downloads-400+/month-<green>.svg)](https://www.microsoft.com/store/productid/9PCMZ6BXK8GH)
-[![GitHub release](https://img.shields.io/github/release/ChrisAnd1998/FalconX-Center-Taskbar.svg)](https://GitHub.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/)
-
 
 # FalconX
 
