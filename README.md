@@ -4,9 +4,9 @@
 <img src="https://chrisandriessen.nl/web/img/insta.gif" width="100%" />
 FalconX automate's your taskbar position to the center. FalconX has been in development since 6 may 2018. Also known as Falcon10.
 
+&nbsp;
 
-
-> :new: Currently i'am rewriting the project FalconX4 >> FalconX5. You can check it out here!
+> :star::new::star: Currently i'am rewriting the project FalconX4 >> FalconX5. You can check it out here!
 https://github.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/tag/1.5.0.0
 
 ## Features
