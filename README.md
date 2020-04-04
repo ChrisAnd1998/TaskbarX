@@ -7,7 +7,8 @@ FalconX automate's your taskbar position to the center. FalconX has been in deve
 &nbsp;
 
 
->![TaskbarX-logo-20](https://user-images.githubusercontent.com/50437199/78421134-b5a4de00-7655-11ea-9a6c-e93b981e346e.png) Currently i'am rewriting the project FalconX4 >> TaskbarX. You can check it out here!
+>![TaskbarX-logo-20](https://user-images.githubusercontent.com/50437199/78458467-de5ac100-76b1-11ea-82df-d6540e128ba9.png)
+ Currently i'am rewriting the project FalconX4 >> TaskbarX. You can check it out here!
 https://github.com/ChrisAnd1998/FalconX-Center-Taskbar/releases/tag/1.5.0.0
 
 ## Features
