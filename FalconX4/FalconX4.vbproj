@@ -112,6 +112,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.UIAutomationClient, Version=12.0.21213.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\Interop.UIAutomationClient.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -122,8 +126,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="UIAComWrapperX, Version=1.1.0.16, Culture=neutral, PublicKeyToken=78cbcf77433a85e5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ComWrapper\UiaComWrapperX\bin\debug\UIAComWrapperX.dll</HintPath>
+      <HintPath>..\packages\UIAComWrapperX.1.1.0.16\lib\net452\UIAComWrapperX.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -190,6 +193,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FalconX48.ico" />
