@@ -29,7 +29,7 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 
 ## Downloads
 
-- FREE | Simple .zip package : https://chrisandriessen.nl/web/FalconX.html  
+- FREE | Simple .zip package : https://chrisandriessen.nl/web/taskbarx 
 - PAID | Windows Store : https://www.microsoft.com/store/productid/9PCMZ6BXK8GH
 
 ## Tags
