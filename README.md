@@ -25,7 +25,7 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 
 ## Preview
  
-[![Alt text](https://img.youtube.com/vi/diPj9AKCpb4/0.jpg)](https://www.youtube.com/watch?v=diPj9AKCpb4) 
+[![Alt text](https://img.youtube.com/vi/oqA3BDt-GqY/0.jpg)](https://youtu.be/oqA3BDt-GqY) 
 
 ## Downloads
 
