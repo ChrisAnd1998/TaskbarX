@@ -2,7 +2,7 @@
 # TaskbarX
 
 
-![TaskbarX-logo-100](https://user-images.githubusercontent.com/50437199/79128815-6a50a500-7da4-11ea-8095-34890486a76f.png)
+![TaskbarX-logo-100](https://user-images.githubusercontent.com/50437199/79128815-6a50a500-7da4-11ea-8095-34890486a76f.png)  
 &nbsp;
 TaskbarX automatically centers your taskbar icons. TaskbarX has been in development since 6 may 2018. Also known as FalconX and Falcon10.
 
