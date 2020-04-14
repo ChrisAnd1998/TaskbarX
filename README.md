@@ -23,7 +23,7 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 - Unlimited monitors supported
 - Change taskbar style to Transparent, Blur and Acrylic
 
-##Commandline Arguments
+## Commandline Arguments
 
 -taskbarstyle=1 will make the taskbar transparent. 2 blur, 3 acrylic and 0 is disabled.
 -primarytaskbaroffset=0 will set the offset of the primary taskbar based on the center.
