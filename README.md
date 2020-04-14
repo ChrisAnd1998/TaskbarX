@@ -23,6 +23,10 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 - Unlimited monitors supported
 - Change taskbar style to Transparent, Blur and Acrylic
   
+  
+&nbsp;
+
+
 ## Commandline Arguments
 
 _**-taskbarstyle=1** will make the taskbar transparent. 2 blur, 3 acrylic and 0 is disabled.  
@@ -40,14 +44,26 @@ _**-taskbarstyle=1** will make the taskbar transparent. 2 blur, 3 acrylic and 0 
   
 > **Example:** _C:\Program Files (x86)\Chris Andriessen\TaskbarX\TasbarX.exe -taskbarstyle=1 -animationstyle=backeaseout_
   
+  
+&nbsp;
+
+
 ## Preview
  
 [![Alt text](https://user-images.githubusercontent.com/50437199/79141058-55324100-7db9-11ea-87b2-04f4c4cab5b0.png)](https://youtu.be/oqA3BDt-GqY) 
   
+  
+&nbsp;
+
+
 ## Downloads
 
 - FREE | Simple .zip package : https://chrisandriessen.nl/web/taskbarx 
 - PAID | Windows Store : https://www.microsoft.com/store/productid/9PCMZ6BXK8GH
   
+  
+&nbsp;
+
+
 ## Tags
 center taskbar, center taskbar icons, CenterTaskbar, center taskbar icons windows 10, center taskbar windows, windows center taskbar, windows center taskbar icons, center taskbar icons, windows 10 center taskbar icons, falcon10, falcon taskbar, taskbar, taskbar icons, taskbar buttons
