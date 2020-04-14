@@ -182,6 +182,18 @@ triggerskip:
                     End If
                 Catch ex As Exception
                     Console.WriteLine(ex.Message)
+
+                    'Lost taskbar handles restart application
+                    If ex.ToString.Contains("E_ACCESSDENIED") Then
+                        Dim Handle As IntPtr
+                        Do
+                            Handle = Nothing
+                            System.Threading.Thread.Sleep(250)
+                            Handle = FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
+                        Loop Until Not Handle = Nothing
+                        Application.Restart()
+                    End If
+
                 End Try
             Loop
         Catch ex As Exception

@@ -15,6 +15,8 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartArguments>-animationstyle=elasticeaseout</StartArguments>
+    <StartArguments>
+    </StartArguments>
+    <StartAction>Project</StartAction>
   </PropertyGroup>
 </Project>
