@@ -5,6 +5,7 @@ Imports TaskbarX.VisualEffects.Easing
 Imports System.Threading
 Imports System.Windows.Automation
 Imports Microsoft.Win32
+Imports UIA
 
 Public Class TaskbarCenter
 
