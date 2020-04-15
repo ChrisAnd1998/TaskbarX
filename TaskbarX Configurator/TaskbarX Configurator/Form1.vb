@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.Management
 Imports System.Net
 Imports System.Reflection
@@ -79,7 +80,7 @@ Public Class Form1
 
                 td.Triggers.Add(New LogonTrigger With {
                 .UserId = Environment.UserName,
-                .Delay = TimeSpan.FromSeconds(3)})
+                .Delay = TimeSpan.FromSeconds(NumericUpDown6.Value)})
 
                 td.Settings.DisallowStartIfOnBatteries = False
                 td.Settings.StopIfGoingOnBatteries = False
@@ -287,6 +288,10 @@ Public Class Form1
                 parameters = parameters & "-looprefreshrate=" & NumericUpDown3.Value & " "
             End If
 
+            If Not NumericUpDown6.Value = Nothing Then
+                parameters = parameters & "-taskdelay=" & NumericUpDown6.Value & " "
+            End If
+
             If Not NumericUpDown5.Value = Nothing Then
                 parameters = parameters & "-onbatterylooprefreshrate=" & NumericUpDown5.Value & " "
             End If
@@ -359,6 +364,9 @@ Public Class Form1
                 If argument.Contains("-looprefreshrate") Then
                     NumericUpDown3.Value = val(1)
                 End If
+                If argument.Contains("-taskdelay") Then
+                    NumericUpDown6.Value = val(1)
+                End If
                 If argument.Contains("-centerinbetween") Then
                     If val(1) = "1" Then
                         CheckBox1.Checked = True
@@ -388,6 +396,92 @@ Public Class Form1
             CheckForUpdateToolStripMenuItem.Visible = False
         End If
 
+        Try
+
+            Using ts As TaskService = New TaskService()
+
+                Dim td = ts.GetTask("TaskbarX")
+
+                Dim cfg As String = Nothing
+
+                If Application.StartupPath.Contains("40210ChrisAndriessen") Then
+                    cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                Else
+                    cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
+                End If
+
+                Dim arguments() As String = cfg.Split(" ")
+
+                For Each argument In arguments
+                    Dim val() As String = Split(argument, "=")
+                    If argument.Contains("-taskbarstyle") Then
+                        If val(1) = 0 Then
+                            RadioButton1.Checked = True
+                        End If
+                        If val(1) = 1 Then
+                            RadioButton2.Checked = True
+                        End If
+                        If val(1) = 2 Then
+                            RadioButton3.Checked = True
+                        End If
+                        If val(1) = 3 Then
+                            RadioButton4.Checked = True
+                        End If
+                    End If
+                    If argument.Contains("-primarytaskbaroffset") Then
+                        NumericUpDown1.Value = val(1)
+                    End If
+                    If argument.Contains("-secondarytaskbaroffset") Then
+                        NumericUpDown2.Value = val(1)
+                    End If
+                    If argument.Contains("-centerprimaryonly") Then
+                        If val(1) = "1" Then
+                            CheckBox2.Checked = True
+                        End If
+                    End If
+                    If argument.Contains("-centersecondaryonly") Then
+                        If val(1) = "1" Then
+                            CheckBox3.Checked = True
+                        End If
+                    End If
+                    If argument.Contains("-animationstyle") Then
+                        ComboBox1.Text = val(1)
+                    End If
+                    If argument.Contains("-animationspeed") Then
+                        NumericUpDown4.Value = val(1)
+                    End If
+                    If argument.Contains("-looprefreshrate") Then
+                        NumericUpDown3.Value = val(1)
+                    End If
+                    If argument.Contains("-centerinbetween") Then
+                        If val(1) = "1" Then
+                            CheckBox1.Checked = True
+                        End If
+                    End If
+                    If argument.Contains("-onbatteryanimationstyle") Then
+                        ComboBox2.Text = val(1)
+                    End If
+                    If argument.Contains("-onbatterylooprefreshrate") Then
+                        NumericUpDown5.Value = val(1)
+                    End If
+                    If argument.Contains("-fixtoolbarsontraychange") Then
+                        If val(1) = "1" Then
+                            CheckBox4.Checked = True
+                        End If
+                    End If
+                Next
+
+                Console.WriteLine(td.Definition.Actions.ToString)
+
+                Dim lg As LogonTrigger = td.Definition.Triggers.Item(0)
+                Dim times As TimeSpan = lg.Delay
+
+                NumericUpDown6.Value = times.Seconds
+            End Using
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub CheckForUpdateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CheckForUpdateToolStripMenuItem.Click
@@ -411,6 +505,14 @@ Public Class Form1
             client.Dispose()
         Catch
         End Try
+    End Sub
+
+    Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        ' Dim result As DialogResult = MessageBox.Show("Before you close the configurator... Your settings won't be saved automatically! You can use File -> Export and Import to save and modify your settings." & vbNewLine & vbNewLine & "Do you want to close now?", "Closing...", MessageBoxButtons.YesNo)
+        ' If (result = DialogResult.Yes) Then
+        'Else
+        ' e.Cancel = True
+        'End If
     End Sub
 
 End Class
