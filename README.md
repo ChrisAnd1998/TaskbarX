@@ -7,7 +7,7 @@
 TaskbarX gives you control over the position of your taskbar icons.
 TaskbarX will give you an original Windows dock like feel. The icons will move to the center or user given position when an icon gets added or removed from the taskbar. You will be given the option to choose between a variety of different animations and change their speeds. The animations can be disabled if you don't like animations and want them to move in an instant. The center position can also be changed to bring your icons more to the left or right based on the center position. Currently all taskbar settings are supported including the vertical taskbar and unlimited taskbars.
 TaskbarX has been in development since 6 may 2018. Also known as FalconX and Falcon10.
-&nbsp;
+&nbsp;  
 ![aa4](https://user-images.githubusercontent.com/50437199/79305152-1c968280-7ef3-11ea-9eda-c97f61b758bd.png)
 &nbsp;
 
