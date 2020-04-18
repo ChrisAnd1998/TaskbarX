@@ -3,8 +3,11 @@ Imports System.IO
 Imports System.Management
 Imports System.Net
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Windows.Automation
+Imports Microsoft.VisualBasic.CompilerServices
+Imports Microsoft.Win32
 Imports Microsoft.Win32.TaskScheduler
 
 Public Class Form1
@@ -62,111 +65,162 @@ Public Class Form1
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
+        'Kill every other running instance of FalconX
+        Shell("Taskkill /F /T /IM TaskbarX.exe")
+        Shell("Taskkill /F /T /IM dllhost.exe")
         Try
-            Using ts As TaskService = New TaskService()
-                ts.RootFolder.DeleteTask("TaskbarX")
-            End Using
-        Catch ex As Exception
-            Console.WriteLine(ex.Message)
+            For Each prog As Process In Process.GetProcesses
+                If prog.ProcessName = "TaskbarX" Then
+                    prog.Kill()
+                End If
+            Next
+        Catch
         End Try
 
-        Try
+        System.Threading.Thread.Sleep(50) : Application.DoEvents()
 
-            Using ts As TaskService = New TaskService()
+        Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf RevertToZero)
+        t1.Start()
 
-                Dim td As TaskDefinition = ts.NewTask()
+        ResetTaskbarStyle()
 
-                td.RegistrationInfo.Description = "Center taskbar icons"
+        Dim parameters As String
 
-                td.Triggers.Add(New LogonTrigger With {
-                .UserId = Environment.UserName,
-                .Delay = TimeSpan.FromSeconds(NumericUpDown6.Value)})
+        If RadioButton1.Checked = True Then
+            parameters = parameters & "-taskbarstyle=0 "
+        End If
+        If RadioButton2.Checked = True Then
+            parameters = parameters & "-taskbarstyle=1 "
+        End If
+        If RadioButton3.Checked = True Then
+            parameters = parameters & "-taskbarstyle=2 "
+        End If
+        If RadioButton4.Checked = True Then
+            parameters = parameters & "-taskbarstyle=3 "
+        End If
 
-                td.Settings.DisallowStartIfOnBatteries = False
-                td.Settings.StopIfGoingOnBatteries = False
-                td.Settings.RunOnlyIfIdle = False
-                td.Settings.IdleSettings.RestartOnIdle = False
-                td.Settings.IdleSettings.StopOnIdleEnd = False
-                td.Settings.Hidden = True
-                td.Settings.ExecutionTimeLimit = TimeSpan.Zero
-                td.RegistrationInfo.Author = "Chris Andriessen"
-                ' td.Principal.LogonType = TaskLogonType.S4U
-                ' td.Principal.LogonType = TaskLogonType.InteractiveTokenOrPassword
+        If Not ComboBox1.SelectedItem = Nothing Then
+            parameters = parameters & "-animationstyle=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+        End If
 
-                Dim parameters As String
+        If Not ComboBox2.SelectedItem = Nothing Then
+            parameters = parameters & "-onbatteryanimationstyle=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+        End If
 
-                If RadioButton1.Checked = True Then
-                    parameters = parameters & "-taskbarstyle=0 "
-                End If
-                If RadioButton2.Checked = True Then
-                    parameters = parameters & "-taskbarstyle=1 "
-                End If
-                If RadioButton3.Checked = True Then
-                    parameters = parameters & "-taskbarstyle=2 "
-                End If
-                If RadioButton4.Checked = True Then
-                    parameters = parameters & "-taskbarstyle=3 "
-                End If
+        If Not NumericUpDown4.Value = Nothing Then
+            parameters = parameters & "-animationspeed=" & NumericUpDown4.Value & " "
+        End If
 
-                If Not ComboBox1.SelectedItem = Nothing Then
-                    parameters = parameters & "-animationstyle=" & ComboBox1.SelectedItem.ToString.ToLower & " "
-                End If
+        If Not NumericUpDown1.Value = Nothing Then
+            parameters = parameters & "-primarytaskbaroffset=" & NumericUpDown1.Value & " "
+        End If
+        If Not NumericUpDown2.Value = Nothing Then
+            parameters = parameters & "-secondarytaskbaroffset=" & NumericUpDown2.Value & " "
+        End If
 
-                If Not ComboBox2.SelectedItem = Nothing Then
-                    parameters = parameters & "-onbatteryanimationstyle=" & ComboBox2.SelectedItem.ToString.ToLower & " "
-                End If
+        If CheckBox1.Checked = True Then
+            parameters = parameters & "-centerinbetween=1 "
+        End If
 
-                If Not NumericUpDown4.Value = Nothing Then
-                    parameters = parameters & "-animationspeed=" & NumericUpDown4.Value & " "
-                End If
+        If Not NumericUpDown3.Value = Nothing Then
+            parameters = parameters & "-looprefreshrate=" & NumericUpDown3.Value & " "
+        End If
 
-                If Not NumericUpDown1.Value = Nothing Then
-                    parameters = parameters & "-primarytaskbaroffset=" & NumericUpDown1.Value & " "
-                End If
-                If Not NumericUpDown2.Value = Nothing Then
-                    parameters = parameters & "-secondarytaskbaroffset=" & NumericUpDown2.Value & " "
-                End If
+        If Not NumericUpDown5.Value = Nothing Then
+            parameters = parameters & "-onbatterylooprefreshrate=" & NumericUpDown5.Value & " "
+        End If
 
-                If CheckBox1.Checked = True Then
-                    parameters = parameters & "-centerinbetween=1 "
-                End If
+        If CheckBox2.Checked = True Then
+            parameters = parameters & "-centerprimaryonly=1 "
+        End If
 
-                If Not NumericUpDown3.Value = Nothing Then
-                    parameters = parameters & "-looprefreshrate=" & NumericUpDown3.Value & " "
-                End If
+        If CheckBox3.Checked = True Then
+            parameters = parameters & "-centersecondaryonly=1 "
+        End If
 
-                If Not NumericUpDown5.Value = Nothing Then
-                    parameters = parameters & "-onbatterylooprefreshrate=" & NumericUpDown5.Value & " "
-                End If
+        If CheckBox4.Checked = True Then
+            parameters = parameters & "-fixtoolbarsontraychange=1 "
+        End If
 
-                If CheckBox2.Checked = True Then
-                    parameters = parameters & "-centerprimaryonly=1 "
-                End If
+        If CheckBox5.Checked = True Then
+            parameters = parameters & "-startupshortcut=1 "
+        End If
 
-                If CheckBox3.Checked = True Then
-                    parameters = parameters & "-centersecondaryonly=1 "
-                End If
+        If CheckBox5.Checked = True Then
 
-                If CheckBox4.Checked = True Then
-                    parameters = parameters & "-fixtoolbarsontraychange=1 "
-                End If
+            Dim regKey1 As RegistryKey
+            regKey1 = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+            regKey1.DeleteValue("TaskbarX", False)
+            regKey1.Close()
 
-                If Application.StartupPath.Contains("40210ChrisAndriessen") Then
-                    'td.Actions.Add(New ExecAction("powershell.exe", "Start-Process 'shell:AppsFolder\40210ChrisAndriessen.TaskbarX_y1dazs5f5wq00!TaskbarX' -Args '" & parameters & "'", Nothing))
-                    'Process.Start("powershell.exe", "Start-Process 'shell:AppsFolder\40210ChrisAndriessen.TaskbarX_y1dazs5f5wq00!TaskbarX' -Args '" & parameters & "'")
-                    td.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
-                    Shell("cmd /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters)
-                Else
-                    td.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
-                    Process.Start("TaskbarX.exe", parameters)
-                End If
+            If Application.StartupPath.Contains("40210ChrisAndriessen") Then
 
-                ts.RootFolder.RegisterTaskDefinition("TaskbarX", td)
+                Dim regKey2 As RegistryKey
+                regKey2 = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+                regKey2.SetValue("TaskbarX", "cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters)
+                regKey2.Close()
 
-            End Using
-        Catch ex As Exception
+                Shell("cmd /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters)
+            Else
 
-        End Try
+                Dim regKey3 As RegistryKey
+                regKey3 = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+                regKey3.SetValue("TaskbarX", Application.StartupPath & "\TaskbarX.exe " & parameters)
+                regKey3.Close()
+
+                Process.Start("TaskbarX.exe", parameters)
+            End If
+        Else
+
+            Try
+                Using ts As TaskService = New TaskService()
+                    ts.RootFolder.DeleteTask("TaskbarX")
+                End Using
+            Catch ex As Exception
+                Console.WriteLine(ex.Message)
+            End Try
+
+            Try
+
+                Using ts As TaskService = New TaskService()
+
+                    Dim td As TaskDefinition = ts.NewTask()
+
+                    td.RegistrationInfo.Description = "Center taskbar icons"
+
+                    td.Triggers.Add(New LogonTrigger With {
+                    .UserId = System.Security.Principal.WindowsIdentity.GetCurrent().Name,
+                    .Delay = TimeSpan.FromSeconds(NumericUpDown6.Value)})
+
+                    td.Settings.DisallowStartIfOnBatteries = False
+                    td.Settings.StopIfGoingOnBatteries = False
+                    td.Settings.RunOnlyIfIdle = False
+                    td.Settings.IdleSettings.RestartOnIdle = False
+                    td.Settings.IdleSettings.StopOnIdleEnd = False
+                    td.Settings.Hidden = True
+                    td.Settings.ExecutionTimeLimit = TimeSpan.Zero
+                    td.RegistrationInfo.Author = "Chris Andriessen"
+                    'td.Principal.LogonType = TaskLogonType.S4U
+                    ' td.Principal.LogonType = TaskLogonType.InteractiveTokenOrPassword
+
+                    If Application.StartupPath.Contains("40210ChrisAndriessen") Then
+                        'td.Actions.Add(New ExecAction("powershell.exe", "Start-Process 'shell:AppsFolder\40210ChrisAndriessen.TaskbarX_y1dazs5f5wq00!TaskbarX' -Args '" & parameters & "'", Nothing))
+                        'Process.Start("powershell.exe", "Start-Process 'shell:AppsFolder\40210ChrisAndriessen.TaskbarX_y1dazs5f5wq00!TaskbarX' -Args '" & parameters & "'")
+                        td.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
+                        Shell("cmd /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters)
+                    Else
+                        td.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
+                        Process.Start("TaskbarX.exe", parameters)
+                    End If
+
+                    ts.RootFolder.RegisterTaskDefinition("TaskbarX", td)
+
+                End Using
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+            End Try
+
+        End If
 
     End Sub
 
@@ -308,6 +362,10 @@ Public Class Form1
                 parameters = parameters & "-fixtoolbarsontraychange=1 "
             End If
 
+            If CheckBox5.Checked = True Then
+                parameters = parameters & "-startupshortcut=1 "
+            End If
+
             My.Computer.FileSystem.WriteAllText _
             (SaveFileDialog1.FileName, parameters, True)
         End If
@@ -381,6 +439,11 @@ Public Class Form1
                 If argument.Contains("-fixtoolbarsontraychange") Then
                     If val(1) = "1" Then
                         CheckBox4.Checked = True
+                    End If
+                End If
+                If argument.Contains("-startupshortcut") Then
+                    If val(1) = "1" Then
+                        CheckBox5.Checked = True
                     End If
                 End If
             Next
@@ -469,6 +532,11 @@ Public Class Form1
                             CheckBox4.Checked = True
                         End If
                     End If
+                    If argument.Contains("-startupshortcut") Then
+                        If val(1) = "1" Then
+                            CheckBox5.Checked = True
+                        End If
+                    End If
                 Next
 
                 Console.WriteLine(td.Definition.Actions.ToString)
@@ -513,6 +581,31 @@ Public Class Form1
         'Else
         ' e.Cancel = True
         'End If
+    End Sub
+
+    Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox5.CheckedChanged
+
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Dim regKey1 As RegistryKey
+        regKey1 = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+        regKey1.DeleteValue("TaskbarX", False)
+        regKey1.Close()
+
+        MessageBox.Show("Startup Shortcut Removed!")
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Try
+            Using ts As TaskService = New TaskService()
+                ts.RootFolder.DeleteTask("TaskbarX")
+            End Using
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+        End Try
+
+        MessageBox.Show("Taskschedule Removed!")
     End Sub
 
 End Class

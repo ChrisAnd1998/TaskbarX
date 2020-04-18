@@ -30,21 +30,26 @@ Partial Class Form1
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.NumericUpDown4 = New System.Windows.Forms.NumericUpDown()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.NumericUpDown3 = New System.Windows.Forms.NumericUpDown()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.NumericUpDown5 = New System.Windows.Forms.NumericUpDown()
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
@@ -61,15 +66,15 @@ Partial Class Form1
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.NumericUpDown6 = New System.Windows.Forms.NumericUpDown()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -83,6 +88,7 @@ Partial Class Form1
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox6.SuspendLayout()
         CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox7.SuspendLayout()
         Me.SuspendLayout()
         '
         'ComboBox1
@@ -167,6 +173,15 @@ Partial Class Form1
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Animation Style"
         '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(170, 48)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(20, 13)
+        Me.Label10.TabIndex = 19
+        Me.Label10.Text = "ms"
+        '
         'Label4
         '
         Me.Label4.AutoSize = True
@@ -197,12 +212,30 @@ Partial Class Form1
         Me.GroupBox3.Controls.Add(Me.Label1)
         Me.GroupBox3.Controls.Add(Me.NumericUpDown1)
         Me.GroupBox3.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 167)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 248)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(269, 97)
         Me.GroupBox3.TabIndex = 9
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Position Settings"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(170, 46)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(20, 13)
+        Me.Label12.TabIndex = 21
+        Me.Label12.Text = "ms"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(170, 20)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(20, 13)
+        Me.Label11.TabIndex = 20
+        Me.Label11.Text = "ms"
         '
         'CheckBox1
         '
@@ -260,12 +293,21 @@ Partial Class Form1
         Me.GroupBox4.Controls.Add(Me.Label3)
         Me.GroupBox4.Controls.Add(Me.NumericUpDown3)
         Me.GroupBox4.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox4.Location = New System.Drawing.Point(12, 270)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 351)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(269, 115)
         Me.GroupBox4.TabIndex = 10
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Extra"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(170, 21)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(20, 13)
+        Me.Label13.TabIndex = 22
+        Me.Label13.Text = "ms"
         '
         'CheckBox4
         '
@@ -326,21 +368,30 @@ Partial Class Form1
         Me.GroupBox5.Controls.Add(Me.NumericUpDown5)
         Me.GroupBox5.Controls.Add(Me.ComboBox2)
         Me.GroupBox5.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox5.Location = New System.Drawing.Point(287, 86)
+        Me.GroupBox5.Location = New System.Drawing.Point(12, 167)
         Me.GroupBox5.Name = "GroupBox5"
         Me.GroupBox5.Size = New System.Drawing.Size(269, 75)
         Me.GroupBox5.TabIndex = 9
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "On Battery Animation Style"
         '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(170, 48)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(20, 13)
+        Me.Label14.TabIndex = 23
+        Me.Label14.Text = "ms"
+        '
         'Label5
         '
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(6, 48)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(140, 13)
+        Me.Label5.Size = New System.Drawing.Size(123, 13)
         Me.Label5.TabIndex = 3
-        Me.Label5.Text = "On Battery Animation Speed"
+        Me.Label5.Text = "On Battery Refresh Rate"
         '
         'NumericUpDown5
         '
@@ -366,16 +417,17 @@ Partial Class Form1
         '
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.Color.Red
-        Me.Label6.Location = New System.Drawing.Point(287, 297)
+        Me.Label6.Location = New System.Drawing.Point(288, 359)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(268, 32)
+        Me.Label6.Size = New System.Drawing.Size(268, 53)
         Me.Label6.TabIndex = 11
-        Me.Label6.Text = "This configurator is temporary..." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Click ""Apply"" to create a startup schedule"
+        Me.Label6.Text = "This configurator is temporary..." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Click ""Apply"" to create a startup schedule or " &
+    "shortcut"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(480, 360)
+        Me.Button1.Location = New System.Drawing.Point(481, 442)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 12
@@ -384,7 +436,7 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(287, 360)
+        Me.Button2.Location = New System.Drawing.Point(288, 442)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(106, 23)
         Me.Button2.TabIndex = 13
@@ -393,7 +445,7 @@ Partial Class Form1
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(399, 360)
+        Me.Button3.Location = New System.Drawing.Point(400, 442)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 14
@@ -406,7 +458,7 @@ Partial Class Form1
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.MenuStrip1.Size = New System.Drawing.Size(567, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(565, 24)
         Me.MenuStrip1.TabIndex = 15
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -455,17 +507,39 @@ Partial Class Form1
         Me.GroupBox6.Controls.Add(Me.Label8)
         Me.GroupBox6.Controls.Add(Me.Label7)
         Me.GroupBox6.Controls.Add(Me.NumericUpDown6)
-        Me.GroupBox6.Location = New System.Drawing.Point(290, 167)
+        Me.GroupBox6.Location = New System.Drawing.Point(287, 35)
         Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(266, 97)
+        Me.GroupBox6.Size = New System.Drawing.Size(266, 112)
         Me.GroupBox6.TabIndex = 16
         Me.GroupBox6.TabStop = False
         Me.GroupBox6.Text = "Startup Taskschedule"
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(162, 80)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(24, 13)
+        Me.Label9.TabIndex = 18
+        Me.Label9.Text = "sec"
+        '
+        'Label8
+        '
+        Me.Label8.BackColor = System.Drawing.Color.Transparent
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.Black
+        Me.Label8.Location = New System.Drawing.Point(8, 25)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(250, 42)
+        Me.Label8.TabIndex = 17
+        Me.Label8.Text = "The default delay = 3 seconds but some users may need to put a longer delay for t" &
+    "he taskschedule to work."
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(6, 20)
+        Me.Label7.Location = New System.Drawing.Point(6, 80)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(34, 13)
         Me.Label7.TabIndex = 6
@@ -473,7 +547,7 @@ Partial Class Form1
         '
         'NumericUpDown6
         '
-        Me.NumericUpDown6.Location = New System.Drawing.Point(190, 18)
+        Me.NumericUpDown6.Location = New System.Drawing.Point(189, 78)
         Me.NumericUpDown6.Maximum = New Decimal(New Integer() {999999, 0, 0, 0})
         Me.NumericUpDown6.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown6.Name = "NumericUpDown6"
@@ -481,77 +555,70 @@ Partial Class Form1
         Me.NumericUpDown6.TabIndex = 5
         Me.NumericUpDown6.Value = New Decimal(New Integer() {3, 0, 0, 0})
         '
-        'Label8
+        'GroupBox7
         '
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.ForeColor = System.Drawing.Color.Black
-        Me.Label8.Location = New System.Drawing.Point(5, 43)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(250, 49)
-        Me.Label8.TabIndex = 17
-        Me.Label8.Text = "The default delay = 3 seconds but some users may need to put a longer delay for t" &
-    "he taskschedule to work."
+        Me.GroupBox7.Controls.Add(Me.Label15)
+        Me.GroupBox7.Controls.Add(Me.CheckBox5)
+        Me.GroupBox7.Location = New System.Drawing.Point(287, 153)
+        Me.GroupBox7.Name = "GroupBox7"
+        Me.GroupBox7.Size = New System.Drawing.Size(266, 89)
+        Me.GroupBox7.TabIndex = 17
+        Me.GroupBox7.TabStop = False
+        Me.GroupBox7.Text = "Startup Shortcut"
+        Me.GroupBox7.Visible = False
         '
-        'Label9
+        'Label15
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(163, 20)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(24, 13)
-        Me.Label9.TabIndex = 18
-        Me.Label9.Text = "sec"
+        Me.Label15.BackColor = System.Drawing.Color.Transparent
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.ForeColor = System.Drawing.Color.Black
+        Me.Label15.Location = New System.Drawing.Point(8, 27)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(250, 28)
+        Me.Label15.TabIndex = 19
+        Me.Label15.Text = "Taskschedule not working? Then you can enable the startup shortcut."
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
-        'Label10
+        'CheckBox5
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(170, 48)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(20, 13)
-        Me.Label10.TabIndex = 19
-        Me.Label10.Text = "ms"
+        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.Location = New System.Drawing.Point(8, 62)
+        Me.CheckBox5.Name = "CheckBox5"
+        Me.CheckBox5.Size = New System.Drawing.Size(133, 17)
+        Me.CheckBox5.TabIndex = 0
+        Me.CheckBox5.Text = "Create startup shortcut"
+        Me.CheckBox5.UseVisualStyleBackColor = True
         '
-        'Label11
+        'Button4
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(170, 20)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(20, 13)
-        Me.Label11.TabIndex = 20
-        Me.Label11.Text = "ms"
+        Me.Button4.BackColor = System.Drawing.Color.Red
+        Me.Button4.Location = New System.Drawing.Point(489, 148)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(57, 23)
+        Me.Button4.TabIndex = 18
+        Me.Button4.Text = "Remove"
+        Me.Button4.UseVisualStyleBackColor = False
+        Me.Button4.Visible = False
         '
-        'Label12
+        'Button5
         '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(170, 46)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(20, 13)
-        Me.Label12.TabIndex = 21
-        Me.Label12.Text = "ms"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(170, 21)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(20, 13)
-        Me.Label13.TabIndex = 22
-        Me.Label13.Text = "ms"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(170, 48)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(20, 13)
-        Me.Label14.TabIndex = 23
-        Me.Label14.Text = "ms"
+        Me.Button5.BackColor = System.Drawing.Color.Transparent
+        Me.Button5.Location = New System.Drawing.Point(489, 30)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(56, 23)
+        Me.Button5.TabIndex = 19
+        Me.Button5.Text = "Remove"
+        Me.Button5.UseVisualStyleBackColor = False
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(567, 397)
+        Me.ClientSize = New System.Drawing.Size(565, 477)
+        Me.Controls.Add(Me.Button5)
+        Me.Controls.Add(Me.Button4)
+        Me.Controls.Add(Me.GroupBox7)
         Me.Controls.Add(Me.GroupBox6)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
@@ -589,6 +656,8 @@ Partial Class Form1
         Me.GroupBox6.ResumeLayout(False)
         Me.GroupBox6.PerformLayout()
         CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox7.ResumeLayout(False)
+        Me.GroupBox7.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -641,4 +710,9 @@ Partial Class Form1
     Friend WithEvents Label13 As Label
     Friend WithEvents Label14 As Label
     Friend WithEvents Label9 As Label
+    Friend WithEvents GroupBox7 As GroupBox
+    Friend WithEvents Label15 As Label
+    Friend WithEvents CheckBox5 As CheckBox
+    Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
 End Class
