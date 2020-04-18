@@ -7,6 +7,7 @@ Namespace VisualEffects
 
     Public Class TaskbarAnimate
         Public Shared IsAnimated As Boolean = True
+        Public Shared AnimatedTaskbars As Integer
 
         Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal iEffect As Effect, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
             Try
@@ -17,10 +18,13 @@ Namespace VisualEffects
                         Exit Sub
                     End If
 
-                    If valueToReach = oldpos Or (valueToReach - oldpos).ToString.Replace("-", "") >= 300 Then
-                        'Prevent Big Swing (if the New position has a difference of 200 Or higher then there Is no reason to move)
-                        Exit Sub
+                    If AnimatedTaskbars >= (TaskbarCenter.TaskbarCount) Then
+                        If valueToReach = oldpos Or (valueToReach - oldpos).ToString.Replace("-", "") >= 300 Then
+                            'Prevent Big Swing (if the New position has a difference of 300 Or higher then there Is no reason to move)
+                            Exit Sub
+                        End If
                     End If
+
                 End If
 
                 IsAnimated = False
@@ -31,15 +35,11 @@ Namespace VisualEffects
                 Dim maxValue As Integer = Math.Abs(valueToReach - originalValue)
                 Dim increasing As Boolean = originalValue < valueToReach
 
-                ' Dim timerx As New Stopwatch
-                ' timerx.Start()
                 elapsed = 0
 
                 While Not elapsed >= duration
                     Thread.Sleep(3)
                     elapsed = elapsed + 3
-
-                    '  Console.WriteLine(elapsed)
 
                     Dim newValue As Integer = CInt(Math.Truncate(easing(elapsed, minValue, maxValue, duration)))
 
@@ -57,8 +57,7 @@ Namespace VisualEffects
 
                 End While
 
-                ' timerx.Stop()
-                'timerx.Reset()
+                AnimatedTaskbars = AnimatedTaskbars + 1
 
                 IsAnimated = True
                 Main.ClearMemory()

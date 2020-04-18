@@ -54,10 +54,13 @@ Public Class TaskbarCenter
 
     Public Shared ScreensChanged As Boolean
 
+    Public Shared TaskbarCount As Integer
+
     Public Shared Sub TaskbarCenterer()
-        RevertToZero()
+        ' RevertToZero()
 
         AddHandler SystemEvents.DisplaySettingsChanged, AddressOf DPChange
+        AddHandler SystemEvents.UserPreferenceChanged, AddressOf DPChange
 
         'Start the Looper
         Dim t1 As Thread = New Thread(AddressOf Looper)
@@ -72,6 +75,7 @@ Public Class TaskbarCenter
     End Sub
 
     Public Shared Sub DPChange(ByVal sender As Object, ByVal e As EventArgs)
+        Console.WriteLine()
         Thread.Sleep(1000)
         'Wait for Shell_TrayWnd
         Dim Handle As IntPtr
@@ -107,6 +111,8 @@ Public Class TaskbarCenter
                 Taskbars.Add(mstasklist)
             Next
 
+            TaskbarCount = Taskbars.Count
+
             'Start the endless loop
             Do
                 Try
@@ -118,6 +124,14 @@ Public Class TaskbarCenter
                     For Each TaskList As AutomationElement In Taskbars
 
                         Dim child As AutomationElement = TaskbarTreeWalker.GetLastChild(TaskList)
+
+                        Try
+                            Dim testiferror = child.Current.BoundingRectangle.Left
+                        Catch ex As Exception
+                            'Current taskbar is empty go to next taskbar.
+                            Continue For
+                        End Try
+
                         Dim Orientation As String
                         Dim TaskbarCount As Integer
                         Dim TrayWndSize As Integer
@@ -182,7 +196,7 @@ triggerskip:
                         Thread.Sleep(Settings.LoopRefreshRate)
                     End If
                 Catch ex As Exception
-                    Console.WriteLine(ex.Message)
+                    Console.WriteLine("@Looper1 | " & ex.Message)
 
                     'Lost taskbar handles restart application
                     If ex.ToString.Contains("E_ACCESSDENIED") Then
@@ -198,7 +212,7 @@ triggerskip:
                 End Try
             Loop
         Catch ex As Exception
-            Console.WriteLine(ex.Message)
+            Console.WriteLine("@Looper2 | " & ex.Message)
         End Try
     End Sub
 
@@ -285,8 +299,8 @@ triggerskip:
 
             Loop
         Catch ex As Exception
-            Console.WriteLine(ex.Message)
-            ''MessageBox.Show(ex.Message)
+            ' Console.WriteLine(ex.Message)
+            Console.WriteLine("@TrayLoopFix | " & ex.Message)
         End Try
     End Sub
 
@@ -350,21 +364,6 @@ triggerskip:
                     curleft2 = TaskList.Current.BoundingRectangle.Left
                 Loop Until curleft = curleft2
 
-                'If the taskbar is still adding an icon then wait until it's not (This will prevent unneeded calculations that trigger the animator)
-                If Orientation = "H" Then
-                    Do
-                        curwidth = CInt((ChildFirst.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + (ChildLast.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + ChildLast.Current.BoundingRectangle.Width)
-                        Threading.Thread.Sleep(30)
-                        curwidth2 = CInt((ChildFirst.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + (ChildLast.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + ChildLast.Current.BoundingRectangle.Width)
-                    Loop Until curleft = curleft2
-                Else
-                    Do
-                        curwidth = CInt((ChildFirst.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + (ChildLast.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + ChildLast.Current.BoundingRectangle.Height)
-                        Threading.Thread.Sleep(30)
-                        curwidth2 = CInt((ChildFirst.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + (ChildLast.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + ChildLast.Current.BoundingRectangle.Height)
-                    Loop Until curleft = curleft2
-                End If
-
                 'Get current taskbar orientation (H = Horizontal | V = Vertical)
                 If TaskList.Current.BoundingRectangle.Height >= 200 Then
                     Orientation = "V"
@@ -372,12 +371,36 @@ triggerskip:
                     Orientation = "H"
                 End If
 
+                'If the taskbar is still adding an icon then wait until it's not (This will prevent unneeded calculations that trigger the animator)
+                Try
+                    If Orientation = "H" Then
+                        Do
+                            curwidth = CInt((ChildFirst.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + (ChildLast.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + ChildLast.Current.BoundingRectangle.Width)
+                            Threading.Thread.Sleep(30)
+                            curwidth2 = CInt((ChildFirst.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + (ChildLast.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + ChildLast.Current.BoundingRectangle.Width)
+                        Loop Until curleft = curleft2
+                    Else
+                        Do
+                            curwidth = CInt((ChildFirst.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + (ChildLast.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + ChildLast.Current.BoundingRectangle.Height)
+                            Threading.Thread.Sleep(30)
+                            curwidth2 = CInt((ChildFirst.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + (ChildLast.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + ChildLast.Current.BoundingRectangle.Height)
+                        Loop Until curleft = curleft2
+                    End If
+                Catch
+                    'Taskbar is empty just skip
+                End Try
+
                 'Calculate the exact width of the total icons
-                If Orientation = "H" Then
-                    TaskbarWidth = CInt((ChildFirst.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + (ChildLast.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + ChildLast.Current.BoundingRectangle.Width)
-                Else
-                    TaskbarWidth = CInt((ChildFirst.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + (ChildLast.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + ChildLast.Current.BoundingRectangle.Height)
-                End If
+                Try
+                    If Orientation = "H" Then
+                        TaskbarWidth = CInt((ChildFirst.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + (ChildLast.Current.BoundingRectangle.Left - TaskList.Current.BoundingRectangle.Left) + ChildLast.Current.BoundingRectangle.Width)
+                    Else
+                        TaskbarWidth = CInt((ChildFirst.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + (ChildLast.Current.BoundingRectangle.Top - TaskList.Current.BoundingRectangle.Top) + ChildLast.Current.BoundingRectangle.Height)
+                    End If
+                Catch
+                    TaskbarWidth = 0
+                    'Taskbar is empty just skip
+                End Try
 
                 'Get info needed to calculate the position
                 If Orientation = "H" Then
@@ -2484,8 +2507,9 @@ triggerskip:
 
             Next
         Catch ex As Exception
-            Console.WriteLine(ex.Message)
-            ''MessageBox.Show(ex.Message)
+
+            Console.WriteLine("@Calculator | " & ex.Message)
+
         End Try
     End Sub
 
@@ -2494,8 +2518,8 @@ triggerskip:
             Dim t1 As Thread = New Thread(Sub() TaskbarAnimate.Animate(hwnd, oldpos, orient, iAnimation, easing, valueToReach, duration))
             t1.Start()
         Catch ex As Exception
-            Console.WriteLine(ex.Message)
-            ''MessageBox.Show(ex.Message)
+
+            Console.WriteLine("@Animation Call | " & ex.Message)
         End Try
     End Sub
 
