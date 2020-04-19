@@ -60,7 +60,8 @@ _**-taskbarstyle=1** will make the taskbar transparent. 2 blur, 3 acrylic and 0 
 
 ## Downloads
 
-- FREE | Simple .zip package : https://chrisandriessen.nl/web/taskbarx 
+- FREE | Simple .zip package : https://chrisandriessen.nl/taskbarx 
+- FREE | Installer : https://chrisandriessen.nl/taskbarx 
 - PAID | Windows Store : https://www.microsoft.com/store/productid/9PCMZ6BXK8GH
   
   
