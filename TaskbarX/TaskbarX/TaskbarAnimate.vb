@@ -18,12 +18,12 @@ Namespace VisualEffects
                         Exit Sub
                     End If
 
-                    If AnimatedTaskbars >= (TaskbarCenter.TaskbarCount) Then
-                        If valueToReach = oldpos Or (valueToReach - oldpos).ToString.Replace("-", "") >= 300 Then
-                            'Prevent Big Swing (if the New position has a difference of 300 Or higher then there Is no reason to move)
-                            Exit Sub
-                        End If
+                    ' If AnimatedTaskbars >= (TaskbarCenter.TaskbarCount) Then
+                    If valueToReach = oldpos Or (valueToReach - oldpos).ToString.Replace("-", "") >= 300 Then
+                        'Prevent Big Swing (if the New position has a difference of 300 Or higher then there Is no reason to move)
+                        Exit Sub
                     End If
+                    ' End If
 
                 End If
 
@@ -57,7 +57,7 @@ Namespace VisualEffects
 
                 End While
 
-                AnimatedTaskbars = AnimatedTaskbars + 1
+                ' AnimatedTaskbars = AnimatedTaskbars + 1
 
                 IsAnimated = True
                 Main.ClearMemory()

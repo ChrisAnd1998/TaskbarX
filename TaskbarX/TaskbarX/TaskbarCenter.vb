@@ -57,7 +57,7 @@ Public Class TaskbarCenter
     Public Shared TaskbarCount As Integer
 
     Public Shared Sub TaskbarCenterer()
-        ' RevertToZero()
+        RevertToZero()
 
         AddHandler SystemEvents.DisplaySettingsChanged, AddressOf DPChange
         AddHandler SystemEvents.UserPreferenceChanged, AddressOf DPChange

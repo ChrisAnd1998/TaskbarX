@@ -41,6 +41,17 @@ Public Class Main
 
     Public Shared Sub Main()
         Try
+            'Kill every other running instance of FalconX
+            Try
+                For Each prog As Process In Process.GetProcesses
+                    If prog.ProcessName = "TaskbarX" Then
+                        If Not prog.Id = Process.GetCurrentProcess.Id Then
+                            prog.Kill()
+                        End If
+                    End If
+                Next
+            Catch
+            End Try
 
             'Set default settings
             Settings.TaskbarStyle = 0
@@ -60,6 +71,11 @@ Public Class Main
             Dim arguments() As String = Environment.GetCommandLineArgs
             For Each argument In arguments
                 Dim val() As String = Split(argument, "=")
+                If argument.Contains("-stop") Then
+                    TaskbarCenter.RevertToZero()
+                    RefreshWindowsExplorer()
+                    End
+                End If
                 If argument.Contains("-taskbarstyle") Then
                     Settings.TaskbarStyle = val(1)
                 End If
@@ -108,18 +124,6 @@ Public Class Main
 
             'Prevent wrong position calculations
             SetProcessDpiAwareness(PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
-
-            'Kill every other running instance of FalconX
-            Try
-                For Each prog As Process In Process.GetProcesses
-                    If prog.ProcessName = "TaskbarX" Then
-                        If Not prog.Id = Process.GetCurrentProcess.Id Then
-                            prog.Kill()
-                        End If
-                    End If
-                Next
-            Catch
-            End Try
 
             'Wait for Shell_TrayWnd
             Dim Handle As IntPtr
