@@ -80,7 +80,7 @@ In your startmenu search for "**Task Scheduler**".
 On the left menu click on "**Task Scheduler Library**". In the middle a list will appear.  
 Right click on the "**TaskbarX**" or "**FalconX**" entry and click "**Delete**".  
 
-![Taskbar error](https://user-images.githubusercontent.com/50437199/80919779-2ed64480-8d6c-11ea-8215-d69b1761d04e.png)
+![Taskbar error](https://user-images.githubusercontent.com/50437199/80919928-e0757580-8d6c-11ea-9106-b0b1ff33f740.png)
 
 
 
