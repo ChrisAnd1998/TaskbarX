@@ -1,6 +1,4 @@
-﻿Imports System.Runtime.InteropServices
-Imports TaskbarX.VisualEffects.Easing
-Imports System.Timers
+﻿Imports TaskbarX.VisualEffects.Easing
 Imports System.Threading
 
 Namespace VisualEffects
@@ -9,10 +7,11 @@ Namespace VisualEffects
         Public Shared IsAnimated As Boolean = True
         Public Shared AnimatedTaskbars As Integer
 
-        Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal iEffect As Effect, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
+        Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
             Try
 
-                If Not oldpos = 0 Then
+                If Not oldpos <= 100 Then
+
                     If valueToReach = oldpos Or (valueToReach - oldpos).ToString.Replace("-", "") <= 10 Then
                         'Prevent Wiggling (if the new position has a difference of 10 or lower then there is no reason to move)
                         Exit Sub
@@ -22,8 +21,8 @@ Namespace VisualEffects
                     If valueToReach = oldpos Or (valueToReach - oldpos).ToString.Replace("-", "") >= 300 Then
                         'Prevent Big Swing (if the New position has a difference of 300 Or higher then there Is no reason to move)
                         Exit Sub
+                        ' End If
                     End If
-                    ' End If
 
                 End If
 
@@ -49,10 +48,13 @@ Namespace VisualEffects
 
                     If orient = "H" Then
                         'Pass new Horizontal animation position
-                        iEffect.SetValueX(hwnd, newValue)
+                        ' iEffect.SetValueX(hwnd, newValue)
+
+                        Win32.SetWindowPos(hwnd, IntPtr.Zero, newValue, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                     Else
                         'Pass new Vertical animation position
-                        iEffect.SetValueY(hwnd, newValue)
+                        ' iEffect.SetValueY(hwnd, newValue)
+                        Win32.SetWindowPos(hwnd, IntPtr.Zero, 0, newValue, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                     End If
 
                 End While

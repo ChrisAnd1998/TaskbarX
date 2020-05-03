@@ -5,3 +5,6 @@ dotnet_diagnostic.CA2101.severity = none
 
 # CA1401: P/Invokes should not be visible
 dotnet_diagnostic.CA1401.severity = none
+
+# BC42104: Variable is used before it has been assigned a value
+dotnet_diagnostic.BC42104.severity = none
