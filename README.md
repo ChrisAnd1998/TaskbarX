@@ -32,20 +32,22 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 ## Commandline Arguments
 
 _**-stop** will stop TaskbarX, puts all icons back to the left and resets the taskbar style.  
-**-taskbarstyle=1** will make the taskbar transparent. 2 blur, 3 acrylic and 0 is disabled.  
-**-primarytaskbaroffset=0** will set the offset of the primary taskbar based on the center.  
-**-secondarytaskbaroffset=0** will set the offset of the primary taskbar based on the center.  
-**-centerprimaryonly=1** will only center the primary taskbar. 0 is disabled.  
-**-centersecondaryonly=1** will only center the secondary taskbar(s). 0 is disabled.  
-**-animationstyle=backeaseout** will set the animation style to BackEaseOut. "none" is instant.  
-**-animationspeed=500** will set the speed of the animation.  
-**-looprefreshrate=400** will set the refresh rate of the looper/taskbar checker.  
-**-centerinbetween=1** will set the primary taskbar position in between start, search etc.. and the tray.  
-**-fixtoolbarsontraychange=1** will update any toolbar when a tray icon gets added or removed.  
-**-onbatteryanimationstyle=backeaseout** will set the animation style to BackEaseOut when on battery mode.  
-**-onbatterylooprefreshrate=400** will set the refresh rate of the looper/taskbar checker when on battery mode._
+**-tbs=1** will make the taskbar transparent. 2 blur, 3 acrylic and 0 is disabled.  
+**-ptbo=0** will set the offset of the primary taskbar based on the center.  
+**-stbo=0** will set the offset of the primary taskbar based on the center.  
+**-cpo=1** will only center the primary taskbar. 0 is disabled.  
+**-cso=1** will only center the secondary taskbar(s). 0 is disabled.  
+**-as=backeaseout** will set the animation style to BackEaseOut. "none" is instant.  
+**-asp=500** will set the speed of the animation.  
+**-lr=400** will set the refresh rate of the looper/taskbar checker.  
+**-cib=1** will set the primary taskbar position in between start, search etc.. and the tray.  
+**-ftotc=1** will update any toolbar when a tray icon gets added or removed.  
+**-sr=1920** will put the icons to the left when screen width becomes 1920px.  
+**-cfsa=1** will pause TaskbarX if a fullscreen app is running.  
+**-obas=backeaseout** will set the animation style to BackEaseOut when on battery mode.  
+**-oblr=400** will set the refresh rate of the looper/taskbar checker when on battery mode._
   
-> **Example:** _C:\Program Files (x86)\Chris Andriessen\TaskbarX\TasbarX.exe -taskbarstyle=1 -animationstyle=backeaseout_
+> **Example:** _C:\Program Files (x86)\TaskbarX\TasbarX.exe -tbs=1 -as=backeaseout_
   
   
 &nbsp;
