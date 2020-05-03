@@ -71,5 +71,21 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 &nbsp;
 
 
+## Errors
+
+The Store version is not capable of uninstalling a taskschedule. 
+If you get the error below then this explains how to fix it:
+
+In your startmenu search for "Task Scheduler".
+On the left menu click on "Task Scheduler Library". In the middle a list will appear.
+Right click on the "TaskbarX" or "FalconX" entry and click "Delete".
+
+![Taskbar error](https://user-images.githubusercontent.com/50437199/80919779-2ed64480-8d6c-11ea-8215-d69b1761d04e.png)
+
+
+
+&nbsp;
+
+
 ## Tags
 center taskbar, center taskbar icons, CenterTaskbar, center taskbar icons windows 10, center taskbar windows, windows center taskbar, windows center taskbar icons, center taskbar icons, windows 10 center taskbar icons, falcon10, falcon taskbar, taskbar, taskbar icons, taskbar buttons
