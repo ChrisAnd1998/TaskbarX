@@ -55,8 +55,10 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 
 ## Preview
  
-[![Alt text](https://user-images.githubusercontent.com/50437199/79141058-55324100-7db9-11ea-87b2-04f4c4cab5b0.png)](https://youtu.be/oqA3BDt-GqY) 
+[![Alt text](https://user-images.githubusercontent.com/50437199/82542445-47a76e00-9b52-11ea-87a6-e1e57eb4108c.jpg)](https://youtu.be/oqA3BDt-GqY) 
   
+  
+
   
 &nbsp;
 
