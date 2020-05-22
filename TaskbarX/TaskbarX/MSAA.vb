@@ -1,5 +1,6 @@
-﻿Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Option Strict On
+
+Imports System.Runtime.InteropServices
 Imports Accessibility
 
 Public Class MSAA
@@ -16,7 +17,7 @@ Public Class MSAA
     ByRef riid As Guid,
     <MarshalAs(UnmanagedType.IUnknown)> ByRef ppvObject As Object) As Int32
     Declare Function GetForegroundWindow Lib "user32" () As Int32
-    Public Shared guidAccessible = New Guid("{00020400-0000-0000-C000-000000000046}")
+    Public Shared guidAccessible As New Guid("{00020400-0000-0000-C000-000000000046}")
 
     Public Shared Function GetAccessibleChildren(ByVal objAccessible As IAccessible) As IAccessible()
         Dim childCount As Integer = 0
@@ -39,7 +40,7 @@ Public Class MSAA
         Dim accObject As Object = New Object
         Dim objAccessible As IAccessible = Nothing
         If (hwnd <> CType(0, IntPtr)) Then
-            AccessibleObjectFromWindow(hwnd, 0, guidAccessible, accObject)
+            AccessibleObjectFromWindow(CInt(CType(hwnd, IntPtr)), 0, guidAccessible, accObject)
             objAccessible = CType(accObject, IAccessible)
         End If
 

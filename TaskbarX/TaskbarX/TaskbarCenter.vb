@@ -1,8 +1,11 @@
-﻿Imports TaskbarX.VisualEffects
-Imports TaskbarX.VisualEffects.Easing
+﻿Option Strict On
+
+
 Imports System.Threading
 Imports Microsoft.Win32
 Imports System.Text
+Imports Accessibility
+
 
 Public Class TaskbarCenter
 
@@ -42,7 +45,7 @@ Public Class TaskbarCenter
         RevertToZero()
 
         AddHandler SystemEvents.DisplaySettingsChanged, AddressOf DPChange
-        AddHandler SystemEvents.UserPreferenceChanged, UserPref
+        'AddHandler SystemEvents.UserPreferenceChanged, UserPref
 
         'Start the Looper
         Dim t1 As Thread = New Thread(AddressOf Looper)
@@ -100,7 +103,7 @@ Public Class TaskbarCenter
         End If
     End Sub
 
-    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Double, ByVal duration As Double)
+    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
         Try
             Dim t1 As Thread = New Thread(Sub() TaskbarAnimate.Animate(hwnd, oldpos, orient, easing, valueToReach, duration))
             t1.Start()
@@ -123,20 +126,21 @@ Public Class TaskbarCenter
         Dim Taskbars As New ArrayList
 
         For Each Taskbar In windowHandles
+            Dim TaskbarHwnd As IntPtr = CType(Taskbar, IntPtr)
             Dim sClassName As New StringBuilder("", 256)
-            Call Win32.GetClassName(Taskbar, sClassName, 256)
+            Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
 
             Dim MSTaskListWClass As IntPtr
 
             If sClassName.ToString = "Shell_TrayWnd" Then
-                Dim ReBarWindow32 = Win32.FindWindowEx(Taskbar, 0, "ReBarWindow32", Nothing)
-                Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, 0, "MSTaskSwWClass", Nothing)
-                MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, 0, "MSTaskListWClass", Nothing)
+                Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
+                Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+                MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
             End If
 
             If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
-                Dim WorkerW = Win32.FindWindowEx(Taskbar, 0, "WorkerW", Nothing)
-                MSTaskListWClass = Win32.FindWindowEx(WorkerW, 0, "MSTaskListWClass", Nothing)
+                Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
+                MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
             End If
 
             ' Console.WriteLine(MSTaskListWClass)
@@ -145,8 +149,8 @@ Public Class TaskbarCenter
         Next
 
         For Each TaskList In Taskbars
-            Win32.SendMessage(Win32.GetParent(Win32.GetParent(TaskList)), 11, True, 0)
-            Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+            Win32.SendMessage(Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr))), 11, True, 0)
+            Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
         Next
     End Sub
 
@@ -168,6 +172,8 @@ Public Class TaskbarCenter
                 Thread.Sleep(250)
                 Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
             Loop Until Not Handle = Nothing
+
+
 
             Application.Restart()
 
@@ -203,19 +209,19 @@ Public Class TaskbarCenter
             'Put all Taskbars into an ArrayList based on each TrayWnd in the TrayWnds ArrayList
             For Each Taskbar In windowHandles
                 Dim sClassName As New StringBuilder("", 256)
-                Call Win32.GetClassName(Taskbar, sClassName, 256)
+                Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
 
                 Dim MSTaskListWClass As IntPtr
 
                 If sClassName.ToString = "Shell_TrayWnd" Then
-                    Dim ReBarWindow32 = Win32.FindWindowEx(Taskbar, 0, "ReBarWindow32", Nothing)
-                    Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, 0, "MSTaskSwWClass", Nothing)
-                    MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, 0, "MSTaskListWClass", Nothing)
+                    Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
+                    Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+                    MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
                 If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
-                    Dim WorkerW = Win32.FindWindowEx(Taskbar, 0, "WorkerW", Nothing)
-                    MSTaskListWClass = Win32.FindWindowEx(WorkerW, 0, "MSTaskListWClass", Nothing)
+                    Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
+                    MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
                 If MSTaskListWClass = Nothing Then
@@ -228,9 +234,11 @@ Public Class TaskbarCenter
 
             Dim TaskObject = New List(Of Accessibility.IAccessible)()
             For Each TaskList In Taskbars
-                Dim accessiblex As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TaskList)
+                Dim accessiblex As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(CType(TaskList, IntPtr))
                 TaskObject.Add(accessiblex)
             Next
+
+            Dim TaskObjects As List(Of IAccessible) = TaskObject
 
             'Start the endless loop
             Do
@@ -268,17 +276,20 @@ Public Class TaskbarCenter
                     End If
 
                     'Go through each taskbar and result in a unique string containing the current state
-                    For Each TaskList In TaskObject
 
-                        Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(TaskList)
+                    Dim i As Integer = 0
 
-                        GetLocation(TaskList, 0)
+                    For Each TaskList In TaskObjects
+                        '  Do While i < CInt(TaskObjects.Count)
+                        Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(CType(TaskList, IAccessible))
+
+                        GetLocation(CType(TaskList, IAccessible), 0)
 
                         Dim tH = childHeight
                         Dim tW = childWidth
 
                         For Each childx As Accessibility.IAccessible In children
-                            If childx.accRole(0) = 22 Then
+                            If CInt(childx.accRole(0)) = 22 Then
                                 Dim children2() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(childx)
                                 GetLocation(childx, children2.Count)
                                 Continue For
@@ -294,7 +305,7 @@ Public Class TaskbarCenter
                             Dim testiferror = cL
                         Catch ex As Exception
                             'Current taskbar is empty go to next taskbar.
-                            Continue For
+                            ' Continue For
                         End Try
 
                         Dim Orientation As String
@@ -327,6 +338,7 @@ Public Class TaskbarCenter
                         'Put the results into a string ready to be matched for differences with last loop
                         results = results & Orientation & TaskbarCount & TrayWndSize
 
+                        i = (i + 1)
                     Next
 
                     If Not results = oldresults Then
@@ -377,7 +389,8 @@ triggerskip:
                     End If
 
                 End Try
-            Loop
+        Loop
+
         Catch ex As Exception
             MessageBox.Show("@Looper2 | " & ex.Message)
         End Try
@@ -390,11 +403,11 @@ triggerskip:
     Public Shared Sub TrayLoopFix()
 
         Try
-            Dim Shell_TrayWnd = Win32.FindWindowByClass("Shell_TrayWnd", 0)
-            Dim TrayNotifyWnd = Win32.FindWindowEx(Shell_TrayWnd, 0, "TrayNotifyWnd", Nothing)
-            Dim ReBarWindow32 = Win32.FindWindowEx(Shell_TrayWnd, 0, "ReBarWindow32", Nothing)
-            Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, 0, "MSTaskSwWClass", Nothing)
-            Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, 0, "MSTaskListWClass", Nothing)
+            Dim Shell_TrayWnd = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
+            Dim TrayNotifyWnd = Win32.FindWindowEx(Shell_TrayWnd, CType(0, IntPtr), "TrayNotifyWnd", Nothing)
+            Dim ReBarWindow32 = Win32.FindWindowEx(Shell_TrayWnd, CType(0, IntPtr), "ReBarWindow32", Nothing)
+            Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+            Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
 
             If MSTaskListWClass = Nothing Then
                 MessageBox.Show("TaskbarX: Could not find the handle of the taskbar. Your current OS may not be supported.")
@@ -461,7 +474,7 @@ triggerskip:
                             trayfixed = False
 
                             setposhwnd = MSTaskListWClass
-                            setpospos = pos
+                            setpospos = CInt(pos)
                             setposori = TrayOrientation
 
                             Dim t1 As Thread = New Thread(AddressOf setpos)
@@ -501,19 +514,19 @@ triggerskip:
             'Put all Taskbars into an ArrayList based on each TrayWnd in the TrayWnds ArrayList
             For Each Taskbar In windowHandles
                 Dim sClassName As New StringBuilder("", 256)
-                Call Win32.GetClassName(Taskbar, sClassName, 256)
+                Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
 
                 Dim MSTaskListWClass As IntPtr
 
                 If sClassName.ToString = "Shell_TrayWnd" Then
-                    Dim ReBarWindow32 = Win32.FindWindowEx(Taskbar, 0, "ReBarWindow32", Nothing)
-                    Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, 0, "MSTaskSwWClass", Nothing)
-                    MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, 0, "MSTaskListWClass", Nothing)
+                    Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
+                    Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+                    MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
                 If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
-                    Dim WorkerW = Win32.FindWindowEx(Taskbar, 0, "WorkerW", Nothing)
-                    MSTaskListWClass = Win32.FindWindowEx(WorkerW, 0, "MSTaskListWClass", Nothing)
+                    Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
+                    MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
                 If MSTaskListWClass = Nothing Then
@@ -528,7 +541,7 @@ triggerskip:
             For Each TaskList In Taskbars
 
                 Dim sClassName As New StringBuilder("", 256)
-                Call Win32.GetClassName(TaskList, sClassName, 256)
+                Call Win32.GetClassName(CType(TaskList, IntPtr), sClassName, 256)
 
                 Dim ChildFirstcL As Integer
                 Dim ChildFirstcT As Integer
@@ -540,7 +553,7 @@ triggerskip:
                 Dim ChildLastcW As Integer
                 Dim ChildLastcH As Integer
 
-                Dim accessible As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TaskList)
+                Dim accessible As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(CType(TaskList, IntPtr))
                 Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(accessible)
 
                 GetLocation2(accessible, 0)
@@ -552,19 +565,23 @@ triggerskip:
 
                 For Each childx As Accessibility.IAccessible In children
 
-                    If childx.accRole(0) = 22 Then
+                    If CInt(childx.accRole(0)) = 22 Then
 
                         Dim children2() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(childx)
                         Dim Count As Integer = 0
                         Count = 0
 
                         For Each ccc As Accessibility.IAccessible In children2
-                            ' If childx.accRole(ccc) = 43 Then
-                            ' If childx.accState(ccc) = 1074790400 Or childx.accState(ccc) = 1074790408 Then
-                            If Not childx.accName(ccc) = "" Then
+                            Try
+                                If CInt(childx.accRole(ccc)) = &H2B Or CInt(childx.accRole(ccc)) = &H39 Then 'push button (0x2B) | menu button (0x39)
+                                    Count = Count + 1
+                                End If
+                            Catch
                                 Count = Count + 1
-                            End If
+                            End Try
+
                         Next
+
 
                         GetLocation2(childx, 0)
                         ChildFirstcL = childLeft2
@@ -583,7 +600,7 @@ triggerskip:
 
                 Next
 
-                Dim RebarHandle = Win32.GetParent(TaskList)
+                Dim RebarHandle = Win32.GetParent(CType(TaskList, IntPtr))
                 Dim accessible3 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(RebarHandle)
 
                 Dim RebarClassName As New StringBuilder("", 256)
@@ -604,7 +621,7 @@ triggerskip:
                 Dim TrayNotifycW As Integer
                 Dim TrayNotifycH As Integer
 
-                Dim TrayWndHandle = Win32.GetParent(Win32.GetParent(TaskList))
+                Dim TrayWndHandle = Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr)))
 
                 Dim TrayWndClassName As New StringBuilder("", 256)
                 Call Win32.GetClassName(TrayWndHandle, TrayWndClassName, 256)
@@ -612,9 +629,9 @@ triggerskip:
                 'Check if TrayWnd = wrong. if it is, correct it (This will be the primary taskbar which should be Shell_TrayWnd)
                 If TrayWndClassName.ToString = "ReBarWindow32" Then
                     Win32.SendMessage(TrayWndHandle, 11, False, 0)
-                    TrayWndHandle = Win32.GetParent(Win32.GetParent(Win32.GetParent(TaskList)))
+                    TrayWndHandle = Win32.GetParent(Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr))))
 
-                    Dim TrayNotify = Win32.FindWindowEx(TrayWndHandle, 0, "TrayNotifyWnd", Nothing)
+                    Dim TrayNotify = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing)
                     Dim accessible4 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayNotify)
 
                     GetLocation2(accessible4, 0)
@@ -694,10 +711,10 @@ triggerskip:
                             Position = CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset).ToString.Replace("-", "")) + Settings.PrimaryTaskbarOffset
                         End If
                     Else
-                        Position = CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft).ToString.Replace("-", "") + Settings.PrimaryTaskbarOffset
+                        Position = CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft).ToString.Replace("-", "")) + Settings.PrimaryTaskbarOffset
                     End If
                 Else
-                    Position = CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft).ToString.Replace("-", "") + Settings.SecondaryTaskbarOffset
+                    Position = CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft).ToString.Replace("-", "")) + Settings.SecondaryTaskbarOffset
                 End If
 
                 'Trigger the animator
@@ -710,340 +727,340 @@ triggerskip:
                             If Orientation = "H" Then
 
                                 If Settings.OnBatteryAnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
                             Else
 
                                 If Settings.OnBatteryAnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                             End If
@@ -1053,340 +1070,340 @@ triggerskip:
                             If Orientation = "H" Then
 
                                 If Settings.OnBatteryAnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
                             Else
 
                                 If Settings.OnBatteryAnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.OnBatteryAnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                             End If
@@ -1395,340 +1412,340 @@ triggerskip:
                         If Orientation = "H" Then
 
                             If Settings.OnBatteryAnimationStyle = "none" Then
-                                Win32.SetWindowPos(TaskList, IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "linear" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
                         Else
 
                             If Settings.OnBatteryAnimationStyle = "none" Then
-                                Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "linear" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "expoeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "circeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quadeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "sineeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "cubiceaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quarteaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "quinteaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "elasticeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "bounceeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.OnBatteryAnimationStyle = "backeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                         End If
@@ -1745,340 +1762,340 @@ triggerskip:
                             If Orientation = "H" Then
 
                                 If Settings.AnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.AnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
                             Else
 
                                 If Settings.AnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.AnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                             End If
@@ -2088,340 +2105,340 @@ triggerskip:
                             If Orientation = "H" Then
 
                                 If Settings.AnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.AnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
                             Else
 
                                 If Settings.AnimationStyle = "none" Then
-                                    Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                    Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
 
                                 If Settings.AnimationStyle = "linear" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "expoeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "circeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quadeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "sineeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "cubiceaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quarteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "quinteaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "elasticeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "bounceeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeasein" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseinout" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                                 End If
 
                                 If Settings.AnimationStyle = "backeaseoutin" Then
-                                    Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                    Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                                 End If
 
                             End If
@@ -2430,340 +2447,340 @@ triggerskip:
                         If Orientation = "H" Then
 
                             If Settings.AnimationStyle = "none" Then
-                                Win32.SetWindowPos(TaskList, IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             End If
 
                             If Settings.AnimationStyle = "linear" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeaseout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeasein" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeaseinout" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeaseoutin" Then
-                                Animate(TaskList, (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcL - RebarcL), "H", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
                         Else
 
                             If Settings.AnimationStyle = "none" Then
-                                Win32.SetWindowPos(TaskList, IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                                Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             End If
 
                             If Settings.AnimationStyle = "linear" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.Linear, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "expoeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ExpoEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "circeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CircEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quadeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuadEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "sineeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.SineEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "cubiceaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.CubicEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quarteaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuartEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "quinteaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.QuintEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "elasticeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.ElasticEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "bounceeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BounceEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeaseout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeasein" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseIn, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeaseinout" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseInOut, Position, Settings.AnimationSpeed)
                             End If
 
                             If Settings.AnimationStyle = "backeaseoutin" Then
-                                Animate(TaskList, (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
+                                Animate(CType(TaskList, IntPtr), (TaskListcT - RebarcT), "V", AddressOf Easings.BackEaseOutIn, Position, Settings.AnimationSpeed)
                             End If
 
                         End If

@@ -1,4 +1,6 @@
-﻿Imports System.Runtime.InteropServices
+﻿Option Strict On
+
+Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports System.Reflection
 Imports System.Text
@@ -76,49 +78,49 @@ Public Class Main
                     End
                 End If
                 If argument.Contains("-tbs=") Then
-                    Settings.TaskbarStyle = val(1)
+                    Settings.TaskbarStyle = CInt(val(1))
                 End If
                 If argument.Contains("-ptbo=") Then
-                    Settings.PrimaryTaskbarOffset = val(1)
+                    Settings.PrimaryTaskbarOffset = CInt(val(1))
                 End If
                 If argument.Contains("-stbo=") Then
-                    Settings.SecondaryTaskbarOffset = val(1)
+                    Settings.SecondaryTaskbarOffset = CInt(val(1))
                 End If
                 If argument.Contains("-cpo=") Then
-                    Settings.CenterPrimaryOnly = val(1)
+                    Settings.CenterPrimaryOnly = CInt(val(1))
                 End If
                 If argument.Contains("-cso=") Then
-                    Settings.CenterSecondaryOnly = val(1)
+                    Settings.CenterSecondaryOnly = CInt(val(1))
                 End If
                 If argument.Contains("-as=") Then
-                    Settings.AnimationStyle = val(1)
+                    Settings.AnimationStyle = CType(val(1), String)
                 End If
                 If argument.Contains("-asp=") Then
-                    Settings.AnimationSpeed = val(1)
+                    Settings.AnimationSpeed = CInt(val(1))
                 End If
                 If argument.Contains("-lr=") Then
-                    Settings.LoopRefreshRate = val(1)
+                    Settings.LoopRefreshRate = CInt(val(1))
                 End If
                 If argument.Contains("-cib=") Then
-                    Settings.CenterInBetween = val(1)
+                    Settings.CenterInBetween = CInt(val(1))
                 End If
                 If argument.Contains("-obas=") Then
-                    Settings.OnBatteryAnimationStyle = val(1)
+                    Settings.OnBatteryAnimationStyle = CType(val(1), String)
                 End If
                 If argument.Contains("-oblr=") Then
-                    Settings.OnBatteryLoopRefreshRate = val(1)
+                    Settings.OnBatteryLoopRefreshRate = CInt(val(1))
                 End If
                 If argument.Contains("-ftotc=") Then
-                    Settings.FixToolbarsOnTrayChange = val(1)
+                    Settings.FixToolbarsOnTrayChange = CInt(val(1))
                 End If
                 If argument.Contains("-sr=") Then
-                    Settings.SkipResolution = val(1)
+                    Settings.SkipResolution = CInt(val(1))
                 End If
                 If argument.Contains("-dtbsowm=") Then
-                    Settings.DefaultTaskbarStyleOnWinMax = val(1)
+                    Settings.DefaultTaskbarStyleOnWinMax = CInt(val(1))
                 End If
                 If argument.Contains("-cfsa=") Then
-                    Settings.CheckFullscreenApp = val(1)
+                    Settings.CheckFullscreenApp = CInt(val(1))
                 End If
             Next
 
@@ -140,11 +142,11 @@ Public Class Main
 
                 Handle = Nothing
                 Thread.Sleep(250)
-                Dim Shell_TrayWnd = Win32.FindWindowByClass("Shell_TrayWnd", 0)
-                Dim TrayNotifyWnd = Win32.FindWindowEx(Shell_TrayWnd, 0, "TrayNotifyWnd", Nothing)
-                Dim ReBarWindow32 = Win32.FindWindowEx(Shell_TrayWnd, 0, "ReBarWindow32", Nothing)
-                Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, 0, "MSTaskSwWClass", Nothing)
-                Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, 0, "MSTaskListWClass", Nothing)
+                Dim Shell_TrayWnd = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
+                Dim TrayNotifyWnd = Win32.FindWindowEx(Shell_TrayWnd, CType(0, IntPtr), "TrayNotifyWnd", Nothing)
+                Dim ReBarWindow32 = Win32.FindWindowEx(Shell_TrayWnd, CType(0, IntPtr), "ReBarWindow32", Nothing)
+                Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+                Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 Handle = MSTaskListWClass
                 Console.WriteLine("Current Handle = " & Handle.ToString)
             Loop Until Not Handle = Nothing
@@ -172,7 +174,7 @@ Public Class Main
 
 #Region "Commands"
 
-    Public Delegate Function CallBack(ByVal hwnd As Integer, ByVal lParam As Integer) As Boolean
+    Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
 
     Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
     Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
@@ -226,9 +228,12 @@ Public Class Main
         Do While (i < CType(count, Integer))
             Dim item As Object = windowsType.InvokeMember("Item", BindingFlags.InvokeMethod, Nothing, windows, New Object() {i})
             Dim itemType As Type = item.GetType
-            Dim itemName As String = CType(itemType.InvokeMember("Name", BindingFlags.GetProperty, Nothing, item, Nothing), String)
-            If (itemName = "Shell_TrayWnd") Then
-                itemType.InvokeMember("Refresh", BindingFlags.InvokeMethod, Nothing, item, Nothing)
+            Dim itemNameInfo As PropertyInfo = itemType.GetProperty("Name")
+            If (itemNameInfo <> Nothing) Then
+                Dim itemName As String = CType(itemType.InvokeMember("Name", BindingFlags.GetProperty, Nothing, item, Nothing), String)
+                If (itemName = "Shell_TrayWnd") Then
+                    itemType.InvokeMember("Refresh", BindingFlags.InvokeMethod, Nothing, item, Nothing)
+                End If
             End If
             i = (i + 1)
         Loop

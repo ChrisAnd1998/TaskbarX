@@ -15,7 +15,7 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartArguments>-dtbsowm=1 -tbs=1</StartArguments>
+    <StartArguments>-dtbsowm=1 -tbs=1 -as=backeaseout -asp=500</StartArguments>
     <StartAction>Project</StartAction>
   </PropertyGroup>
 </Project>

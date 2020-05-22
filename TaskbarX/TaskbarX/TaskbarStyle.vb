@@ -1,10 +1,12 @@
-﻿Imports System.Runtime.InteropServices
+﻿Option Strict On
+
+Imports System.Runtime.InteropServices
 Imports System.Text
-Imports System.Threading
+
 
 Public Class TaskbarStyle
 
-    Public Delegate Function CallBack(ByVal hwnd As Integer, ByVal lParam As Integer) As Boolean
+    Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
 
     Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
     Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
@@ -27,10 +29,11 @@ Public Class TaskbarStyle
                 End If
             End If
 
-            Return True
+
         Catch ex As Exception
 
         End Try
+        Return True
     End Function
 
     Public Shared Function Enumerator(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
