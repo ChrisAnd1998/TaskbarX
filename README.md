@@ -47,7 +47,7 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 **-obas=backeaseout** will set the animation style to BackEaseOut when on battery mode.  
 **-oblr=400** will set the refresh rate of the looper/taskbar checker when on battery mode._
   
-> **Example:** _C:\Program Files (x86)\TaskbarX\TasbarX.exe -tbs=1 -as=backeaseout_
+> **Example:** _C:\Program Files (x86)\TaskbarX\TaskbarX.exe -tbs=1 -as=backeaseout_
   
   
 &nbsp;
