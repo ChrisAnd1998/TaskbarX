@@ -84,7 +84,7 @@ Right click on the "**TaskbarX**" or "**FalconX**" entry and click "**Delete**".
 
 ![Taskbar error](https://user-images.githubusercontent.com/50437199/80919928-e0757580-8d6c-11ea-9106-b0b1ff33f740.png)
 
-
+_You can also use `SCHTASKS /DELETE /TN "TaskbarX"` to remove the scheduled task from the command line._
 
 &nbsp;
 
