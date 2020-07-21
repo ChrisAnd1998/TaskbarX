@@ -40,9 +40,8 @@ Public Delegate Function EasingDelegate(ByVal currentTime As Double, ByVal minVa
             Dim num2 As Double = maxHeight / 2.0
             Dim x As Double = 2.0
             Dim num3 As Double = -10.0
-            Dim num4 As Double = currentTime - 1.0
-            currentTime = num4
-            Return num2 * (-Math.Pow(x, num3 * num4) + 2.0) + minHeight
+        Dim num4 As Double = currentTime - 1.0
+        Return num2 * (-Math.Pow(x, num3 * num4) + 2.0) + minHeight
         End Function
 
         Public Shared Function ExpoEaseOutIn(currentTime As Double, minHeight As Double, maxHeight As Double, duration As Double) As Double
@@ -138,10 +137,9 @@ Public Delegate Function EasingDelegate(ByVal currentTime As Double, ByVal minVa
             End If
             Dim num2 As Double = -maxHeight / 2.0
             Dim num3 As Double = 3.1415926535897931
-            Dim num4 As Double = currentTime - 1.0
-            currentTime = num4
-            Return num2 * (Math.Cos(num3 * num4 / 2.0) - 2.0) + minHeight
-        End Function
+        Dim num4 As Double = currentTime - 1.0
+        Return num2 * (Math.Cos(num3 * num4 / 2.0) - 2.0) + minHeight
+    End Function
 
         Public Shared Function SineEaseOutIn(currentTime As Double, minHeight As Double, maxHeight As Double, duration As Double) As Double
             If currentTime < duration / 2.0 Then

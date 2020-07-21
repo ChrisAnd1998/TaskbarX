@@ -1,4 +1,4 @@
-﻿Option Strict On
+Option Strict On
 
 Imports System.Runtime.InteropServices
 Imports System.Threading
@@ -235,7 +235,7 @@ Public Class Main
                     itemType.InvokeMember("Refresh", BindingFlags.InvokeMethod, Nothing, item, Nothing)
                 End If
             End If
-            i = (i + 1)
+            i += 1
         Loop
     End Sub
 
