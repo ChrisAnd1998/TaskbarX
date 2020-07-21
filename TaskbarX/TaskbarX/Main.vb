@@ -43,11 +43,9 @@ Public Class Main
         Try
             'Kill every other running instance of FalconX
             Try
-                For Each prog As Process In Process.GetProcesses
-                    If prog.ProcessName = "TaskbarX" Then
-                        If Not prog.Id = Process.GetCurrentProcess.Id Then
-                            prog.Kill()
-                        End If
+                For Each prog As Process In Process.GetProcessesByName("TaskbarX")
+                    If Not prog.Id = Process.GetCurrentProcess.Id Then
+                        prog.Kill()
                     End If
                 Next
             Catch
