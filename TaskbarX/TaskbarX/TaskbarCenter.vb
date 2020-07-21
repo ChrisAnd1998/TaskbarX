@@ -126,7 +126,6 @@ Public Class TaskbarCenter
         Dim Taskbars As New ArrayList
 
         For Each Taskbar In windowHandles
-            Dim TaskbarHwnd As IntPtr = CType(Taskbar, IntPtr)
             Dim sClassName As New StringBuilder("", 256)
             Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
 
