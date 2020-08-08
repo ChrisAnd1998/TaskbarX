@@ -65,8 +65,8 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 
 ## Downloads
 
-- FREE | Simple .zip package : https://chrisandriessen.nl/taskbarx 
-- FREE | Installer : https://chrisandriessen.nl/taskbarx 
+- FREE | Portable .zip package : https://chrisandriessen.nl/taskbarx 
+- FREE | Rainmeter Skin : https://chrisandriessen.nl/taskbarx 
 - PAID | Windows Store : https://www.microsoft.com/store/productid/9PCMZ6BXK8GH
   
   
