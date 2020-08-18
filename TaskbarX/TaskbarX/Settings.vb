@@ -14,6 +14,11 @@
     Public Shared SkipResolution As Integer
     Public Shared CheckFullscreenApp As Integer
     Public Shared DefaultTaskbarStyleOnWinMax As Integer
+    Public Shared DontCenterTaskbar As Integer
+    Public Shared HidePrimaryStartButton As Integer
+    Public Shared HideSecondaryStartButton As Integer
+    Public Shared HidePrimaryNotifyWnd As Integer
+    Public Shared ShowTrayIcon As Integer
 
     'If on battery FalconX will override with these
     Public Shared OnBatteryAnimationStyle As String

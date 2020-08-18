@@ -1,11 +1,10 @@
-Option Strict On
+﻿Option Strict On
 
-
-Imports System.Threading
-Imports Microsoft.Win32
 Imports System.Text
+Imports System.Threading
+Imports System.Windows.Forms
 Imports Accessibility
-
+Imports Microsoft.Win32
 
 Public Class TaskbarCenter
 
@@ -37,6 +36,9 @@ Public Class TaskbarCenter
     Public Shared setpospos As Integer
     Public Shared setposori As String
 
+    Public Shared initposcalc As String
+    Public Shared initposcalcready As Boolean
+
     Public Shared UserPref As New Microsoft.Win32.UserPreferenceChangedEventHandler(AddressOf HandlePrefChange)
 
 #End Region
@@ -45,7 +47,6 @@ Public Class TaskbarCenter
         RevertToZero()
 
         AddHandler SystemEvents.DisplaySettingsChanged, AddressOf DPChange
-        'AddHandler SystemEvents.UserPreferenceChanged, UserPref
 
         'Start the Looper
         Dim t1 As Thread = New Thread(AddressOf Looper)
@@ -113,6 +114,8 @@ Public Class TaskbarCenter
         End Try
     End Sub
 
+    Public Shared revertcycle As Boolean
+
     Public Shared Sub RevertToZero()
         'Put all taskbars back to default position
         GetActiveWindows()
@@ -126,6 +129,7 @@ Public Class TaskbarCenter
         Dim Taskbars As New ArrayList
 
         For Each Taskbar In windowHandles
+
             Dim sClassName As New StringBuilder("", 256)
             Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
 
@@ -133,16 +137,25 @@ Public Class TaskbarCenter
 
             If sClassName.ToString = "Shell_TrayWnd" Then
                 Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
+                Dim MStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
+                Win32.ShowWindow(MStart, Win32.ShowWindowCommands.Show)
+
+                Dim MTray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "TrayNotifyWnd", Nothing)
+                Win32.SetWindowLong(MTray, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H56000000)
+                Win32.SetWindowLong(MTray, CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H2000)
+                Win32.SendMessage(MTray, 11, True, 0)
+                Win32.ShowWindow(MTray, Win32.ShowWindowCommands.Show)
+
                 Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
                 MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
             End If
 
             If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
                 Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
+                Dim SStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
+                Win32.ShowWindow(SStart, Win32.ShowWindowCommands.Show)
                 MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
             End If
-
-            ' Console.WriteLine(MSTaskListWClass)
 
             Taskbars.Add(MSTaskListWClass)
         Next
@@ -151,6 +164,7 @@ Public Class TaskbarCenter
             Win32.SendMessage(Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr))), 11, True, 0)
             Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
         Next
+
     End Sub
 
 #End Region
@@ -167,11 +181,10 @@ Public Class TaskbarCenter
             Dim Handle As IntPtr
             Do
                 Console.WriteLine("Waiting for Shell_TrayWnd")
+
                 Thread.Sleep(250)
                 Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
             Loop Until Not Handle = Nothing
-
-
 
             Application.Restart()
 
@@ -185,6 +198,7 @@ Public Class TaskbarCenter
         Dim Handle As IntPtr
         Do
             Console.WriteLine("Waiting for Shell_TrayWnd")
+
             Thread.Sleep(250)
             Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
         Loop Until Not Handle = Nothing
@@ -210,14 +224,37 @@ Public Class TaskbarCenter
 
                 Dim MSTaskListWClass As IntPtr
 
+                ' Win32.SetWindowLong(CType(Taskbar, IntPtr), CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), (Win32.GetWindowLong(CType(Taskbar, IntPtr), Win32.GWL_EXSTYLE) Or Win32.WS_EX_LAYERED)
+                '  Win32.SetLayeredWindowAttributes(CType(Taskbar, IntPtr), 0, 128, Win32.LWA_ALPHA)
+
                 If sClassName.ToString = "Shell_TrayWnd" Then
                     Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
+
+                    If Settings.HidePrimaryStartButton = 1 Then
+                        Dim MStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
+                        Win32.ShowWindow(MStart, Win32.ShowWindowCommands.Hide)
+                    End If
+
+                    If Settings.HidePrimaryNotifyWnd = 1 Then
+                        Dim MTray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "TrayNotifyWnd", Nothing)
+                        Win32.ShowWindow(MTray, Win32.ShowWindowCommands.Hide)
+                        Win32.SetWindowLong(MTray, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H7E000000)
+                        Win32.SetWindowLong(MTray, CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H8110460)
+                        Win32.SendMessage(MTray, 11, False, 0)
+                    End If
+
                     Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
                     MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
                 If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
                     Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
+
+                    If Settings.HideSecondaryStartButton = 1 Then
+                        Dim SStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
+                        Win32.ShowWindow(SStart, Win32.ShowWindowCommands.Hide)
+                    End If
+
                     MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
@@ -277,7 +314,7 @@ Public Class TaskbarCenter
                     Dim i As Integer = 0
 
                     For Each TaskList In TaskObjects
-                        '  Do While i < CInt(TaskObjects.Count)
+
                         Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(CType(TaskList, IAccessible))
 
                         GetLocation(CType(TaskList, IAccessible), 0)
@@ -290,6 +327,7 @@ Public Class TaskbarCenter
                                 Dim children2() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(childx)
                                 GetLocation(childx, children2.Count)
                                 Continue For
+
                             End If
                         Next
 
@@ -316,8 +354,6 @@ Public Class TaskbarCenter
                             Orientation = "H"
                         End If
 
-                        'Console.WriteLine(Orientation)
-
                         'Get the end position of the last icon in the taskbar
                         If Orientation = "H" Then
                             TaskbarCount = cL + cW
@@ -335,33 +371,22 @@ Public Class TaskbarCenter
                         'Put the results into a string ready to be matched for differences with last loop
                         results = results & Orientation & TaskbarCount & TrayWndSize
 
+                        initposcalcready = True
+
                         i += 1
                     Next
 
                     If Not results = oldresults Then
                         'Something has changed we can now calculate the new position for each taskbar
 
-                        'Wait for the Animator to finish
-                        Do
-                            Thread.Sleep(30)
-                        Loop Until TaskbarAnimate.IsAnimated = True
-
-                        'Block multiple triggers at once (preventing the taskbar from moving halfway and then to final position)
-                        Dim trigger As Integer
-                        If trigger = 1 Then
-                            GoTo triggerskip
-                        End If
-                        trigger = 1
-                        Thread.Sleep(50)
-                        trigger = 0
+                        initposcalcready = False
+                        initposcalc = results
 
                         'Start the PositionCalculator
-                        Dim t3 As Thread = New Thread(AddressOf PositionCalculator)
+                        Dim t3 As Thread = New Thread(AddressOf InitPositionCalculator)
                         t3.Start()
 
                     End If
-
-triggerskip:
 
                     'Save current results for next loop
                     oldresults = results
@@ -387,7 +412,6 @@ triggerskip:
 
                 End Try
             Loop
-
         Catch ex As Exception
             MessageBox.Show("@Looper2 | " & ex.Message)
         End Try
@@ -465,7 +489,7 @@ triggerskip:
                                 '
                                 Exit Sub
                             End If
-                            '  Dim offset = CInt(TaskList.Current.BoundingRectangle.Left.ToString.Replace("-", ""))
+
                             Dim pos = (TaskListcL - ReBarcL - 2).ToString.Replace("-", "")
 
                             trayfixed = False
@@ -502,7 +526,28 @@ triggerskip:
 
 #Region "PositionCalculator"
 
+    Public Shared Sub InitPositionCalculator()
+
+        Dim mm As String
+        Dim mm2 As String
+
+        mm = initposcalc
+
+        Do
+            Thread.Sleep(10)
+        Loop Until initposcalcready = True
+
+        mm2 = initposcalc
+
+        If mm = mm2 Then
+            'Start the PositionCalculator
+            Dim t3 As Thread = New Thread(AddressOf PositionCalculator)
+            t3.Start()
+        End If
+    End Sub
+
     Public Shared Sub PositionCalculator()
+
         Try
             'Calculate the new positions and pass them through to the animator
 
@@ -579,7 +624,6 @@ triggerskip:
 
                         Next
 
-
                         GetLocation2(childx, 0)
                         ChildFirstcL = childLeft2
                         ChildFirstcT = childTop2
@@ -593,6 +637,7 @@ triggerskip:
                         ChildLastcH = childHeight2
 
                         Continue For
+
                     End If
 
                 Next

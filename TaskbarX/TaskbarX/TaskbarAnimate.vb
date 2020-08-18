@@ -1,31 +1,25 @@
-﻿
-Imports System.Threading
-
+﻿Imports System.Windows.Forms
 
 Public Class TaskbarAnimate
-        Public Shared IsAnimated As Boolean = True
-        Public Shared AnimatedTaskbars As Integer
 
-        Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
-            Try
+    Public Shared current As New ArrayList
 
-                If Not oldpos <= 100 Then
+    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
+        Try
 
-                    If valueToReach = oldpos Or CInt((valueToReach - oldpos).ToString.Replace("-", "")) <= 10 Then
-                        'Prevent Wiggling (if the new position has a difference of 10 or lower then there is no reason to move)
-                        Exit Sub
-                    End If
+            If valueToReach = oldpos Or CInt((valueToReach - oldpos).ToString.Replace("-", "")) <= 10 Then
+                'Prevent Wiggling (if the new position has a difference of 10 or lower then there is no reason to move)
+                Exit Sub
+            End If
 
-                    ' If AnimatedTaskbars >= (TaskbarCenter.TaskbarCount) Then
-                    If valueToReach = oldpos Or CInt((valueToReach - oldpos).ToString.Replace("-", "")) >= 300 Then
-                        'Prevent Big Swing (if the New position has a difference of 300 Or higher then there Is no reason to move)
-                        Exit Sub
-                        ' End If
-                    End If
-
+            For Each tt In current
+                If CType(tt, IntPtr) = hwnd Then
+                    'If hwnd is already getting animated then hwnd is in this arraylist and exit the animator because it's uneeded.
+                    Exit Sub
                 End If
+            Next
 
-                IsAnimated = False
+            current.Add(hwnd)
 
             Dim sw As New Stopwatch
             Dim originalValue As Integer = oldpos
@@ -34,14 +28,10 @@ Public Class TaskbarAnimate
             Dim maxValue As Integer = Math.Abs(valueToReach - originalValue)
             Dim increasing As Boolean = originalValue < valueToReach
 
-            'Dim sleepvalue = Settings.AnimationSpeed / 144
-
             elapsed = 0
             sw.Start()
 
             While Not elapsed >= duration
-
-                ' Thread.Sleep(3)
                 elapsed = CInt(sw.ElapsedMilliseconds)
 
                 Dim newValue As Integer = CInt(Math.Truncate(easing(elapsed, minValue, maxValue, duration)))
@@ -50,28 +40,21 @@ Public Class TaskbarAnimate
                     newValue = (originalValue + valueToReach) - newValue
                 End If
 
-
-
                 If orient = "H" Then
-
-                        Win32.SetWindowPos(hwnd, IntPtr.Zero, newValue, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
-                    Else
-
-                        Win32.SetWindowPos(hwnd, IntPtr.Zero, 0, newValue, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
-                    End If
-
+                    Win32.SetWindowPos(hwnd, IntPtr.Zero, newValue, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                Else
+                    Win32.SetWindowPos(hwnd, IntPtr.Zero, 0, newValue, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                End If
             End While
 
-
-
-            ' AnimatedTaskbars = AnimatedTaskbars + 1
             sw.Stop()
-            IsAnimated = True
-                Main.ClearMemory()
-            Catch ex As Exception
-                Console.WriteLine(ex.Message)
-            End Try
+            current.Remove(hwnd)
 
-        End Sub
+            Main.ClearMemory()
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+        End Try
 
-    End Class
+    End Sub
+
+End Class

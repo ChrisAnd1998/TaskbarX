@@ -1,47 +1,16 @@
-Option Strict On
+﻿Option Strict On
 
-Imports System.Runtime.InteropServices
-Imports System.Threading
 Imports System.Reflection
 Imports System.Text
+Imports System.Threading
 
 Public Class Main
 
-#Region "Declarations"
-
-    <DllImport("SHCore.dll", SetLastError:=True)>
-    Private Shared Function SetProcessDpiAwareness(ByVal awareness As PROCESS_DPI_AWARENESS) As Boolean
-    End Function
-
-    <DllImport("user32.dll", EntryPoint:="FindWindow", SetLastError:=True, CharSet:=Runtime.InteropServices.CharSet.Auto)>
-    Private Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
-    End Function
-
-    <DllImport("user32.dll")>
-    Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal wMsg As Int32, ByVal wParam As Boolean, ByVal lParam As Int32) As Integer
-    End Function
-
-    <DllImport("kernel32.dll")>
-    Private Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
-    End Function
-
-    Private Enum PROCESS_DPI_AWARENESS
-        Process_DPI_Unaware = 0
-        Process_System_DPI_Aware = 1
-        Process_Per_Monitor_DPI_Aware = 2
-    End Enum
-
-    Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
-    Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
-    Public Shared WM_THEMECHANGED As Integer = &H31A
-
-    Public Const WM_SETREDRAW As Integer = 11
-
-#End Region
+    Public Shared noty As New NotifyIcon
 
     Public Shared Sub Main()
         Try
-            'Kill every other running instance of FalconX
+            'Kill every other running instance of TaskbarX
             Try
                 For Each prog As Process In Process.GetProcessesByName("TaskbarX")
                     If Not prog.Id = Process.GetCurrentProcess.Id Then
@@ -58,9 +27,10 @@ Public Class Main
             Settings.CenterPrimaryOnly = 0
             Settings.CenterSecondaryOnly = 0
             Settings.AnimationStyle = "cubiceaseinout"
-            Settings.AnimationSpeed = 100
+            Settings.AnimationSpeed = 300
             Settings.LoopRefreshRate = 400
             Settings.CenterInBetween = 0
+            Settings.DontCenterTaskbar = 0
             Settings.FixToolbarsOnTrayChange = 1
             Settings.OnBatteryAnimationStyle = "cubiceaseinout"
             Settings.OnBatteryLoopRefreshRate = 400
@@ -70,6 +40,7 @@ Public Class Main
             For Each argument In arguments
                 Dim val() As String = Split(argument, "=")
                 If argument.Contains("-stop") Then
+                    noty.Visible = False
                     TaskbarCenter.RevertToZero()
                     RefreshWindowsExplorer()
                     ResetTaskbarStyle()
@@ -120,8 +91,24 @@ Public Class Main
                 If argument.Contains("-cfsa=") Then
                     Settings.CheckFullscreenApp = CInt(val(1))
                 End If
+                If argument.Contains("-dct=") Then
+                    Settings.DontCenterTaskbar = CInt(val(1))
+                End If
+                If argument.Contains("-hps=") Then
+                    Settings.HidePrimaryStartButton = CInt(val(1))
+                End If
+                If argument.Contains("-hss=") Then
+                    Settings.HideSecondaryStartButton = CInt(val(1))
+                End If
+                If argument.Contains("-hpt=") Then
+                    Settings.HidePrimaryNotifyWnd = CInt(val(1))
+                End If
+                If argument.Contains("-sti=") Then
+                    Settings.ShowTrayIcon = CInt(val(1))
+                End If
             Next
 
+            'If animation speed is lower than 1 then make it 1. Otherwise it will give an error.
             If Settings.AnimationSpeed <= 1 Then
                 Settings.AnimationSpeed = 1
             End If
@@ -131,7 +118,7 @@ Public Class Main
             currentProcess.PriorityClass = ProcessPriorityClass.High
 
             'Prevent wrong position calculations
-            SetProcessDpiAwareness(PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
+            Win32.SetProcessDpiAwareness(Win32.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
 
             'Wait for Shell_TrayWnd
             Dim Handle As IntPtr
@@ -149,16 +136,25 @@ Public Class Main
                 Console.WriteLine("Current Handle = " & Handle.ToString)
             Loop Until Not Handle = Nothing
 
-
             'Just empty startup memory before starting
             ClearMemory()
 
             'Reset the taskbar style...
             ResetTaskbarStyle()
 
+            If Settings.ShowTrayIcon = 1 Then
+                noty.Text = "TaskbarX (LeftClick = Restart) (RightClick = Stop)"
+                noty.Icon = My.Resources.icon
+                noty.Visible = True
+            End If
+
+            AddHandler noty.MouseClick, AddressOf mnuRef_Click
+
             'Start the TaskbarCenterer
-            Dim t1 As Thread = New Thread(AddressOf TaskbarCenter.TaskbarCenterer)
-            t1.Start()
+            If Not Settings.DontCenterTaskbar = 1 Then
+                Dim t1 As Thread = New Thread(AddressOf TaskbarCenter.TaskbarCenterer)
+                t1.Start()
+            End If
 
             'Start the TaskbarStyler if enabled
             If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Then
@@ -170,16 +166,26 @@ Public Class Main
         End Try
     End Sub
 
+    Public Shared Sub mnuRef_Click(sender As Object, e As MouseEventArgs)
+        noty.Visible = False
+        If (e.Button = MouseButtons.Left) Then
+            Application.Restart()
+        Else
+            TaskbarCenter.RevertToZero()
+            RefreshWindowsExplorer()
+            ResetTaskbarStyle()
+            End
+        End If
+
+    End Sub
+
 #Region "Commands"
+
+    Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
 
     Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
 
-    Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
     Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
-
-    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
-    Private Shared Function GetClassName(ByVal hWnd As System.IntPtr, ByVal lpClassName As System.Text.StringBuilder, ByVal nMaxCount As Integer) As Integer
-    End Function
 
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
@@ -189,7 +195,7 @@ Public Class Main
 
     Public Shared Function Enumerator(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
         Dim sClassName As New StringBuilder("", 256)
-        Call GetClassName(hwnd, sClassName, 256)
+        Call Win32.GetClassName(hwnd, sClassName, 256)
         If sClassName.ToString = "Shell_TrayWnd" Or sClassName.ToString = "Shell_SecondaryTrayWnd" Then
             windowHandles.Add(hwnd)
         End If
@@ -209,9 +215,9 @@ Public Class Main
         RefreshWindowsExplorer()
         For Each tray As IntPtr In trays
             Dim trayptr As IntPtr = tray
-            SendMessage(trayptr, WM_THEMECHANGED, True, 0)
-            SendMessage(trayptr, WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
-            SendMessage(trayptr, WM_DWMCOMPOSITIONCHANGED, True, 0)
+            Win32.SendMessage(trayptr, Win32.WM_THEMECHANGED, True, 0)
+            Win32.SendMessage(trayptr, Win32.WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
+            Win32.SendMessage(trayptr, Win32.WM_DWMCOMPOSITIONCHANGED, True, 0)
         Next
     End Sub
 
@@ -227,7 +233,7 @@ Public Class Main
             Dim item As Object = windowsType.InvokeMember("Item", BindingFlags.InvokeMethod, Nothing, windows, New Object() {i})
             Dim itemType As Type = item.GetType
             Dim itemNameInfo As PropertyInfo = itemType.GetProperty("Name")
-            If (itemNameInfo <> Nothing) Then
+            If itemNameInfo Is Nothing Then
                 Dim itemName As String = CType(itemType.InvokeMember("Name", BindingFlags.GetProperty, Nothing, item, Nothing), String)
                 If (itemName = "Shell_TrayWnd") Then
                     itemType.InvokeMember("Refresh", BindingFlags.InvokeMethod, Nothing, item, Nothing)
@@ -241,7 +247,7 @@ Public Class Main
         GC.Collect()
         GC.WaitForPendingFinalizers()
         GC.Collect()
-        Return SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, -1, -1)
+        Return Win32.SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, -1, -1)
     End Function
 
 #End Region

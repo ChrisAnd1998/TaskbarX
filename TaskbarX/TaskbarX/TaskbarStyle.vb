@@ -1,8 +1,8 @@
-Option Strict On
+﻿Option Strict On
 
+Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Text
-
 
 Public Class TaskbarStyle
 
@@ -10,6 +10,7 @@ Public Class TaskbarStyle
 
     Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
     Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
+
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
@@ -26,8 +27,6 @@ Public Class TaskbarStyle
                     windowHandles2.Add(hwnd)
                 End If
             End If
-
-
         Catch ex As Exception
 
         End Try
@@ -71,14 +70,17 @@ Public Class TaskbarStyle
             'Select accent based on settings
             If Settings.TaskbarStyle = 1 Then
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_TRANSPARANT
+
             End If
 
             If Settings.TaskbarStyle = 3 Then
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
+
             End If
 
             If Settings.TaskbarStyle = 2 Then
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_BLURBEHIND
+
             End If
 
             'Save accent data

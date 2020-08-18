@@ -4,6 +4,10 @@ Imports System.Runtime.InteropServices
 
 Public Class Win32
 
+    <DllImport("user32.dll")>
+    Public Shared Function ShowWindow(hWnd As IntPtr, <MarshalAs(UnmanagedType.I4)> nCmdShow As ShowWindowCommands) As <MarshalAs(UnmanagedType.Bool)> Boolean
+    End Function
+
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
     End Function
@@ -18,7 +22,6 @@ Public Class Win32
 
     Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
 
-    Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
     Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
 
     <DllImport("user32.dll", CharSet:=CharSet.Auto)>
@@ -35,20 +38,12 @@ Public Class Win32
     Public Shared Function SetWindowCompositionAttribute(ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
     End Function
 
-    <DllImport("user32.dll", EntryPoint:="FindWindow", SetLastError:=True, CharSet:=CharSet.Auto)>
-    Public Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
-    End Function
-
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Public Shared Function FindWindowEx(ByVal parentHandle As IntPtr, ByVal childAfter As IntPtr, ByVal lclassName As String, ByVal windowTitle As String) As IntPtr
     End Function
 
     <DllImport("user32.dll", ExactSpelling:=True, CharSet:=CharSet.Auto)>
     Public Shared Function GetParent(ByVal hWnd As IntPtr) As IntPtr
-    End Function
-
-    <DllImport("user32.dll")>
-    Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal wMsg As Int32, ByVal wParam As Boolean, ByVal lParam As Int32) As Integer
     End Function
 
     <DllImport("user32.dll")>
@@ -79,6 +74,44 @@ Public Class Win32
     <DllImport("user32.dll")>
     Public Shared Function RedrawWindow(hWnd As IntPtr, lprcUpdate As IntPtr, hrgnUpdate As IntPtr, flags As RedrawWindowFlags) As Boolean
     End Function
+
+    <DllImport("SHCore.dll", SetLastError:=True)>
+    Public Shared Function SetProcessDpiAwareness(ByVal awareness As PROCESS_DPI_AWARENESS) As Boolean
+    End Function
+
+    <DllImport("user32.dll", EntryPoint:="FindWindow", SetLastError:=True, CharSet:=Runtime.InteropServices.CharSet.Auto)>
+    Public Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
+    End Function
+
+    <DllImport("user32.dll")>
+    Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal wMsg As Int32, ByVal wParam As Boolean, ByVal lParam As Int32) As Integer
+    End Function
+
+    <DllImport("kernel32.dll")>
+    Public Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
+    End Function
+
+    Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
+
+    <System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint:="SetWindowLong")>
+    Public Shared Function SetWindowLong(ByVal hWnd As IntPtr, <MarshalAs(UnmanagedType.I4)> nIndex As WindowStyles, ByVal dwNewLong As Integer) As Integer
+    End Function
+
+    <DllImport("user32.dll")>
+    Public Shared Function SetLayeredWindowAttributes(ByVal hwnd As IntPtr, ByVal crKey As UInteger, ByVal bAlpha As Byte, ByVal dwFlags As UInteger) As Boolean
+    End Function
+
+    Public Enum PROCESS_DPI_AWARENESS
+        Process_DPI_Unaware = 0
+        Process_System_DPI_Aware = 1
+        Process_Per_Monitor_DPI_Aware = 2
+    End Enum
+
+    Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
+    Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
+    Public Shared WM_THEMECHANGED As Integer = &H31A
+
+    Public Const WM_SETREDRAW As Integer = 11
 
     <Flags()>
     Public Enum RedrawWindowFlags As UInteger
@@ -152,10 +185,6 @@ Public Class Win32
         ByVal dwmsEventTime As UInteger
     )
 
-    Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
-    Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
-    Public Shared WM_THEMECHANGED As Integer = &H31A
-
     Public Structure WindowCompositionAttributeData
         Public Attribute As WindowCompositionAttribute
         Public Data As IntPtr
@@ -202,6 +231,11 @@ Public Class Win32
     Public Const GWL_EXSTYLE = -20
     Public Const WS_MAXIMIZE = 16777216
     Public Const WS_POPUP = 2147483648
+    Public Const WS_EX_LAYERED As Integer = 524288
+
+    Public Const LWA_ALPHA As Integer = 2
+
+    Public Const LWA_COLORKEY As Integer = 1
 
     Public Enum WindowStyles
         WS_BORDER = &H800000
@@ -228,6 +262,22 @@ Public Class Win32
         '  WS_POPUPWINDOW = WS_POPUP Or WS_BORDER Or WS_SYSMENU
     End Enum
 
+    Enum ShowWindowCommands As Integer
+        Hide = 0
+        Normal = 1
+        ShowMinimized = 2
+        Maximize = 3
+        ShowMaximized = 3
+        ShowNoActivate = 4
+        Show = 5
+        Minimize = 6
+        ShowMinNoActive = 7
+        ShowNA = 8
+        Restore = 9
+        ShowDefault = 10
+        ForceMinimize = 11
+    End Enum
+
     Public Delegate Function EnumWindowProcess(ByVal Handle As IntPtr, ByVal Parameter As IntPtr) As Boolean
 
     Public Shared SWP_NOSIZE As UInt32 = 1
@@ -235,7 +285,5 @@ Public Class Win32
     Public Shared SWP_NOACTIVATE As UInt32 = 16
     Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
     Public Shared SWP_NOZORDER As UInt32 = 4
-
-
 
 End Class
