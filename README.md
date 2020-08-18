@@ -45,11 +45,11 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 **-sr=1920** will put the icons to the left when screen width becomes 1920px.  
 **-cfsa=1** will pause TaskbarX if a fullscreen app is running.  
 **-obas=backeaseout** will set the animation style to BackEaseOut when on battery mode.  
-**-oblr=400** will set the refresh rate of the looper/taskbar checker when on battery mode.
-**-dct=1** will stop TaskbarX from centering the taskbar icons.
-**-hps=1** will hide the start button on the primary monitor.
-**-hss=1** will hide the start button on the secondary monitor.
-**-hpt=1** will hide the tray area on the primary monitor.
+**-oblr=400** will set the refresh rate of the looper/taskbar checker when on battery mode.  
+**-dct=1** will stop TaskbarX from centering the taskbar icons.  
+**-hps=1** will hide the start button on the primary monitor.  
+**-hss=1** will hide the start button on the secondary monitor.  
+**-hpt=1** will hide the tray area on the primary monitor.  
 **-sti=1** will show a tray icon to quickly restart and stop TaskbarX._
   
 > **Example:** _C:\Program Files (x86)\TaskbarX\TaskbarX.exe -tbs=1 -as=backeaseout_
