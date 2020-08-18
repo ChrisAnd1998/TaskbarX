@@ -10,8 +10,6 @@ Public Class TaskbarStyle
 
     Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
     Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
-    Public Shared ActiveWindows2 As New System.Collections.ObjectModel.Collection(Of IntPtr)
-
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
