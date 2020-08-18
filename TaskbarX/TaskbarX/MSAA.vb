@@ -20,7 +20,7 @@ Public Class MSAA
     Public Shared guidAccessible As New Guid("{00020400-0000-0000-C000-000000000046}")
 
     Public Shared Function GetAccessibleChildren(ByVal objAccessible As IAccessible) As IAccessible()
-        Dim childCount As Integer = 0
+        Dim childCount As Integer
         Try
             childCount = objAccessible.accChildCount
         Catch ex As Exception

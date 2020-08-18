@@ -1,4 +1,4 @@
-﻿Option Strict On
+Option Strict On
 
 
 Imports System.Threading
@@ -91,7 +91,7 @@ Public Class TaskbarCenter
         Return Nothing
     End Function
 
-    Public Shared Sub setpos()
+    Public Shared Sub SetPos()
         If setposori = "H" Then
             Do
                 Win32.SetWindowPos(setposhwnd, IntPtr.Zero, setpospos, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
@@ -167,7 +167,6 @@ Public Class TaskbarCenter
             Dim Handle As IntPtr
             Do
                 Console.WriteLine("Waiting for Shell_TrayWnd")
-                Handle = Nothing
                 Thread.Sleep(250)
                 Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
             Loop Until Not Handle = Nothing
@@ -186,7 +185,6 @@ Public Class TaskbarCenter
         Dim Handle As IntPtr
         Do
             Console.WriteLine("Waiting for Shell_TrayWnd")
-            Handle = Nothing
             Thread.Sleep(250)
             Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
         Loop Until Not Handle = Nothing
@@ -337,7 +335,7 @@ Public Class TaskbarCenter
                         'Put the results into a string ready to be matched for differences with last loop
                         results = results & Orientation & TaskbarCount & TrayWndSize
 
-                        i = (i + 1)
+                        i += 1
                     Next
 
                     If Not results = oldresults Then
@@ -388,7 +386,7 @@ triggerskip:
                     End If
 
                 End Try
-        Loop
+            Loop
 
         Catch ex As Exception
             MessageBox.Show("@Looper2 | " & ex.Message)
@@ -476,7 +474,7 @@ triggerskip:
                             setpospos = CInt(pos)
                             setposori = TrayOrientation
 
-                            Dim t1 As Thread = New Thread(AddressOf setpos)
+                            Dim t1 As Thread = New Thread(AddressOf SetPos)
                             t1.Start()
 
                             Thread.Sleep(5)
@@ -573,10 +571,10 @@ triggerskip:
                         For Each ccc As Accessibility.IAccessible In children2
                             Try
                                 If CInt(childx.accRole(ccc)) = &H2B Or CInt(childx.accRole(ccc)) = &H39 Then 'push button (0x2B) | menu button (0x39)
-                                    Count = Count + 1
+                                    Count += 1
                                 End If
                             Catch
-                                Count = Count + 1
+                                Count += 1
                             End Try
 
                         Next

@@ -1,4 +1,4 @@
-﻿Option Strict On
+Option Strict On
 
 Imports System.Runtime.InteropServices
 Imports System.Text
@@ -43,7 +43,7 @@ Public Class TaskbarStyle
         Return True
     End Function
 
-    Public Shared Sub ttt()
+    Public Shared Sub Ttt()
         Do
             windowHandles2.Clear()
 
@@ -61,7 +61,7 @@ Public Class TaskbarStyle
             GetActiveWindows()
 
             If Settings.DefaultTaskbarStyleOnWinMax = 1 Then
-                '  Dim t2 As Thread = New Thread(AddressOf ttt)
+                '  Dim t2 As Thread = New Thread(AddressOf Ttt)
                 '   t2.Start()
             End If
 
