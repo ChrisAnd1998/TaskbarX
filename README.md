@@ -2,7 +2,7 @@
 # TaskbarX
 
 
-![TaskbarX-logo-v2-100](https://user-images.githubusercontent.com/50437199/90984414-08cfec80-e575-11ea-83ef-e7033a98b43e.png)
+![rsz_hero2](https://user-images.githubusercontent.com/50437199/90984468-6c5a1a00-e575-11ea-9af0-a874115e07e7.png)
   
 TaskbarX gives you control over the position of your taskbar icons.
 TaskbarX will give you an original Windows dock like feel. The icons will move to the center or user given position when an icon gets added or removed from the taskbar. You will be given the option to choose between a variety of different animations and change their speeds. The animations can be disabled if you don't like animations and want them to move in an instant. The center position can also be changed to bring your icons more to the left or right based on the center position. Currently all taskbar settings are supported including the vertical taskbar and unlimited taskbars.
