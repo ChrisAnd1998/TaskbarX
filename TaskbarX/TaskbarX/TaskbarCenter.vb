@@ -1,10 +1,12 @@
-﻿Option Strict On
+﻿Option Strict Off
 
 Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
+
 Imports Accessibility
 Imports Microsoft.Win32
+
 
 Public Class TaskbarCenter
 
@@ -606,6 +608,8 @@ Public Class TaskbarCenter
                 Dim TaskListcH As Integer = childHeight2
 
                 For Each childx As Accessibility.IAccessible In children
+
+                    Dim c = CInt(childx.accRole(0))
 
                     If CInt(childx.accRole(0)) = 22 Then
 

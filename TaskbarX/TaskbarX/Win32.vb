@@ -38,6 +38,10 @@ Public Class Win32
     Public Shared Function SetWindowCompositionAttribute(ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
     End Function
 
+    <DllImport("user32.dll")>
+    Public Shared Function SetWindowCompositionTransition(ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
+    End Function
+
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Public Shared Function FindWindowEx(ByVal parentHandle As IntPtr, ByVal childAfter As IntPtr, ByVal lclassName As String, ByVal windowTitle As String) As IntPtr
     End Function
@@ -101,6 +105,14 @@ Public Class Win32
     Public Shared Function SetLayeredWindowAttributes(ByVal hwnd As IntPtr, ByVal crKey As UInteger, ByVal bAlpha As Byte, ByVal dwFlags As UInteger) As Boolean
     End Function
 
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function PostMessage(ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As IntPtr) As Boolean
+    End Function
+
+    <DllImport("user32.dll", SetLastError:=False)>
+    Public Shared Function GetDesktopWindow() As IntPtr
+    End Function
+
     Public Enum PROCESS_DPI_AWARENESS
         Process_DPI_Unaware = 0
         Process_System_DPI_Aware = 1
@@ -115,51 +127,17 @@ Public Class Win32
 
     <Flags()>
     Public Enum RedrawWindowFlags As UInteger
-
-        ''' <summary>
-        ''' Invalidates the rectangle or region that you specify in lprcUpdate or hrgnUpdate.
-        ''' You can set only one of these parameters to a non-NULL value. If both are NULL, RDW_INVALIDATE invalidates the entire window.
-        ''' </summary>
         Invalidate = &H1
-
-        ''' <summary>Causes the OS to post a WM_PAINT message to the window regardless of whether a portion of the window is invalid.</summary>
         InternalPaint = &H2
-
-        ''' <summary>
-        ''' Causes the window to receive a WM_ERASEBKGND message when the window is repainted.
-        ''' Specify this value in combination with the RDW_INVALIDATE value; otherwise, RDW_ERASE has no effect.
-        ''' </summary>
         [Erase] = &H4
-
-        ''' <summary>
-        ''' Validates the rectangle or region that you specify in lprcUpdate or hrgnUpdate.
-        ''' You can set only one of these parameters to a non-NULL value. If both are NULL, RDW_VALIDATE validates the entire window.
-        ''' This value does not affect internal WM_PAINT messages.
-        ''' </summary>
         Validate = &H8
-
         NoInternalPaint = &H10
-
-        ''' <summary>Suppresses any pending WM_ERASEBKGND messages.</summary>
         NoErase = &H20
-
-        ''' <summary>Excludes child windows, if any, from the repainting operation.</summary>
         NoChildren = &H40
-
-        ''' <summary>Includes child windows, if any, in the repainting operation.</summary>
         AllChildren = &H80
-
-        ''' <summary>Causes the affected windows, which you specify by setting the RDW_ALLCHILDREN and RDW_NOCHILDREN values, to receive WM_ERASEBKGND and WM_PAINT messages before the RedrawWindow returns, if necessary.</summary>
         UpdateNow = &H100
-
-        ''' <summary>
-        ''' Causes the affected windows, which you specify by setting the RDW_ALLCHILDREN and RDW_NOCHILDREN values, to receive WM_ERASEBKGND messages before RedrawWindow returns, if necessary.
-        ''' The affected windows receive WM_PAINT messages at the ordinary time.
-        ''' </summary>
         EraseNow = &H200
-
         Frame = &H400
-
         NoFrame = &H800
     End Enum
 
@@ -285,5 +263,143 @@ Public Class Win32
     Public Shared SWP_NOACTIVATE As UInt32 = 16
     Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
     Public Shared SWP_NOZORDER As UInt32 = 4
+
+    Public Shared WM_COMMAND As Long = &H111
+    '  Public Shared WM_SETTINGCHANGE As Long = &H1A
+
+    Public Shared HWND_BROADCAST As IntPtr = New IntPtr(65535)
+    Public Shared WM_SETTINGCHANGE As UInteger = 26
+    Public Shared SMTO_ABORTIFHUNG As Integer = 2
+
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function SendNotifyMessage(
+     ByVal hWnd As IntPtr,
+     ByVal msg As UInteger,
+     ByVal wParam As UIntPtr,
+     ByVal lParam As String
+     ) As Boolean
+    End Function
+
+    ' Public Declare Function SendMessageTimeout Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As IntPtr, ByVal lParam As String, ByVal fuFlags As Integer, ByVal uTimeout As Integer, ByVal lpdwResult As IntPtr) As IntPtr
+
+    <DllImport("shell32.dll")>
+    Public Shared Sub SHChangeNotify(
+    ByVal wEventID As HChangeNotifyEventID,
+    ByVal uFlags As HChangeNotifyFlags,
+    ByVal dwItem1 As IntPtr,
+    ByVal dwItem2 As IntPtr)
+    End Sub
+
+    Public Enum HChangeNotifyEventID
+        SHCNE_ALLEVENTS = &H7FFFFFFF
+        SHCNE_ASSOCCHANGED = &H8000000
+        SHCNE_ATTRIBUTES = &H800
+        SHCNE_CREATE = &H2
+        SHCNE_DELETE = &H4
+        SHCNE_DRIVEADD = &H100
+        SHCNE_DRIVEADDGUI = &H10000
+        SHCNE_DRIVEREMOVED = &H80
+        SHCNE_EXTENDED_EVENT = &H4000000
+        SHCNE_FREESPACE = &H40000
+        SHCNE_MEDIAINSERTED = &H20
+        SHCNE_MEDIAREMOVED = &H40
+        SHCNE_MKDIR = &H8
+        SHCNE_NETSHARE = &H200
+        SHCNE_NETUNSHARE = &H400
+        SHCNE_RENAMEFOLDER = &H20000
+        SHCNE_RENAMEITEM = &H1
+        SHCNE_RMDIR = &H10
+        SHCNE_SERVERDISCONNECT = &H4000
+        SHCNE_UPDATEDIR = &H1000
+        SHCNE_UPDATEIMAGE = &H8000
+    End Enum
+
+    Public Enum HChangeNotifyFlags
+        SHCNF_DWORD = &H3
+        SHCNF_IDLIST = &H0
+        SHCNF_PATHA = &H1
+        SHCNF_PATHW = &H5
+        SHCNF_PRINTERA = &H2
+        SHCNF_PRINTERW = &H6
+        SHCNF_FLUSH = &H1000
+        SHCNF_FLUSHNOWAIT = &H2000
+    End Enum
+
+
+    <DllImport("user32.dll", SetLastError:=True)>
+    Public Shared Function SendMessageTimeout(ByVal windowHandle As IntPtr, ByVal Msg As Integer, ByVal wParam As IntPtr, ByVal lParam As IntPtr, ByVal flags As SendMessageTimeoutFlags, ByVal timeout As Integer, ByRef result As IntPtr) As IntPtr
+    End Function
+
+    Public Enum SendMessageTimeoutFlags
+        SMTO_NORMAL = 0
+        SMTO_BLOCK = 1
+        SMTO_ABORTIFHUNG = 2
+        SMTO_NOTIMEOUTIFNOTHUNG = 8
+        SMTO_ERRORONEXIT = 32
+    End Enum
+
+
+    <DllImport("user32.dll")>
+    Public Shared Function BeginPaint(ByVal hwnd As IntPtr, <Out()> ByRef lpPaint As PAINTSTRUCT) As IntPtr
+    End Function
+
+    <DllImport("user32.dll")>
+    Public Shared Function EndPaint(ByVal hwnd As IntPtr, <[In]()> ByRef lpPaint As PAINTSTRUCT) As IntPtr
+    End Function
+
+    Public Structure PAINTSTRUCT
+        Public hdc As IntPtr
+        Public fErase As Integer
+        Public rcPaint As RECT
+        Public fRestore As Integer
+        Public fIncUpdate As Integer
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=32)>
+        Public rgbReserved As Byte()
+    End Structure
+
+    <DllImport("CoreDll.dll")>
+    Public Shared Function RegFlushKey(ByVal hKey As IntPtr) As UInt32
+    End Function
+
+
+
+
+    Public Const HKEY_CLASSES_ROOT As UInt32 = 2147483648
+    Public Const HKEY_CURRENT_USER As UInt32 = 2147483649
+    Public Const HKEY_LOCAL_MACHINE As UInt32 = 2147483650
+    Public Const HKEY_USERS As UInt32 = 2147483651
+
+    Public Declare Function PostMessageW Lib "user32.dll" Alias "PostMessageW" (ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As UInteger, ByVal lParam As Integer) As Boolean
+
+
+    <DllImport("dwmapi.dll")>
+    Public Shared Sub DwmEnableComposition(ByVal uCompositionAction As CompositionAction)
+    End Sub
+
+    Public Enum CompositionAction As UInteger
+        DWM_EC_DISABLECOMPOSITION = 0
+        DWM_EC_ENABLECOMPOSITION = 1
+    End Enum
+
+    <DllImport("user32.dll")>
+    Public Shared Function EnableWindow(ByVal hWnd As IntPtr, ByVal bEnable As Boolean) As Boolean
+    End Function
+
+    <DllImport("dwmapi.dll")>
+    Public Shared Sub DwmEnableBlurBehindWindow(ByVal hwnd As IntPtr, ByRef blurBehind As DWM_BLURBEHIND)
+    End Sub
+
+    Structure DWM_BLURBEHIND
+        Public dwFlags As DWM_BB
+        Public fEnable As Boolean
+        Public hRgnBlur As IntPtr
+        Public fTransitionOnMaximized As Boolean
+    End Structure
+
+    Enum DWM_BB
+        Enable = 1
+        BlurRegion = 2
+        TransitionMaximized = 4
+    End Enum
 
 End Class

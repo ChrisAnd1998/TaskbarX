@@ -20,6 +20,7 @@
     Public Shared HidePrimaryNotifyWnd As Integer
     Public Shared ShowTrayIcon As Integer
 
+
     'If on battery FalconX will override with these
     Public Shared OnBatteryAnimationStyle As String
 

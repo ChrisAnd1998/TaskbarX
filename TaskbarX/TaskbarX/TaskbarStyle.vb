@@ -4,6 +4,7 @@ Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Text
 
+
 Public Class TaskbarStyle
 
     Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
@@ -73,24 +74,26 @@ Public Class TaskbarStyle
 
             End If
 
-            If Settings.TaskbarStyle = 3 Then
-                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
-
-            End If
-
             If Settings.TaskbarStyle = 2 Then
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_BLURBEHIND
 
             End If
 
+            If Settings.TaskbarStyle = 3 Then
+                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
+                accent.GradientColor = 0
+            End If
+
             'Save accent data
             Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
             Marshal.StructureToPtr(accent, accentPtr, False)
-            Dim data = New Win32.WindowCompositionAttributeData With {
-                .Attribute = Win32.WindowCompositionAttribute.WCA_ACCENT_POLICY,
-                .SizeOfData = accentStructSize,
-                .Data = accentPtr
-            }
+
+
+            Dim data = New Win32.WindowCompositionAttributeData
+            data.Attribute = Win32.WindowCompositionAttribute.WCA_ACCENT_POLICY
+            data.SizeOfData = accentStructSize
+            data.Data = accentPtr
+
 
             Dim trays As New ArrayList
 
@@ -106,6 +109,8 @@ Public Class TaskbarStyle
                 Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
             Next
 
+
+
             Do
 
                 Try
@@ -113,6 +118,9 @@ Public Class TaskbarStyle
                     For Each tray As IntPtr In trays
                         Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
                         Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
+
+                        'Win32.SetWindowCompositionTransition(CType(trayptr, IntPtr), data)
+
 
                         ' If Settings.DefaultTaskbarStyleOnWinMax = 1 Then
                         ' im cc As Integer = 0
@@ -144,7 +152,7 @@ Public Class TaskbarStyle
 
                     Next
 
-                    System.Threading.Thread.Sleep(14)
+                    System.Threading.Thread.Sleep(5)
                 Catch
                 End Try
             Loop

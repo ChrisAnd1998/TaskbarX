@@ -1,8 +1,9 @@
 ﻿Option Strict On
 
-Imports System.Reflection
+
 Imports System.Text
 Imports System.Threading
+
 
 Public Class Main
 
@@ -35,6 +36,7 @@ Public Class Main
             Settings.OnBatteryAnimationStyle = "cubiceaseinout"
             Settings.OnBatteryLoopRefreshRate = 400
 
+
             'Read the arguments for the settings
             Dim arguments() As String = Environment.GetCommandLineArgs
             For Each argument In arguments
@@ -42,13 +44,13 @@ Public Class Main
                 If argument.Contains("-stop") Then
                     noty.Visible = False
                     TaskbarCenter.RevertToZero()
-                    RefreshWindowsExplorer()
                     ResetTaskbarStyle()
                     End
                 End If
                 If argument.Contains("-tbs=") Then
                     Settings.TaskbarStyle = CInt(val(1))
                 End If
+
                 If argument.Contains("-ptbo=") Then
                     Settings.PrimaryTaskbarOffset = CInt(val(1))
                 End If
@@ -136,33 +138,37 @@ Public Class Main
                 Console.WriteLine("Current Handle = " & Handle.ToString)
             Loop Until Not Handle = Nothing
 
+
             'Just empty startup memory before starting
             ClearMemory()
 
             'Reset the taskbar style...
             ResetTaskbarStyle()
 
+
             If Settings.ShowTrayIcon = 1 Then
-                noty.Text = "TaskbarX (LeftClick = Restart) (RightClick = Stop)"
-                noty.Icon = My.Resources.icon
-                noty.Visible = True
-            End If
+                    noty.Text = "TaskbarX (LeftClick = Restart) (RightClick = Stop)"
+                    noty.Icon = My.Resources.icon
+                    noty.Visible = True
+                End If
 
-            AddHandler noty.MouseClick, AddressOf mnuRef_Click
+                AddHandler noty.MouseClick, AddressOf mnuRef_Click
 
-            'Start the TaskbarCenterer
-            If Not Settings.DontCenterTaskbar = 1 Then
-                Dim t1 As Thread = New Thread(AddressOf TaskbarCenter.TaskbarCenterer)
-                t1.Start()
-            End If
+                'Start the TaskbarCenterer
+                If Not Settings.DontCenterTaskbar = 1 Then
+                    Dim t1 As Thread = New Thread(AddressOf TaskbarCenter.TaskbarCenterer)
+                    t1.Start()
+                End If
 
-            'Start the TaskbarStyler if enabled
-            If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Then
-                Dim t2 As Thread = New Thread(AddressOf TaskbarStyle.TaskbarStyler)
-                t2.Start()
-            End If
+                'Start the TaskbarStyler if enabled
+                If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Then
+                    Dim t2 As Thread = New Thread(AddressOf TaskbarStyle.TaskbarStyler)
+                    t2.Start()
+                End If
+
+
         Catch ex As Exception
-            Console.WriteLine(ex.Message)
+                Console.WriteLine(ex.Message)
         End Try
     End Sub
 
@@ -172,7 +178,6 @@ Public Class Main
             Application.Restart()
         Else
             TaskbarCenter.RevertToZero()
-            RefreshWindowsExplorer()
             ResetTaskbarStyle()
             End
         End If
@@ -212,7 +217,7 @@ Public Class Main
             Console.WriteLine(trayWnd)
             trays.Add(trayWnd)
         Next
-        RefreshWindowsExplorer()
+
         For Each tray As IntPtr In trays
             Dim trayptr As IntPtr = tray
             Win32.SendMessage(trayptr, Win32.WM_THEMECHANGED, True, 0)
@@ -221,27 +226,12 @@ Public Class Main
         Next
     End Sub
 
-    Public Shared Sub RefreshWindowsExplorer()
-        Dim CLSID_ShellApplication As Guid = New Guid("13709620-C279-11CE-A49E-444553540000")
-        Dim shellApplicationType As Type = Type.GetTypeFromCLSID(CLSID_ShellApplication, True)
-        Dim shellApplication As Object = Activator.CreateInstance(shellApplicationType)
-        Dim windows As Object = shellApplicationType.InvokeMember("Windows", BindingFlags.InvokeMethod, Nothing, shellApplication, New Object(-1) {})
-        Dim windowsType As Type = windows.GetType
-        Dim count As Object = windowsType.InvokeMember("Count", BindingFlags.GetProperty, Nothing, windows, Nothing)
-        Dim i As Integer = 0
-        Do While (i < CType(count, Integer))
-            Dim item As Object = windowsType.InvokeMember("Item", BindingFlags.InvokeMethod, Nothing, windows, New Object() {i})
-            Dim itemType As Type = item.GetType
-            Dim itemNameInfo As PropertyInfo = itemType.GetProperty("Name")
-            If itemNameInfo Is Nothing Then
-                Dim itemName As String = CType(itemType.InvokeMember("Name", BindingFlags.GetProperty, Nothing, item, Nothing), String)
-                If (itemName = "Shell_TrayWnd") Then
-                    itemType.InvokeMember("Refresh", BindingFlags.InvokeMethod, Nothing, item, Nothing)
-                End If
-            End If
-            i += 1
-        Loop
+    Public Shared Sub RestartExplorer()
+        For Each MyProcess In Process.GetProcessesByName("explorer")
+            MyProcess.Kill()
+        Next
     End Sub
+
 
     Public Shared Function ClearMemory() As Int32
         GC.Collect()

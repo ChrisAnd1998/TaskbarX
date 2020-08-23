@@ -3,6 +3,7 @@
 Imports System.Runtime.InteropServices
 Imports Accessibility
 
+
 Public Class MSAA
 
     <DllImport("oleacc.dll")>
@@ -10,7 +11,11 @@ Public Class MSAA
 
     End Function
 
-    Declare Function AccessibleChildren Lib "oleacc.dll" (ByVal paccContainer As IAccessible, ByVal iChildStart As Integer, ByVal cChildren As Integer, <[Out]()> ByVal rgvarChildren() As Object, ByRef pcObtained As Integer) As UInteger
+
+    <DllImport("oleacc.dll")>
+    Public Shared Function AccessibleChildren(ByVal paccContainer As IAccessible, ByVal iChildStart As Integer, ByVal cChildren As Integer, <[Out]()> ByVal rgvarChildren() As Object, ByRef pcObtained As Integer) As UInteger
+
+    End Function
 
     Private Declare Function AccessibleObjectFromWindow Lib "oleacc" (ByVal Hwnd As Int32,
     ByVal dwId As Int32,
