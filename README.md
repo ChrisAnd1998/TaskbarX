@@ -29,6 +29,16 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 &nbsp;
 
 
+## Mockup
+ 
+![Mockup](https://chrisandriessen.nl/images/Mockup.png)
+  
+  
+
+  
+&nbsp;
+
+
 ## Commandline Arguments
 
 _**-stop** will stop TaskbarX, puts all icons back to the left and resets the taskbar style.  
@@ -60,7 +70,7 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 
 ## Preview
  
-[![Alt text](https://user-images.githubusercontent.com/50437199/82542445-47a76e00-9b52-11ea-87a6-e1e57eb4108c.jpg)](https://youtu.be/oqA3BDt-GqY) 
+[![Alt text](https://chrisandriessen.nl/images/rsz_hero3.png)](https://youtu.be/oqA3BDt-GqY) 
   
   
 
