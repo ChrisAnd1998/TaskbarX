@@ -3,14 +3,12 @@
 Imports System.Runtime.InteropServices
 Imports Accessibility
 
-
 Public Class MSAA
 
     <DllImport("oleacc.dll")>
     Public Shared Function WindowFromAccessibleObject(ByVal pacc As IAccessible, ByRef phwnd As IntPtr) As UInteger
 
     End Function
-
 
     <DllImport("oleacc.dll")>
     Public Shared Function AccessibleChildren(ByVal paccContainer As IAccessible, ByVal iChildStart As Integer, ByVal cChildren As Integer, <[Out]()> ByVal rgvarChildren() As Object, ByRef pcObtained As Integer) As UInteger

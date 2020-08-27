@@ -1,12 +1,9 @@
-﻿Option Strict Off
+﻿Option Strict On
 
 Imports System.Text
 Imports System.Threading
-Imports System.Windows.Forms
-
 Imports Accessibility
 Imports Microsoft.Win32
-
 
 Public Class TaskbarCenter
 
@@ -64,10 +61,16 @@ Public Class TaskbarCenter
 
 #Region "Commands"
 
+    Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
+
+    Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
+
+    Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
+
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
-        Win32.EnumWindows(AddressOf Enumerator, 0)
-        Return Win32.ActiveWindows
+        EnumWindows(AddressOf Enumerator, 0)
+        Return ActiveWindows
     End Function
 
     Public Shared Function Enumerator(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
@@ -156,6 +159,8 @@ Public Class TaskbarCenter
                 Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
                 Dim SStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
                 Win32.ShowWindow(SStart, Win32.ShowWindowCommands.Show)
+                Dim STray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ClockButton", Nothing)
+                Win32.ShowWindow(STray, Win32.ShowWindowCommands.Show)
                 MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
             End If
 
@@ -223,11 +228,7 @@ Public Class TaskbarCenter
             For Each Taskbar In windowHandles
                 Dim sClassName As New StringBuilder("", 256)
                 Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
-
                 Dim MSTaskListWClass As IntPtr
-
-                ' Win32.SetWindowLong(CType(Taskbar, IntPtr), CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), (Win32.GetWindowLong(CType(Taskbar, IntPtr), Win32.GWL_EXSTYLE) Or Win32.WS_EX_LAYERED)
-                '  Win32.SetLayeredWindowAttributes(CType(Taskbar, IntPtr), 0, 128, Win32.LWA_ALPHA)
 
                 If sClassName.ToString = "Shell_TrayWnd" Then
                     Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
@@ -255,6 +256,11 @@ Public Class TaskbarCenter
                     If Settings.HideSecondaryStartButton = 1 Then
                         Dim SStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
                         Win32.ShowWindow(SStart, Win32.ShowWindowCommands.Hide)
+                    End If
+
+                    If Settings.HideSecondaryNotifyWnd = 1 Then
+                        Dim STray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ClockButton", Nothing)
+                        Win32.ShowWindow(STray, Win32.ShowWindowCommands.Hide)
                     End If
 
                     MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)

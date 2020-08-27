@@ -1,6 +1,4 @@
-﻿Imports System.Windows.Forms
-
-Public Class TaskbarAnimate
+﻿Public Class TaskbarAnimate
 
     Public Shared current As New ArrayList
 

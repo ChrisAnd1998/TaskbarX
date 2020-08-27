@@ -1,9 +1,7 @@
 ﻿Option Strict On
 
-
 Imports System.Text
 Imports System.Threading
-
 
 Public Class Main
 
@@ -36,7 +34,6 @@ Public Class Main
             Settings.OnBatteryAnimationStyle = "cubiceaseinout"
             Settings.OnBatteryLoopRefreshRate = 400
 
-
             'Read the arguments for the settings
             Dim arguments() As String = Environment.GetCommandLineArgs
             For Each argument In arguments
@@ -49,6 +46,16 @@ Public Class Main
                 End If
                 If argument.Contains("-tbs=") Then
                     Settings.TaskbarStyle = CInt(val(1))
+                End If
+
+                If argument.Contains("-color") Then
+                    Dim colorval As String = val(1)
+                    Dim colorsep = colorval.Split(CType(";", Char()))
+
+                    Settings.TaskbarStyleRed = CInt(colorsep(0))
+                    Settings.TaskbarStyleGreen = CInt(colorsep(1))
+                    Settings.TaskbarStyleBlue = CInt(colorsep(2))
+                    Settings.TaskbarStyleAlpha = CInt(colorsep(3))
                 End If
 
                 If argument.Contains("-ptbo=") Then
@@ -105,8 +112,14 @@ Public Class Main
                 If argument.Contains("-hpt=") Then
                     Settings.HidePrimaryNotifyWnd = CInt(val(1))
                 End If
+                If argument.Contains("-hst=") Then
+                    Settings.HideSecondaryNotifyWnd = CInt(val(1))
+                End If
                 If argument.Contains("-sti=") Then
                     Settings.ShowTrayIcon = CInt(val(1))
+                End If
+                If argument.Contains("-tbsom=") Then
+                    Settings.TaskbarStyleOnMax = CInt(val(1))
                 End If
             Next
 
@@ -138,37 +151,33 @@ Public Class Main
                 Console.WriteLine("Current Handle = " & Handle.ToString)
             Loop Until Not Handle = Nothing
 
-
             'Just empty startup memory before starting
             ClearMemory()
 
             'Reset the taskbar style...
             ResetTaskbarStyle()
 
-
             If Settings.ShowTrayIcon = 1 Then
-                    noty.Text = "TaskbarX (LeftClick = Restart) (RightClick = Stop)"
-                    noty.Icon = My.Resources.icon
-                    noty.Visible = True
-                End If
+                noty.Text = "TaskbarX (LeftClick = Restart) (RightClick = Stop)"
+                noty.Icon = My.Resources.icon
+                noty.Visible = True
+            End If
 
-                AddHandler noty.MouseClick, AddressOf mnuRef_Click
+            AddHandler noty.MouseClick, AddressOf mnuRef_Click
 
-                'Start the TaskbarCenterer
-                If Not Settings.DontCenterTaskbar = 1 Then
-                    Dim t1 As Thread = New Thread(AddressOf TaskbarCenter.TaskbarCenterer)
-                    t1.Start()
-                End If
+            'Start the TaskbarCenterer
+            If Not Settings.DontCenterTaskbar = 1 Then
+                Dim t1 As Thread = New Thread(AddressOf TaskbarCenter.TaskbarCenterer)
+                t1.Start()
+            End If
 
-                'Start the TaskbarStyler if enabled
-                If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Then
-                    Dim t2 As Thread = New Thread(AddressOf TaskbarStyle.TaskbarStyler)
-                    t2.Start()
-                End If
-
-
+            'Start the TaskbarStyler if enabled
+            If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Then
+                Dim t2 As Thread = New Thread(AddressOf TaskbarStyle.TaskbarStyler)
+                t2.Start()
+            End If
         Catch ex As Exception
-                Console.WriteLine(ex.Message)
+            Console.WriteLine(ex.Message)
         End Try
     End Sub
 
@@ -231,7 +240,6 @@ Public Class Main
             MyProcess.Kill()
         Next
     End Sub
-
 
     Public Shared Function ClearMemory() As Int32
         GC.Collect()

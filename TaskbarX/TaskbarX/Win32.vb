@@ -20,12 +20,13 @@ Public Class Win32
     Public Shared Function SetWindowPos(ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As UInt32) As Boolean
     End Function
 
-    Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
-
-    Public Shared ActiveWindows As New System.Collections.ObjectModel.Collection(Of IntPtr)
-
     <DllImport("user32.dll", CharSet:=CharSet.Auto)>
     Public Shared Function GetClassName(ByVal hWnd As System.IntPtr, ByVal lpClassName As System.Text.StringBuilder, ByVal nMaxCount As Integer) As Integer
+    End Function
+
+    <DllImport("user32.dll")>
+    Public Shared Function GetWindowPlacement(ByVal hWnd As IntPtr, ByRef lpwndpl As WINDOWPLACEMENT) As Boolean
+
     End Function
 
     <DllImport("User32.dll")>
@@ -36,10 +37,6 @@ Public Class Win32
 
     <DllImport("user32.dll")>
     Public Shared Function SetWindowCompositionAttribute(ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
-    End Function
-
-    <DllImport("user32.dll")>
-    Public Shared Function SetWindowCompositionTransition(ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
     End Function
 
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
@@ -95,8 +92,6 @@ Public Class Win32
     Public Shared Function SetProcessWorkingSetSize(ByVal hProcess As IntPtr, ByVal dwMinimumWorkingSetSize As Int32, ByVal dwMaximumWorkingSetSize As Int32) As Int32
     End Function
 
-    Public Declare Function EnumWindows Lib "user32" (ByVal Adress As CallBack, ByVal y As Integer) As Integer
-
     <System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint:="SetWindowLong")>
     Public Shared Function SetWindowLong(ByVal hWnd As IntPtr, <MarshalAs(UnmanagedType.I4)> nIndex As WindowStyles, ByVal dwNewLong As Integer) As Integer
     End Function
@@ -112,6 +107,25 @@ Public Class Win32
     <DllImport("user32.dll", SetLastError:=False)>
     Public Shared Function GetDesktopWindow() As IntPtr
     End Function
+
+    Public Structure POINTAPI
+        Public x As Integer
+        Public y As Integer
+    End Structure
+
+    Public Shared WS_BORDER As Integer = 8388608
+    Public Shared WS_DLGFRAME As Integer = 4194304
+    Public Shared WS_CAPTION As Integer = WS_BORDER Or WS_DLGFRAME
+    Public Shared WS_VISIBLE As Integer = 268435456
+
+    Public Structure WINDOWPLACEMENT
+        Public Length As Integer
+        Public flags As Integer
+        Public showCmd As Integer
+        Public ptMinPosition As POINTAPI
+        Public ptMaxPosition As POINTAPI
+        Public rcNormalPosition As RECT
+    End Structure
 
     Public Enum PROCESS_DPI_AWARENESS
         Process_DPI_Unaware = 0
@@ -236,8 +250,6 @@ Public Class Win32
         WS_TABSTOP = &H10000
         WS_VISIBLE = &H10000000
         WS_VSCROLL = &H200000
-
-        '  WS_POPUPWINDOW = WS_POPUP Or WS_BORDER Or WS_SYSMENU
     End Enum
 
     Enum ShowWindowCommands As Integer
@@ -263,10 +275,7 @@ Public Class Win32
     Public Shared SWP_NOACTIVATE As UInt32 = 16
     Public Shared SWP_NOSENDCHANGING As UInt32 = 1024
     Public Shared SWP_NOZORDER As UInt32 = 4
-
     Public Shared WM_COMMAND As Long = &H111
-    '  Public Shared WM_SETTINGCHANGE As Long = &H1A
-
     Public Shared HWND_BROADCAST As IntPtr = New IntPtr(65535)
     Public Shared WM_SETTINGCHANGE As UInteger = 26
     Public Shared SMTO_ABORTIFHUNG As Integer = 2
@@ -279,8 +288,6 @@ Public Class Win32
      ByVal lParam As String
      ) As Boolean
     End Function
-
-    ' Public Declare Function SendMessageTimeout Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As IntPtr, ByVal lParam As String, ByVal fuFlags As Integer, ByVal uTimeout As Integer, ByVal lpdwResult As IntPtr) As IntPtr
 
     <DllImport("shell32.dll")>
     Public Shared Sub SHChangeNotify(
@@ -323,83 +330,6 @@ Public Class Win32
         SHCNF_PRINTERW = &H6
         SHCNF_FLUSH = &H1000
         SHCNF_FLUSHNOWAIT = &H2000
-    End Enum
-
-
-    <DllImport("user32.dll", SetLastError:=True)>
-    Public Shared Function SendMessageTimeout(ByVal windowHandle As IntPtr, ByVal Msg As Integer, ByVal wParam As IntPtr, ByVal lParam As IntPtr, ByVal flags As SendMessageTimeoutFlags, ByVal timeout As Integer, ByRef result As IntPtr) As IntPtr
-    End Function
-
-    Public Enum SendMessageTimeoutFlags
-        SMTO_NORMAL = 0
-        SMTO_BLOCK = 1
-        SMTO_ABORTIFHUNG = 2
-        SMTO_NOTIMEOUTIFNOTHUNG = 8
-        SMTO_ERRORONEXIT = 32
-    End Enum
-
-
-    <DllImport("user32.dll")>
-    Public Shared Function BeginPaint(ByVal hwnd As IntPtr, <Out()> ByRef lpPaint As PAINTSTRUCT) As IntPtr
-    End Function
-
-    <DllImport("user32.dll")>
-    Public Shared Function EndPaint(ByVal hwnd As IntPtr, <[In]()> ByRef lpPaint As PAINTSTRUCT) As IntPtr
-    End Function
-
-    Public Structure PAINTSTRUCT
-        Public hdc As IntPtr
-        Public fErase As Integer
-        Public rcPaint As RECT
-        Public fRestore As Integer
-        Public fIncUpdate As Integer
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=32)>
-        Public rgbReserved As Byte()
-    End Structure
-
-    <DllImport("CoreDll.dll")>
-    Public Shared Function RegFlushKey(ByVal hKey As IntPtr) As UInt32
-    End Function
-
-
-
-
-    Public Const HKEY_CLASSES_ROOT As UInt32 = 2147483648
-    Public Const HKEY_CURRENT_USER As UInt32 = 2147483649
-    Public Const HKEY_LOCAL_MACHINE As UInt32 = 2147483650
-    Public Const HKEY_USERS As UInt32 = 2147483651
-
-    Public Declare Function PostMessageW Lib "user32.dll" Alias "PostMessageW" (ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As UInteger, ByVal lParam As Integer) As Boolean
-
-
-    <DllImport("dwmapi.dll")>
-    Public Shared Sub DwmEnableComposition(ByVal uCompositionAction As CompositionAction)
-    End Sub
-
-    Public Enum CompositionAction As UInteger
-        DWM_EC_DISABLECOMPOSITION = 0
-        DWM_EC_ENABLECOMPOSITION = 1
-    End Enum
-
-    <DllImport("user32.dll")>
-    Public Shared Function EnableWindow(ByVal hWnd As IntPtr, ByVal bEnable As Boolean) As Boolean
-    End Function
-
-    <DllImport("dwmapi.dll")>
-    Public Shared Sub DwmEnableBlurBehindWindow(ByVal hwnd As IntPtr, ByRef blurBehind As DWM_BLURBEHIND)
-    End Sub
-
-    Structure DWM_BLURBEHIND
-        Public dwFlags As DWM_BB
-        Public fEnable As Boolean
-        Public hRgnBlur As IntPtr
-        Public fTransitionOnMaximized As Boolean
-    End Structure
-
-    Enum DWM_BB
-        Enable = 1
-        BlurRegion = 2
-        TransitionMaximized = 4
     End Enum
 
 End Class

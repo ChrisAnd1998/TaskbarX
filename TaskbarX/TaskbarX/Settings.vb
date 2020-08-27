@@ -18,10 +18,15 @@
     Public Shared HidePrimaryStartButton As Integer
     Public Shared HideSecondaryStartButton As Integer
     Public Shared HidePrimaryNotifyWnd As Integer
+    Public Shared HideSecondaryNotifyWnd As Integer
     Public Shared ShowTrayIcon As Integer
+    Public Shared TaskbarStyleOnMax As Integer
+    Public Shared TaskbarStyleRed As Integer
+    Public Shared TaskbarStyleGreen As Integer
+    Public Shared TaskbarStyleBlue As Integer
+    Public Shared TaskbarStyleAlpha As Integer
 
-
-    'If on battery FalconX will override with these
+    'If on battery TaskbarX will override with these
     Public Shared OnBatteryAnimationStyle As String
 
     Public Shared OnBatteryLoopRefreshRate As Integer

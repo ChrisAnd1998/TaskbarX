@@ -1,9 +1,8 @@
 ﻿Option Strict On
 
-Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Text
-
+Imports System.Threading
 
 Public Class TaskbarStyle
 
@@ -18,21 +17,12 @@ Public Class TaskbarStyle
         Return ActiveWindows
     End Function
 
-    Public Shared Function Enumerator2(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
-        Try
-
-            Dim style As Integer = Win32.GetWindowLong(hwnd, Win32.GWL_STYLE)
-
-            If (style And Win32.WS_MAXIMIZE) = Win32.WS_MAXIMIZE Then
-                If Not (style And Win32.WS_POPUP) = Win32.WS_POPUP Then
-                    windowHandles2.Add(hwnd)
-                End If
-            End If
-        Catch ex As Exception
-
-        End Try
-        Return True
-    End Function
+    Public Shared windowHandles As ArrayList = New ArrayList()
+    Public Shared windowHandles2 As ArrayList = New ArrayList()
+    Public Shared trays As ArrayList = New ArrayList()
+    Public Shared traysbackup As ArrayList = New ArrayList()
+    Public Shared normalwindows As ArrayList = New ArrayList()
+    Public Shared resetted As ArrayList = New ArrayList()
 
     Public Shared Function Enumerator(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
         Dim sClassName As New StringBuilder("", 256)
@@ -43,65 +33,110 @@ Public Class TaskbarStyle
         Return True
     End Function
 
-    Public Shared Sub Ttt()
-        Do
-            windowHandles2.Clear()
+    Public Shared Function Enumerator2(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
+        Try
+            Dim style As Integer = Win32.GetWindowLong(hwnd, Win32.GWL_STYLE)
+            If (style And Win32.WS_VISIBLE) = Win32.WS_VISIBLE Then
+                If (style And Win32.WS_MAXIMIZE) = Win32.WS_MAXIMIZE Then
+                    If Not (style And Win32.WS_POPUP) = Win32.WS_POPUP Then
+                        windowHandles2.Remove(hwnd)
+                        windowHandles2.Add(hwnd)
+                    End If
+                Else
+                    If Not (style And Win32.WS_POPUP) = Win32.WS_POPUP Then
+                        normalwindows.Remove(hwnd)
+                        normalwindows.Add(hwnd)
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+        End Try
+        Return True
+    End Function
 
+    Public Shared Sub Tbsm()
+        Do
+
+            Dim windowsold As Integer
+            Dim windowsnew As Integer
+            windowsold = windowHandles2.Count
+
+            windowHandles2.Clear()
+            System.Threading.Thread.Sleep(250)
             EnumWindows(AddressOf Enumerator2, 0)
-            System.Threading.Thread.Sleep(100)
+
+            windowsnew = windowHandles2.Count
+
+            If Not windowsnew = windowsold Then
+                For Each tray As IntPtr In traysbackup
+                    For Each normalwindow As IntPtr In normalwindows
+                        Dim curmonx As Screen = Screen.FromHandle(normalwindow)
+                        Dim curmontbx As Screen = Screen.FromHandle(tray)
+                        If curmonx.DeviceName = curmontbx.DeviceName Then
+                            trays.Remove(tray)
+                            trays.Add(tray)
+                        End If
+                    Next
+                Next
+
+                For Each tray As IntPtr In traysbackup
+                    For Each maxedwindow As IntPtr In windowHandles2
+                        Dim curmonx As Screen = Screen.FromHandle(maxedwindow)
+                        Dim curmontbx As Screen = Screen.FromHandle(tray)
+                        If curmonx.DeviceName = curmontbx.DeviceName Then
+                            trays.Remove(tray)
+                            Win32.PostMessage(tray, &H31E, CType(&H1, IntPtr), CType(&H0, IntPtr))
+                        End If
+                    Next
+                Next
+            End If
+
         Loop
     End Sub
-
-    Public Shared windowHandles As ArrayList = New ArrayList()
-    Public Shared windowHandles2 As ArrayList = New ArrayList()
 
     Public Shared Sub TaskbarStyler()
         Try
 
             GetActiveWindows()
 
-            If Settings.DefaultTaskbarStyleOnWinMax = 1 Then
-                '  Dim t2 As Thread = New Thread(AddressOf Ttt)
-                '   t2.Start()
-            End If
-
             Dim accent = New Win32.AccentPolicy()
             Dim accentStructSize = Marshal.SizeOf(accent)
 
             'Select accent based on settings
             If Settings.TaskbarStyle = 1 Then
-                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_TRANSPARANT
-
+                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
             End If
 
             If Settings.TaskbarStyle = 2 Then
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_BLURBEHIND
-
             End If
 
             If Settings.TaskbarStyle = 3 Then
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
-                accent.GradientColor = 0
             End If
+
+            accent.AccentFlags = 1 'enable colorize
+            accent.GradientColor = BitConverter.ToInt32(New Byte() {CByte(Settings.TaskbarStyleRed), CByte(Settings.TaskbarStyleGreen), CByte(Settings.TaskbarStyleBlue), CByte(Settings.TaskbarStyleAlpha * 2.55)}, 0)
 
             'Save accent data
             Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
             Marshal.StructureToPtr(accent, accentPtr, False)
-
 
             Dim data = New Win32.WindowCompositionAttributeData
             data.Attribute = Win32.WindowCompositionAttribute.WCA_ACCENT_POLICY
             data.SizeOfData = accentStructSize
             data.Data = accentPtr
 
-
-            Dim trays As New ArrayList
-
             'Put all TrayWnds into an ArrayList
             For Each trayWnd As IntPtr In windowHandles
-                'Console.WriteLine(trayWnd)
                 trays.Add(trayWnd)
+                traysbackup.Add(trayWnd)
             Next
+
+            If Settings.DefaultTaskbarStyleOnWinMax = 1 Then
+                Dim t2 As Thread = New Thread(AddressOf Tbsm)
+                t2.Start()
+            End If
 
             'Set taskbar style for all TrayWnds each 14 millisecond
             For Each tray As IntPtr In trays
@@ -109,50 +144,13 @@ Public Class TaskbarStyle
                 Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
             Next
 
-
-
             Do
-
                 Try
 
                     For Each tray As IntPtr In trays
-                        Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
-                        Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
-
-                        'Win32.SetWindowCompositionTransition(CType(trayptr, IntPtr), data)
-
-
-                        ' If Settings.DefaultTaskbarStyleOnWinMax = 1 Then
-                        ' im cc As Integer = 0
-                        ' Dim oldcc As Integer
-                        ' cc = windowHandles2.Count
-                        ' If windowHandles2.Count = 0 Then
-                        ' Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
-                        ' Else
-                        ' For Each activewindow In windowHandles2
-                        ' Console.WriteLine(activewindow)
-                        ' Dim curmonx As Screen = Screen.FromHandle(activewindow)
-                        ' Dim curmontbx As Screen = Screen.FromHandle(tray)
-                        ' If cc <= oldcc Then
-                        ' If Not cc = oldcc Then
-                        ' If Not curmontbx.DeviceName = curmonx.DeviceName Then
-                        ' Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
-                        ' End If
-                        ' End If
-                        ' End If
-                        ' If curmontbx.DeviceName = curmonx.DeviceName Then
-                        ' Win32.SendMessage(trayptr, Win32.WM_DWMCOMPOSITIONCHANGED, True, 0)
-                        ' End If
-                        ' Next
-                        ' End If
-                        ' oldcc = cc
-                        ' Else
-                        ' Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
-                        ' End If
-
+                        Win32.SetWindowCompositionAttribute(tray, data)
                     Next
-
-                    System.Threading.Thread.Sleep(5)
+                    System.Threading.Thread.Sleep(10)
                 Catch
                 End Try
             Loop

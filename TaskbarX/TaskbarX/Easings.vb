@@ -4,7 +4,6 @@ Public Delegate Function EasingDelegate(ByVal currentTime As Double, ByVal minVa
 
 Public Class Easings
 
-    'All Animations are here some of them can be found here https://easings.net/en
     Public Shared Function Linear(currentTime As Double, minHeight As Double, maxHeight As Double, duration As Double) As Double
         Return maxHeight * currentTime / duration + minHeight
 
