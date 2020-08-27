@@ -60,7 +60,10 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 **-hps=1** will hide the start button on the primary monitor.  
 **-hss=1** will hide the start button on the secondary monitor.  
 **-hpt=1** will hide the tray area on the primary monitor.  
-**-sti=1** will show a tray icon to quickly restart and stop TaskbarX._
+**-hst=1** will hide the tray area on the secondary monitor. 0 is disabled and 1 is enabled.
+**-sti=1** will show a tray icon to quickly restart and stop TaskbarX.
+**-dtbsowm=1** will revert to the default taskbar on maximized window. 0 is disabled and 1 is enabled.
+**-color=0;0;0;1** will set the color of the taskbar when using taskbar styling. RGBA._
   
 > **Example:** _C:\Program Files (x86)\TaskbarX\TaskbarX.exe -tbs=1 -as=backeaseout_
   
