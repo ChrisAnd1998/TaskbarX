@@ -93,6 +93,36 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 &nbsp;
 
 
+
+## Frequently Asked Questions
+
+**What versions of Windows does TaskbarX support?** TaskbarX only supports Windows 10. Version 1709 and lower will have issues with the "taskbar styling" option but, the centering will work fine. Windows 7 does not work and is not supported. It could be working on Windows 8 but, is not officially tested and is also not supported.  
+
+
+
+**Whats the difference between the normal version and the store version?** The store version is exactly the same as the normal/free version. It's a donation sytem. The store version does give you the benefit of automatic updates and easy installing.  
+
+
+
+**Does TaskbarX change my settings or registry?** No, TaskbarX is completely portable doesn't change your settings or your registry. Closing TaskbarX will stop the centering.  
+
+
+
+**How to run TaskbarX on startup?** Once you click apply inside the Configurator a Taskschedule should be created with a delay of 3 seconds. If this doesn't work try increasing the delay to like 10 seconds or so inside the Configurator under the Taskschedule tab.  
+
+
+
+**How do i uninstall TaskbarX?** Open the "TaskbarX Configurator" and hit the "Stop TaskbarX" button. This will stop the TaskbarX process and put your icons back to the left. Then go to the "Taskschedule" tab and hit the "Remove" button. After that you can simply remove the files where you installed TaskbarX.  
+
+
+
+**Error Windows cannot find 'shell:AppsFolder\Chris... after uninstalling Store version?** At the moment the Store has no option to remove a taskschedule. So it has to be done manually until Microsoft provides a solution. Here's how to fix it. In your startmenu search for "Task Scheduler". On the left menu click on "Task Scheduler Library". In the middle a list will appear. Right click on the "TaskbarX" or "FalconX" entry and click "Delete".  
+
+
+&nbsp;
+
+
+
 ## Errors
 
 The Store version is not capable of uninstalling a taskschedule.   
