@@ -55,6 +55,9 @@
     <ApplicationIcon>StoreLogo2-71.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emoji.Wpf, Version=0.0.0.19, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emoji.Wpf.0.0.19-experimental\lib\net30\Emoji.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>False</Private>
     </Reference>
@@ -97,6 +100,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Typography.GlyphLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emoji.Wpf.0.0.19-experimental\lib\net30\Typography.GlyphLayout.dll</HintPath>
+    </Reference>
+    <Reference Include="Typography.OpenFont, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emoji.Wpf.0.0.19-experimental\lib\net30\Typography.OpenFont.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase">
       <Private>False</Private>
@@ -190,6 +199,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="StoreLogo2-71.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="grid.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="..\packages\System.Runtime.WindowsRuntime.4.7.0\build\net461\System.Runtime.WindowsRuntime.targets" Condition="Exists('..\packages\System.Runtime.WindowsRuntime.4.7.0\build\net461\System.Runtime.WindowsRuntime.targets')" />

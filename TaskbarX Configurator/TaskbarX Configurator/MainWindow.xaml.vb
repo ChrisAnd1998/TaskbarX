@@ -1,13 +1,12 @@
 ﻿Option Strict On
 
+Imports System.Drawing
 Imports System.IO
 Imports System.Net
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Text
 Imports System.Threading
-Imports System.Windows.Automation
-Imports System.Windows.Threading
 Imports Microsoft.Win32.TaskScheduler
 Imports ModernWpf.Controls
 
@@ -28,6 +27,15 @@ Class MainWindow
     <DllImport("user32.dll", EntryPoint:="FindWindow", SetLastError:=True, CharSet:=Runtime.InteropServices.CharSet.Auto)>
     Private Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
     End Function
+
+    Public Declare Function GetCursorPos Lib "user32" (ByRef lpPoint As PointAPI) As Boolean
+
+    Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
+
+    Structure PointAPI
+        Public x As Int32
+        Public y As Int32
+    End Structure
 
     Public Shared SWP_NOSIZE As UInt32 = 1
     Public Shared SWP_ASYNCWINDOWPOS As UInt32 = 16384
@@ -81,8 +89,22 @@ Class MainWindow
 
     End Sub
 
+    Private bmp As Bitmap = New Bitmap(1, 1)
+
+    Private Function GetColorAt(ByVal x As Integer, ByVal y As Integer) As Color
+        Dim bounds As Rectangle = New Rectangle(x, y, 1, 1)
+
+        Using g As Graphics = Graphics.FromImage(bmp)
+            g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size)
+        End Using
+
+        Return bmp.GetPixel(0, 0)
+    End Function
+
     Private Sub Window_Loaded(ByVal sender As Object, ByVal e As RoutedEventArgs)
+
         'Checkbox10.Visibility = Visibility.Hidden
+
         ListBox1.SelectedIndex = 0
 
         sAlpha.Value = 50
@@ -237,6 +259,12 @@ Class MainWindow
                         End If
                         If CInt(val(1)) = 3 Then
                             RadioButton4.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 4 Then
+                            RadioButtontc.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 5 Then
+                            RadioButtonoq.IsChecked = True
                         End If
 
                     End If
@@ -400,6 +428,12 @@ Class MainWindow
         End If
         If RadioButton4.IsChecked = True Then
             parameters = parameters & "-tbs=3 "
+        End If
+        If RadioButtontc.IsChecked = True Then
+            parameters = parameters & "-tbs=4 "
+        End If
+        If RadioButtonoq.IsChecked = True Then
+            parameters = parameters & "-tbs=5 "
         End If
 
         parameters = parameters & "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
@@ -608,6 +642,12 @@ Class MainWindow
         If RadioButton4.IsChecked = True Then
             parameters = parameters & "-tbs=3 "
         End If
+        If RadioButtontc.IsChecked = True Then
+            parameters = parameters & "-tbs=4 "
+        End If
+        If RadioButtonoq.IsChecked = True Then
+            parameters = parameters & "-tbs=5 "
+        End If
 
         parameters = parameters & "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
@@ -809,6 +849,13 @@ Class MainWindow
                             RadioButton4.IsChecked = True
                         End If
 
+                        If CInt(val(1)) = 4 Then
+                            RadioButtontc.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 5 Then
+                            RadioButtonoq.IsChecked = True
+                        End If
+
                     End If
 
                     If argument.Contains("-color") Then
@@ -930,7 +977,7 @@ Class MainWindow
         NumericUpDown1.Text = "0"
         NumericUpDown2.Text = "0"
         CheckBox1.IsChecked = False
-        NumericUpDown6.Text = "3"
+        NumericUpDown6.Text = "6"
         CheckBox2.IsChecked = False
         CheckBox3.IsChecked = False
         CheckBox4.IsChecked = True
@@ -986,6 +1033,12 @@ Class MainWindow
         End If
         If RadioButton4.IsChecked = True Then
             parameters = parameters & "-tbs=3 "
+        End If
+        If RadioButtontc.IsChecked = True Then
+            parameters = parameters & "-tbs=4 "
+        End If
+        If RadioButtonoq.IsChecked = True Then
+            parameters = parameters & "-tbs=5 "
         End If
 
         parameters = parameters & "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
@@ -1341,14 +1394,9 @@ Class MainWindow
         Dim val As Integer = CInt(sAlpha.Value)
         tAlpha.Text = CType(val, String) & "%"
 
-        colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
+        colorprev.Fill = New SolidColorBrush(System.Windows.Media.Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
 
-        If sAlpha.Value / 100 = 0 Then
-            colorprev.Opacity = 100
-            colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(255), CByte(255), CByte(255)))
-        Else
-            colorprev.Opacity = sAlpha.Value / 100
-        End If
+        colorprev.Opacity = sAlpha.Value / 100
 
     End Sub
 
@@ -1356,29 +1404,18 @@ Class MainWindow
         Dim val As Integer = CInt(sBlue.Value)
         tBlue.Text = CType(val, String)
 
-        colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
+        colorprev.Fill = New SolidColorBrush(System.Windows.Media.Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
 
-        If sAlpha.Value / 100 = 0 Then
-            colorprev.Opacity = 100
-            colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(255), CByte(255), CByte(255)))
-        Else
-            colorprev.Opacity = sAlpha.Value / 100
-        End If
-
+        colorprev.Opacity = sAlpha.Value / 100
     End Sub
 
     Private Sub Green_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double))
         Dim val As Integer = CInt(sGreen.Value)
         tGreen.Text = CType(val, String)
 
-        colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
+        colorprev.Fill = New SolidColorBrush(System.Windows.Media.Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
 
-        If sAlpha.Value / 100 = 0 Then
-            colorprev.Opacity = 100
-            colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(255), CByte(255), CByte(255)))
-        Else
-            colorprev.Opacity = sAlpha.Value / 100
-        End If
+        colorprev.Opacity = sAlpha.Value / 100
 
     End Sub
 
@@ -1386,14 +1423,38 @@ Class MainWindow
         Dim val As Integer = CInt(sRed.Value)
         tRed.Text = CType(val, String)
 
-        colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
+        colorprev.Fill = New SolidColorBrush(System.Windows.Media.Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
 
-        If sAlpha.Value / 100 = 0 Then
-            colorprev.Opacity = 100
-            colorprev.Fill = New SolidColorBrush(Color.FromRgb(CByte(255), CByte(255), CByte(255)))
-        Else
-            colorprev.Opacity = sAlpha.Value / 100
-        End If
+        colorprev.Opacity = sAlpha.Value / 100
+    End Sub
+
+    Private Sub Button_Click_12(sender As Object, e As RoutedEventArgs)
+
+        Dim t1 As Thread = New Thread(AddressOf colorthread)
+        t1.Start()
+
+    End Sub
+
+    Sub colorthread()
+        Dim lpPoint As PointAPI
+        Dim x = GetAsyncKeyState(1) = 0
+
+        Do
+            System.Threading.Thread.Sleep(1)
+            GetCursorPos(lpPoint)
+
+            Console.WriteLine(GetColorAt(lpPoint.x, lpPoint.y))
+
+            Dim colorp As Color = GetColorAt(lpPoint.x, lpPoint.y)
+
+            Me.Dispatcher.Invoke(Sub()
+                                     ' sAlpha.Value = colorp.A
+                                     sRed.Value = colorp.R
+                                     sGreen.Value = colorp.G
+                                     sBlue.Value = colorp.B
+                                 End Sub)
+
+        Loop Until Not GetAsyncKeyState(1) = 0
     End Sub
 
 End Class

@@ -9,42 +9,43 @@
         ResizeMode="NoResize"
         Loaded="Window_Loaded"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     ui:WindowHelper.UseModernWindowStyle="True" Icon="StoreLogo2-71.ico">
     <ui:SimpleStackPanel Margin="12,12,12,14" Spacing="24">
         <ListBox x:Name="ListBox1" HorizontalAlignment="Left" Height="615" VerticalAlignment="Top" Width="179" Margin="-12,-11,0,-572" SelectionChanged="ListBox_SelectionChanged">
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE790;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="🎨" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="Style"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEB51;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="❤️" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="Animation"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE81D;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="🕹️" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="Position"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE756;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="🚥" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="Taskschedule"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE712;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
-                <TextBlock Text="Extra"  Margin="24,0,0,0" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="⚙️" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <TextBlock Text="Extra"  Margin="24,0,0,0" VerticalAlignment="Center" Width="36" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE946;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="ℹ️" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="About"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
+                <emoji:TextBlock  Text="🗑️" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="Uninstall"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
         </ListBox>
@@ -52,28 +53,33 @@
             <TabItem>
                 <Grid Margin="0,0,0,-124">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="139*" />
-                        <ColumnDefinition Width="457*" />
+                        <ColumnDefinition Width="166*" />
+                        <ColumnDefinition Width="495*" />
                     </Grid.ColumnDefinitions>
+                    <Image HorizontalAlignment="Left" Height="152" Margin="10,399,0,0" VerticalAlignment="Top" Width="152" Source="grid.png" />
                     <TextBlock Text="Style" FontSize="20" Margin="10,50,0,618" VerticalAlignment="Center" Height="32" Grid.ColumnSpan="2" />
-                    <RadioButton  ToolTip="Keep the taskbar background as it has always been." x:Name="RadioButton1" Content="Default" HorizontalAlignment="Left" Margin="11,89,0,0" VerticalAlignment="Top" IsChecked="True" />
-                    <RadioButton  ToolTip="Make the taskbar background Transparent." x:Name="RadioButton2" Content="Transparent" HorizontalAlignment="Left" Margin="11,126,0,0" VerticalAlignment="Top" />
-                    <RadioButton ToolTip="Make the taskbar background Blurred." x:Name="RadioButton3" Content="Blur" HorizontalAlignment="Left" Margin="11,163,0,0" VerticalAlignment="Top" />
-                    <RadioButton ToolTip="Make the taskbar background Acrylic/Fluent." x:Name="RadioButton4" Content="Acrylic" HorizontalAlignment="Left" Margin="11,200,0,0" VerticalAlignment="Top" />
-                    <CheckBox ToolTip="Revert the taskbar to the default background when a window is maximized." x:Name="Checkbox10" Content="Switch back to Default on maximized window" HorizontalAlignment="Left" Margin="11,260,0,0" VerticalAlignment="Top" Width="364" Grid.ColumnSpan="2" />
-                    <Slider x:Name="sRed" HorizontalAlignment="Left" Margin="57,324,0,0" VerticalAlignment="Top" Width="255" Grid.Column="1" Maximum="255" ValueChanged="Red_ValueChanged" Foreground="#FFD70000" />
-                    <Rectangle x:Name="colorprev" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="144" Margin="10,323,0,0" Stroke="Black" VerticalAlignment="Top" Width="144" />
-                    <Slider x:Name="sGreen" HorizontalAlignment="Left" Margin="57,361,0,0" VerticalAlignment="Top" Width="255" Grid.Column="1" Maximum="255" ValueChanged="Green_ValueChanged" Foreground="#FF29B01C" />
-                    <Slider x:Name="sBlue" Margin="57,398,195,0" VerticalAlignment="Top" Grid.Column="1" Maximum="255" ValueChanged="Blue_ValueChanged" Foreground="#FF0023FF" />
-                    <Slider x:Name="sAlpha" Margin="57,435,195,0" VerticalAlignment="Top" Grid.Column="1" Maximum="100" ValueChanged="Alpha_ValueChanged" Foreground="#FF898989" />
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,331,0,0" TextWrapping="Wrap" Text="Red" VerticalAlignment="Top" />
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,368,0,0" TextWrapping="Wrap" Text="Green" VerticalAlignment="Top" />
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,405,0,0" TextWrapping="Wrap" Text="Blue" VerticalAlignment="Top" />
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,442,0,0" TextWrapping="Wrap" Text="Alpha" VerticalAlignment="Top" />
-                    <TextBlock x:Name="tRed" Grid.Column="1" HorizontalAlignment="Left" Margin="321,331,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" />
-                    <TextBlock x:Name="tGreen" Grid.Column="1" HorizontalAlignment="Left" Margin="321,368,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" />
-                    <TextBlock x:Name="tBlue" Grid.Column="1" HorizontalAlignment="Left" Margin="321,405,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" />
-                    <TextBlock x:Name="tAlpha" Grid.Column="1" HorizontalAlignment="Left" Margin="321,441,0,0" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" />
+                    <RadioButton  ToolTip="Keep the taskbar background as it has always been." x:Name="RadioButton1" Content="Default " HorizontalAlignment="Left" Margin="11,89,0,0" VerticalAlignment="Top" IsChecked="True" Height="32" Width="120" />
+                    <RadioButton  ToolTip="Make the taskbar background fully Transparent." x:Name="RadioButton2" Content="Transparent" HorizontalAlignment="Left" Margin="11,126,0,0" VerticalAlignment="Top" Height="32" Width="120" />
+                    <RadioButton ToolTip="Make the taskbar background Blurred with a gradient color." x:Name="RadioButton3" Content="Blur" HorizontalAlignment="Left" Margin="11,237,0,0" VerticalAlignment="Top" Height="32" Width="120" />
+                    <RadioButton ToolTip="Make the taskbar background Acrylic/Fluent with a gradient color." x:Name="RadioButton4" Content="Acrylic" HorizontalAlignment="Left" Margin="11,274,0,0" VerticalAlignment="Top" Height="32" Width="120" />
+                    <CheckBox ToolTip="Revert the taskbar to the default background when a window is maximized." x:Name="Checkbox10" Content="Switch back to Default on maximized window" HorizontalAlignment="Left" Margin="11,334,0,0" VerticalAlignment="Top" Width="364" Grid.ColumnSpan="2" Height="32" />
+                    <Slider x:Name="sRed" HorizontalAlignment="Left" VerticalAlignment="Top" Width="255" Maximum="255" ValueChanged="Red_ValueChanged" Foreground="#FFD70000" Height="32" Margin="56,403,0,0" Grid.Column="1" />
+                    <Rectangle x:Name="colorprev" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="150"  VerticalAlignment="Top" Width="150" Margin="11,400,0,0" />
+                    <Slider x:Name="sGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="255" Maximum="255" ValueChanged="Green_ValueChanged" Foreground="#FF29B01C" Height="32" Margin="56,440,0,0" Grid.Column="1" />
+                    <Slider x:Name="sBlue" VerticalAlignment="Top" Maximum="255" ValueChanged="Blue_ValueChanged" Foreground="#FF0023FF" Height="32" Margin="56,477,184,0" Grid.Column="1" />
+                    <Slider x:Name="sAlpha" VerticalAlignment="Top" Maximum="100" ValueChanged="Alpha_ValueChanged" Foreground="#FF898989" Height="32" Margin="56,514,184,0" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Red" VerticalAlignment="Top" Height="19" Width="24" Margin="9,410,0,0" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Green" VerticalAlignment="Top" Height="19" Width="42" Margin="9,447,0,0" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Blue" VerticalAlignment="Top" Height="19" Width="27" Margin="9,484,0,0" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Alpha" VerticalAlignment="Top" Height="19" Width="36" Margin="9,521,0,0" Grid.Column="1" />
+                    <TextBlock x:Name="tRed" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Height="19" Width="51" Margin="320,410,0,0" Grid.Column="1" />
+                    <TextBlock x:Name="tGreen" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Height="19" Width="66" Margin="320,447,0,0" Grid.Column="1" />
+                    <TextBlock x:Name="tBlue" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Height="19" Width="87" Margin="320,484,0,0" Grid.Column="1" />
+                    <TextBlock x:Name="tAlpha" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="66" Margin="320,520,0,0" Grid.Column="1" />
+                    <Button ToolTip="Pick a color from the screen. (Left click to pick a color on the screen from your mouse cursor.)" FontFamily="Segoe MDL2 Assets" Content="&#xEF3C;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Click="Button_Click_12" Margin="405,400,0,0" Grid.Column="1" />
+                    <RadioButton  ToolTip="Make the taskbar background Transparent with a gradient color." x:Name="RadioButtontc" Content="Transparent Gradient" HorizontalAlignment="Left" Margin="11,163,0,0" VerticalAlignment="Top" Height="32" Width="193" Grid.ColumnSpan="2" />
+                    <RadioButton  ToolTip="Make the taskbar background Opaque with a gradient color." x:Name="RadioButtonoq" Content="Opaque" HorizontalAlignment="Left" Margin="11,200,0,0" VerticalAlignment="Top" Height="32" Width="193" Grid.ColumnSpan="2" />
+                    <emoji:TextBlock  Text="🎨" Margin="430,58,10,585" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -95,6 +101,7 @@
                     <Rectangle Grid.Column="1" Fill="#999" HorizontalAlignment="Left" Height="14" Margin="223,343,0,0" Stroke="Gray" VerticalAlignment="Top" Width="1" />
                     <Button Content="&gt;" Grid.Column="1" HorizontalAlignment="Left" Margin="105,117,0,0" VerticalAlignment="Top" Width="30" Click="Button_Click_10" />
                     <Button Content="&lt;" Grid.Column="1" HorizontalAlignment="Left" Margin="70,117,0,0" VerticalAlignment="Top" Width="30" Click="Button_Click_11" />
+                    <emoji:TextBlock  Text="❤️" Margin="442,58,10,445" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -115,6 +122,7 @@
                     <TextBlock HorizontalAlignment="Left" Margin="10,244,0,0" TextWrapping="Wrap" Text="Skip Resolution" VerticalAlignment="Top" Width="201" Grid.ColumnSpan="2" />
                     <ui:NumberBox ToolTip="If your resolutions width becomes this value in pixels then TaskbarX will pause and put the icons back to the left. If it changes then it will start centering the icons again." x:Name="NumericUpDown7" Text="0" HorizontalAlignment="Left" Margin="10,265,0,0" VerticalAlignment="Top" Width="83" PreviewTextInput="NumberValidationTextBox" />
                     <TextBlock HorizontalAlignment="Left" Margin="98,273,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Top" Width="201" Grid.ColumnSpan="2" />
+                    <emoji:TextBlock  Text="🕹️" Margin="442,58,10,441" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -125,10 +133,12 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Taskschedule" FontSize="20" Margin="10,50,0,478" VerticalAlignment="Center" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" Margin="10,96,0,0" TextWrapping="Wrap" Text="Delay" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="201" />
-                    <ui:NumberBox ToolTip="Does TaskbarX not run on start-up? Well 3 seconds could be to early for TaskbarX to start. Try increasing this value in seconds." x:Name="NumericUpDown6" HorizontalAlignment="Left" Text="3" Margin="10,117,0,0" VerticalAlignment="Top" Width="83" PreviewTextInput="NumberValidationTextBox" />
+                    <ui:NumberBox ToolTip="Does TaskbarX not run on start-up? Well 6 seconds could be to early for TaskbarX to start. Try increasing this value in seconds." x:Name="NumericUpDown6" HorizontalAlignment="Left" Text="6" Margin="10,117,0,0" VerticalAlignment="Top" Width="83" PreviewTextInput="NumberValidationTextBox" />
                     <TextBlock HorizontalAlignment="Left" Margin="98,125,0,0" TextWrapping="Wrap" Text="sec" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="201" />
                     <Button ToolTip="Remove the TaskbarX start-up taskschedule." Content="Remove" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" Width="83" Click="Button_Click_3" />
                     <Button ToolTip="Create the TaskbarX start-up taskschedule." Content="Create" HorizontalAlignment="Left" Margin="98,177,0,0" VerticalAlignment="Top" Width="83" Click="Button_Click_33" Grid.ColumnSpan="2" />
+                    <emoji:TextBlock HorizontalAlignment="Left" Margin="10,235,0,0" TextWrapping="Wrap" Text="📌 The taskschedule is responsible for making TaskbarX run at startup. And also stores your settings." VerticalAlignment="Top" Width="641" Grid.ColumnSpan="2" />
+                    <emoji:TextBlock  Text="🚥" Margin="442,58,10,445" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -153,6 +163,7 @@
                     <CheckBox ToolTip="Hide the Primary Tray area with the clock." Content="Hide Primary Tray area" HorizontalAlignment="Left" Margin="10,314,0,0" x:Name="Checkbox14" VerticalAlignment="Top" Grid.ColumnSpan="2" />
                     <CheckBox ToolTip="Show a trayicon to quickly restart and stop TaskbarX." Content="Show Tray icon" HorizontalAlignment="Left" Margin="10,388,0,0" VerticalAlignment="Top" x:Name="Checkbox16" />
                     <CheckBox ToolTip="Hide the Secondary Tray area with the clock." x:Name="Checkbox15" Content="Hide Secondary Tray area" HorizontalAlignment="Left" Margin="10,351,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="289" />
+                    <emoji:TextBlock  Text="⚙️" Margin="442,58,10,479" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -170,7 +181,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
                     <Image Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="476,128,0,0" VerticalAlignment="Top" Width="32" Source="Resources/logo2020-64.png" RenderTransformOrigin="1.037,1.32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.5.9.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.6.0.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />
@@ -190,6 +201,7 @@
                     <TextBlock Text="Uninstall" FontSize="20" Margin="10,50,0,478" VerticalAlignment="Center" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" Margin="10,96,0,0" TextWrapping="Wrap" Text="The only way to properly uninstall TaskbarX..." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="407" />
                     <Button ToolTip="Uninstall TaskbarX :(" Content="Uninstall" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_8" />
+                    <emoji:TextBlock  Text="🗑️" Margin="442,58,10,445" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
             </TabItem>
         </TabControl>
