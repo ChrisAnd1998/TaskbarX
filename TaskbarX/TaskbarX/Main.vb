@@ -172,7 +172,7 @@ Public Class Main
             End If
 
             'Start the TaskbarStyler if enabled
-            If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Then
+            If Settings.TaskbarStyle = 1 Or Settings.TaskbarStyle = 2 Or Settings.TaskbarStyle = 3 Or Settings.TaskbarStyle = 4 Or Settings.TaskbarStyle = 5 Then
                 Dim t2 As Thread = New Thread(AddressOf TaskbarStyle.TaskbarStyler)
                 t2.Start()
             End If

@@ -35,18 +35,24 @@ Public Class TaskbarStyle
 
     Public Shared Function Enumerator2(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
         Try
+
+            Dim intRet As Integer
+            Dim wpTemp As Win32.WINDOWPLACEMENT
+
+            wpTemp.Length = System.Runtime.InteropServices.Marshal.SizeOf(wpTemp)
+            intRet = CInt(Win32.GetWindowPlacement(hwnd, wpTemp))
             Dim style As Integer = Win32.GetWindowLong(hwnd, Win32.GWL_STYLE)
+
             If (style And Win32.WS_VISIBLE) = Win32.WS_VISIBLE Then
-                If (style And Win32.WS_MAXIMIZE) = Win32.WS_MAXIMIZE Then
-                    If Not (style And Win32.WS_POPUP) = Win32.WS_POPUP Then
-                        windowHandles2.Remove(hwnd)
-                        windowHandles2.Add(hwnd)
-                    End If
-                Else
-                    If Not (style And Win32.WS_POPUP) = Win32.WS_POPUP Then
-                        normalwindows.Remove(hwnd)
-                        normalwindows.Add(hwnd)
-                    End If
+                If wpTemp.showCmd = 1 Then
+                    normalwindows.Remove(hwnd)
+                    normalwindows.Add(hwnd)
+                ElseIf wpTemp.showCmd = 2 Then
+                    normalwindows.Remove(hwnd)
+                    normalwindows.Add(hwnd)
+                ElseIf wpTemp.showCmd = 3 Then
+                    windowHandles2.Remove(hwnd)
+                    windowHandles2.Add(hwnd)
                 End If
             End If
         Catch ex As Exception
@@ -104,7 +110,7 @@ Public Class TaskbarStyle
 
             'Select accent based on settings
             If Settings.TaskbarStyle = 1 Then
-                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
+                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_TRANSPARANT
             End If
 
             If Settings.TaskbarStyle = 2 Then
@@ -115,7 +121,15 @@ Public Class TaskbarStyle
                 accent.AccentState = Win32.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
             End If
 
-            accent.AccentFlags = 1 'enable colorize
+            If Settings.TaskbarStyle = 4 Then
+                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT
+            End If
+
+            If Settings.TaskbarStyle = 5 Then
+                accent.AccentState = Win32.AccentState.ACCENT_ENABLE_GRADIENT
+            End If
+
+            accent.AccentFlags = 2 'enable colorize
             accent.GradientColor = BitConverter.ToInt32(New Byte() {CByte(Settings.TaskbarStyleRed), CByte(Settings.TaskbarStyleGreen), CByte(Settings.TaskbarStyleBlue), CByte(Settings.TaskbarStyleAlpha * 2.55)}, 0)
 
             'Save accent data
@@ -149,6 +163,7 @@ Public Class TaskbarStyle
 
                     For Each tray As IntPtr In trays
                         Win32.SetWindowCompositionAttribute(tray, data)
+
                     Next
                     System.Threading.Thread.Sleep(10)
                 Catch
