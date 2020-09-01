@@ -18,7 +18,7 @@ Public Class TaskbarStyle
     End Function
 
     Public Shared windowHandles As ArrayList = New ArrayList()
-    Public Shared windowHandles2 As ArrayList = New ArrayList()
+    Public Shared maximizedwindows As ArrayList = New ArrayList()
     Public Shared trays As ArrayList = New ArrayList()
     Public Shared traysbackup As ArrayList = New ArrayList()
     Public Shared normalwindows As ArrayList = New ArrayList()
@@ -33,26 +33,32 @@ Public Class TaskbarStyle
         Return True
     End Function
 
+    Shared Function IsPhanthom(ByVal hWnd As IntPtr) As Boolean
+        Dim CloakedVal As Integer
+        Dim hRes As Integer = Win32.DwmGetWindowAttribute(hWnd, Win32.DWMWINDOWATTRIBUTE.Cloaked, CloakedVal, Len(CloakedVal))
+        If hRes = Not 0 Then
+            CloakedVal = 0
+        End If
+        Return If(CBool(CloakedVal), True, False)
+    End Function
+
     Public Shared Function Enumerator2(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
         Try
-
             Dim intRet As Integer
-            Dim wpTemp As Win32.WINDOWPLACEMENT
-
+            Dim wpTemp As New Win32.WINDOWPLACEMENT
             wpTemp.Length = System.Runtime.InteropServices.Marshal.SizeOf(wpTemp)
             intRet = CInt(Win32.GetWindowPlacement(hwnd, wpTemp))
             Dim style As Integer = Win32.GetWindowLong(hwnd, Win32.GWL_STYLE)
 
-            If (style And Win32.WS_VISIBLE) = Win32.WS_VISIBLE Then
-                If wpTemp.showCmd = 1 Then
-                    normalwindows.Remove(hwnd)
-                    normalwindows.Add(hwnd)
-                ElseIf wpTemp.showCmd = 2 Then
-                    normalwindows.Remove(hwnd)
-                    normalwindows.Add(hwnd)
-                ElseIf wpTemp.showCmd = 3 Then
-                    windowHandles2.Remove(hwnd)
-                    windowHandles2.Add(hwnd)
+            If IsPhanthom(hwnd) = False Then 'Fix phanthom windows
+                If (style And Win32.WS_VISIBLE) = Win32.WS_VISIBLE Then
+                    If wpTemp.showCmd = 3 Then
+                        maximizedwindows.Remove(hwnd)
+                        maximizedwindows.Add(hwnd)
+                    Else
+                        normalwindows.Remove(hwnd)
+                        normalwindows.Add(hwnd)
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -65,13 +71,13 @@ Public Class TaskbarStyle
 
             Dim windowsold As Integer
             Dim windowsnew As Integer
-            windowsold = windowHandles2.Count
+            windowsold = maximizedwindows.Count
 
-            windowHandles2.Clear()
+            maximizedwindows.Clear()
             System.Threading.Thread.Sleep(250)
             EnumWindows(AddressOf Enumerator2, 0)
 
-            windowsnew = windowHandles2.Count
+            windowsnew = maximizedwindows.Count
 
             If Not windowsnew = windowsold Then
                 For Each tray As IntPtr In traysbackup
@@ -86,7 +92,7 @@ Public Class TaskbarStyle
                 Next
 
                 For Each tray As IntPtr In traysbackup
-                    For Each maxedwindow As IntPtr In windowHandles2
+                    For Each maxedwindow As IntPtr In maximizedwindows
                         Dim curmonx As Screen = Screen.FromHandle(maxedwindow)
                         Dim curmontbx As Screen = Screen.FromHandle(tray)
                         If curmonx.DeviceName = curmontbx.DeviceName Then
@@ -163,7 +169,6 @@ Public Class TaskbarStyle
 
                     For Each tray As IntPtr In trays
                         Win32.SetWindowCompositionAttribute(tray, data)
-
                     Next
                     System.Threading.Thread.Sleep(10)
                 Catch

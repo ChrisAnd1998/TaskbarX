@@ -44,6 +44,10 @@ Public Class Main
                     ResetTaskbarStyle()
                     End
                 End If
+                If argument.Contains("-console") Then
+                    Win32.AllocConsole()
+                    Settings.ConsoleEnabled = 1
+                End If
                 If argument.Contains("-tbs=") Then
                     Settings.TaskbarStyle = CInt(val(1))
                 End If
@@ -148,7 +152,7 @@ Public Class Main
                 Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
                 Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 Handle = MSTaskListWClass
-                Console.WriteLine("Current Handle = " & Handle.ToString)
+                '  Console.WriteLine("Current Handle = " & Handle.ToString)
             Loop Until Not Handle = Nothing
 
             'Just empty startup memory before starting

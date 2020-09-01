@@ -104,9 +104,71 @@ Public Class Win32
     Public Shared Function PostMessage(ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As IntPtr) As Boolean
     End Function
 
+    <DllImport("kernel32.dll", SetLastError:=True)>
+    Public Shared Function AllocConsole() As Boolean
+
+    End Function
+
+    <DllImport("kernel32.dll")>
+    Public Shared Function AttachConsole(ByVal dwProcessId As Integer) As Boolean
+
+    End Function
+
+    Public Const ATTACH_PARENT_PROCESS As Integer = -1
+
     <DllImport("user32.dll", SetLastError:=False)>
     Public Shared Function GetDesktopWindow() As IntPtr
     End Function
+
+    <DllImport("dwmapi.dll")>
+    Public Shared Function DwmGetWindowAttribute(ByVal hwnd As IntPtr, ByVal dwAttribute As DWMWINDOWATTRIBUTE, ByRef pvAttribute As Integer, ByVal cbAttribute As Integer) As Integer
+    End Function
+
+    <DllImport("dwmapi.dll")>
+    Public Shared Function DwmSetWindowAttribute(ByVal hwnd As IntPtr, ByVal dwAttribute As DWMWINDOWATTRIBUTE, ByRef pvAttribute As RECT, ByVal cbAttribute As Integer) As Integer
+    End Function
+
+    <DllImport("user32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
+    Public Shared Function GetWindowText(ByVal hWnd As IntPtr, ByVal lpString As Text.StringBuilder, ByVal nMaxCount As Integer) As Integer
+
+    End Function
+
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function GetLayeredWindowAttributes(hwnd As IntPtr, crKey As Integer, bAlpha As Byte, dwFlags As Integer) As Boolean
+    End Function
+
+    Enum DWMWINDOWATTRIBUTE As UInteger
+
+        NCRenderingEnabled = 1
+
+        NCRenderingPolicy
+
+        TransitionsForceDisabled
+
+        AllowNCPaint
+
+        CaptionButtonBounds
+
+        NonClientRtlLayout
+
+        ForceIconicRepresentation
+
+        Flip3DPolicy
+
+        ExtendedFrameBounds
+
+        HasIconicBitmap
+
+        DisallowPeek
+
+        ExcludedFromPeek
+
+        Cloak
+
+        Cloaked
+
+        FreezeRepresentation
+    End Enum
 
     Public Structure POINTAPI
         Public x As Integer
