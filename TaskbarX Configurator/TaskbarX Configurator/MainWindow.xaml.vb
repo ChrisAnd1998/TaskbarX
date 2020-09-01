@@ -364,6 +364,9 @@ Class MainWindow
                             Checkbox16.IsChecked = True
                         End If
                     End If
+                    If argument.Contains("-console") Then
+                        checkboxconsole.IsChecked = True
+                    End If
 
                 Next
 
@@ -508,6 +511,9 @@ Class MainWindow
         End If
         If Checkbox16.IsChecked = True Then
             parameters = parameters & "-sti=1 "
+        End If
+        If checkboxconsole.IsChecked = True Then
+            parameters = parameters & "-console "
         End If
 
         Try
@@ -721,6 +727,9 @@ Class MainWindow
         End If
         If Checkbox16.IsChecked = True Then
             parameters = parameters & "-sti=1 "
+        End If
+        If checkboxconsole.IsChecked = True Then
+            parameters = parameters & "-console "
         End If
 
         Try
@@ -953,6 +962,9 @@ Class MainWindow
                             Checkbox16.IsChecked = True
                         End If
                     End If
+                    If argument.Contains("-console") Then
+                        checkboxconsole.IsChecked = True
+                    End If
 
                 Next
 
@@ -988,6 +1000,7 @@ Class MainWindow
         Checkbox14.IsChecked = False
         Checkbox15.IsChecked = False
         Checkbox16.IsChecked = False
+        checkboxconsole.IsChecked = False
         NumericUpDown3.Text = "400"
         NumericUpDown5.Text = "400"
         NumericUpDown7.Text = "0"
@@ -1113,6 +1126,9 @@ Class MainWindow
         End If
         If Checkbox16.IsChecked = True Then
             parameters = parameters & "-sti=1 "
+        End If
+        If Checkbox16.IsChecked = True Then
+            parameters = parameters & "-console "
         End If
 
         If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
