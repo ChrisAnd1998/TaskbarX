@@ -6,7 +6,6 @@ Public Class Easings
 
     Public Shared Function Linear(currentTime As Double, minHeight As Double, maxHeight As Double, duration As Double) As Double
         Return maxHeight * currentTime / duration + minHeight
-
     End Function
 
     Public Shared Function ExpoEaseOut(currentTime As Double, minHeight As Double, maxHeight As Double, duration As Double) As Double
@@ -348,6 +347,7 @@ Public Class Easings
         Dim num As Double = currentTime / duration
         currentTime = num
         Return maxHeight * num * currentTime * (2.70158 * currentTime - 1.70158) + minHeight
+
     End Function
 
     Public Shared Function BackEaseInOut(currentTime As Double, minHeight As Double, maxHeight As Double, duration As Double) As Double

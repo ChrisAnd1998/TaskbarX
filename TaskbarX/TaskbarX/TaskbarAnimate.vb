@@ -1,9 +1,16 @@
-﻿Public Class TaskbarAnimate
+﻿Option Strict On
+
+Public Class TaskbarAnimate
 
     Public Shared current As New ArrayList
 
     Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
         Try
+
+            If CInt((valueToReach - oldpos).ToString.Replace("-", "")) = 0 Then
+                'The difference is 0 so there is no need to trigger the animator.
+                Exit Sub
+            End If
 
             If valueToReach = oldpos Or CInt((valueToReach - oldpos).ToString.Replace("-", "")) <= 10 Then
                 'Prevent Wiggling (if the new position has a difference of 10 or lower then there is no reason to move)
@@ -17,13 +24,22 @@
                 End If
             Next
 
+            ' Console.WriteLine(CInt((valueToReach - oldpos).ToString.Replace("-", "")))
+
             current.Add(hwnd)
 
             Dim sw As New Stopwatch
             Dim originalValue As Integer = oldpos
             Dim elapsed As New Integer
-            Dim minValue As Integer = Math.Min(originalValue, valueToReach)
-            Dim maxValue As Integer = Math.Abs(valueToReach - originalValue)
+            Dim minValue As Integer
+
+            If originalValue <= valueToReach Then
+                minValue = originalValue
+            Else
+                minValue = valueToReach
+            End If
+
+            Dim maxValue As Integer = CInt((valueToReach - originalValue).ToString.Replace("-", ""))
             Dim increasing As Boolean = originalValue < valueToReach
 
             elapsed = 0
@@ -32,7 +48,7 @@
             While Not elapsed >= duration
                 elapsed = CInt(sw.ElapsedMilliseconds)
 
-                Dim newValue As Integer = CInt(Math.Truncate(easing(elapsed, minValue, maxValue, duration)))
+                Dim newValue As Integer = CInt((easing(elapsed, minValue, maxValue, duration)))
 
                 If Not increasing Then
                     newValue = (originalValue + valueToReach) - newValue

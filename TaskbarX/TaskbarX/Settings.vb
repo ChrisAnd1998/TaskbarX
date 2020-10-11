@@ -1,7 +1,10 @@
-﻿Public Class Settings
+﻿Option Strict On
+
+Public Class Settings
     Public Shared Pause As Boolean
 
     Public Shared TaskbarStyle As Integer
+    Public Shared SecondaryTaskbarStyle As Integer
     Public Shared PrimaryTaskbarOffset As Integer
     Public Shared SecondaryTaskbarOffset As Integer
     Public Shared CenterPrimaryOnly As Integer

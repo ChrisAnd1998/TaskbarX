@@ -8,14 +8,6 @@ Public Class Win32
     Public Shared Function ShowWindow(hWnd As IntPtr, <MarshalAs(UnmanagedType.I4)> nCmdShow As ShowWindowCommands) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
 
-    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
-    Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
-    End Function
-
-    Public Shared Function MakeLParam(ByVal LoWord As Integer, ByVal HiWord As Integer) As IntPtr
-        Return New IntPtr((HiWord << 16) Or (LoWord And &HFFFF))
-    End Function
-
     <DllImport("user32.dll", SetLastError:=True)>
     Public Shared Function SetWindowPos(ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As UInt32) As Boolean
     End Function
@@ -26,13 +18,10 @@ Public Class Win32
 
     <DllImport("user32.dll")>
     Public Shared Function GetWindowPlacement(ByVal hWnd As IntPtr, ByRef lpwndpl As WINDOWPLACEMENT) As Boolean
-
     End Function
 
     <DllImport("User32.dll")>
-    Public Shared Function EnumChildWindows _
-     (ByVal WindowHandle As IntPtr, ByVal Callback As EnumWindowProcess,
-     ByVal lParam As IntPtr) As Boolean
+    Public Shared Function EnumChildWindows(ByVal WindowHandle As IntPtr, ByVal Callback As EnumWindowProcess, ByVal lParam As IntPtr) As Boolean
     End Function
 
     <DllImport("user32.dll")>
@@ -65,15 +54,6 @@ Public Class Win32
 
     <DllImport("user32.dll", SetLastError:=True)>
     Public Shared Function GetWindowLong(ByVal hWnd As IntPtr, ByVal nIndex As Integer) As Integer
-
-    End Function
-
-    <DllImport("user32.dll")>
-    Public Shared Function UpdateWindow(ByVal hWnd As IntPtr) As Boolean
-    End Function
-
-    <DllImport("user32.dll")>
-    Public Shared Function RedrawWindow(hWnd As IntPtr, lprcUpdate As IntPtr, hrgnUpdate As IntPtr, flags As RedrawWindowFlags) As Boolean
     End Function
 
     <DllImport("SHCore.dll", SetLastError:=True)>
@@ -96,25 +76,13 @@ Public Class Win32
     Public Shared Function SetWindowLong(ByVal hWnd As IntPtr, <MarshalAs(UnmanagedType.I4)> nIndex As WindowStyles, ByVal dwNewLong As Integer) As Integer
     End Function
 
-    <DllImport("user32.dll")>
-    Public Shared Function SetLayeredWindowAttributes(ByVal hwnd As IntPtr, ByVal crKey As UInteger, ByVal bAlpha As Byte, ByVal dwFlags As UInteger) As Boolean
-    End Function
-
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Public Shared Function PostMessage(ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As IntPtr) As Boolean
     End Function
 
     <DllImport("kernel32.dll", SetLastError:=True)>
     Public Shared Function AllocConsole() As Boolean
-
     End Function
-
-    <DllImport("kernel32.dll")>
-    Public Shared Function AttachConsole(ByVal dwProcessId As Integer) As Boolean
-
-    End Function
-
-    Public Const ATTACH_PARENT_PROCESS As Integer = -1
 
     <DllImport("user32.dll", SetLastError:=False)>
     Public Shared Function GetDesktopWindow() As IntPtr
@@ -128,45 +96,21 @@ Public Class Win32
     Public Shared Function DwmSetWindowAttribute(ByVal hwnd As IntPtr, ByVal dwAttribute As DWMWINDOWATTRIBUTE, ByRef pvAttribute As RECT, ByVal cbAttribute As Integer) As Integer
     End Function
 
-    <DllImport("user32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
-    Public Shared Function GetWindowText(ByVal hWnd As IntPtr, ByVal lpString As Text.StringBuilder, ByVal nMaxCount As Integer) As Integer
-
-    End Function
-
-    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
-    Public Shared Function GetLayeredWindowAttributes(hwnd As IntPtr, crKey As Integer, bAlpha As Byte, dwFlags As Integer) As Boolean
-    End Function
-
     Enum DWMWINDOWATTRIBUTE As UInteger
-
         NCRenderingEnabled = 1
-
         NCRenderingPolicy
-
         TransitionsForceDisabled
-
         AllowNCPaint
-
         CaptionButtonBounds
-
         NonClientRtlLayout
-
         ForceIconicRepresentation
-
         Flip3DPolicy
-
         ExtendedFrameBounds
-
         HasIconicBitmap
-
         DisallowPeek
-
         ExcludedFromPeek
-
         Cloak
-
         Cloaked
-
         FreezeRepresentation
     End Enum
 
@@ -200,44 +144,6 @@ Public Class Win32
     Public Shared WM_THEMECHANGED As Integer = &H31A
 
     Public Const WM_SETREDRAW As Integer = 11
-
-    <Flags()>
-    Public Enum RedrawWindowFlags As UInteger
-        Invalidate = &H1
-        InternalPaint = &H2
-        [Erase] = &H4
-        Validate = &H8
-        NoInternalPaint = &H10
-        NoErase = &H20
-        NoChildren = &H40
-        AllChildren = &H80
-        UpdateNow = &H100
-        EraseNow = &H200
-        Frame = &H400
-        NoFrame = &H800
-    End Enum
-
-    <System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint:="SetWinEventHook")>
-    Private Shared Function SetWinEventHook(
-        ByVal eventMin As UInteger,
-        ByVal eventMax As UInteger,
-        ByVal hmodWinEventProc As IntPtr,
-        ByVal lpfnWinEventProc As WinEventDelegate,
-        ByVal idProcess As UInteger,
-        ByVal idThread As UInteger,
-        ByVal dwFlags As UInteger
-    ) As IntPtr
-    End Function
-
-    Delegate Sub WinEventDelegate(
-        ByVal hWinEventHook As IntPtr,
-        ByVal eventType As UInteger,
-        ByVal hwnd As IntPtr,
-        ByVal idObject As Integer,
-        ByVal idChild As Integer,
-        ByVal dwEventThread As UInteger,
-        ByVal dwmsEventTime As UInteger
-    )
 
     Public Structure WindowCompositionAttributeData
         Public Attribute As WindowCompositionAttribute
@@ -286,10 +192,6 @@ Public Class Win32
     Public Const WS_MAXIMIZE = 16777216
     Public Const WS_POPUP = 2147483648
     Public Const WS_EX_LAYERED As Integer = 524288
-
-    Public Const LWA_ALPHA As Integer = 2
-
-    Public Const LWA_COLORKEY As Integer = 1
 
     Public Enum WindowStyles
         WS_BORDER = &H800000
@@ -341,57 +243,5 @@ Public Class Win32
     Public Shared HWND_BROADCAST As IntPtr = New IntPtr(65535)
     Public Shared WM_SETTINGCHANGE As UInteger = 26
     Public Shared SMTO_ABORTIFHUNG As Integer = 2
-
-    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
-    Public Shared Function SendNotifyMessage(
-     ByVal hWnd As IntPtr,
-     ByVal msg As UInteger,
-     ByVal wParam As UIntPtr,
-     ByVal lParam As String
-     ) As Boolean
-    End Function
-
-    <DllImport("shell32.dll")>
-    Public Shared Sub SHChangeNotify(
-    ByVal wEventID As HChangeNotifyEventID,
-    ByVal uFlags As HChangeNotifyFlags,
-    ByVal dwItem1 As IntPtr,
-    ByVal dwItem2 As IntPtr)
-    End Sub
-
-    Public Enum HChangeNotifyEventID
-        SHCNE_ALLEVENTS = &H7FFFFFFF
-        SHCNE_ASSOCCHANGED = &H8000000
-        SHCNE_ATTRIBUTES = &H800
-        SHCNE_CREATE = &H2
-        SHCNE_DELETE = &H4
-        SHCNE_DRIVEADD = &H100
-        SHCNE_DRIVEADDGUI = &H10000
-        SHCNE_DRIVEREMOVED = &H80
-        SHCNE_EXTENDED_EVENT = &H4000000
-        SHCNE_FREESPACE = &H40000
-        SHCNE_MEDIAINSERTED = &H20
-        SHCNE_MEDIAREMOVED = &H40
-        SHCNE_MKDIR = &H8
-        SHCNE_NETSHARE = &H200
-        SHCNE_NETUNSHARE = &H400
-        SHCNE_RENAMEFOLDER = &H20000
-        SHCNE_RENAMEITEM = &H1
-        SHCNE_RMDIR = &H10
-        SHCNE_SERVERDISCONNECT = &H4000
-        SHCNE_UPDATEDIR = &H1000
-        SHCNE_UPDATEIMAGE = &H8000
-    End Enum
-
-    Public Enum HChangeNotifyFlags
-        SHCNF_DWORD = &H3
-        SHCNF_IDLIST = &H0
-        SHCNF_PATHA = &H1
-        SHCNF_PATHW = &H5
-        SHCNF_PRINTERA = &H2
-        SHCNF_PRINTERW = &H6
-        SHCNF_FLUSH = &H1000
-        SHCNF_FLUSHNOWAIT = &H2000
-    End Enum
 
 End Class

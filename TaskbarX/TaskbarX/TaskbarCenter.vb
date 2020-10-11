@@ -282,6 +282,13 @@ Public Class TaskbarCenter
 
             Dim TaskObjects As List(Of IAccessible) = TaskObject
 
+            Dim cpu As New PerformanceCounter()
+            With cpu
+                .CategoryName = "Processor"
+                .CounterName = "% Processor Time"
+                .InstanceName = "_Total"
+            End With
+
             'Start the endless loop
             Do
                 Try
@@ -419,6 +426,7 @@ Public Class TaskbarCenter
                     End If
 
                 End Try
+
             Loop
         Catch ex As Exception
             MessageBox.Show("@Looper2 | " & ex.Message)

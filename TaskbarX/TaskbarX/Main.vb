@@ -134,7 +134,7 @@ Public Class Main
 
             'Makes the animations run smoother
             Dim currentProcess As Process = Process.GetCurrentProcess
-            currentProcess.PriorityClass = ProcessPriorityClass.High
+            currentProcess.PriorityClass = ProcessPriorityClass.Idle
 
             'Prevent wrong position calculations
             Win32.SetProcessDpiAwareness(Win32.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware)
@@ -162,12 +162,12 @@ Public Class Main
             ResetTaskbarStyle()
 
             If Settings.ShowTrayIcon = 1 Then
-                noty.Text = "TaskbarX (LeftClick = Restart) (RightClick = Stop)"
+                noty.Text = "TaskbarX (L = Restart) (M = Config) (R = Stop)"
                 noty.Icon = My.Resources.icon
                 noty.Visible = True
             End If
 
-            AddHandler noty.MouseClick, AddressOf mnuRef_Click
+            AddHandler noty.MouseClick, AddressOf MnuRef_Click
 
             'Start the TaskbarCenterer
             If Not Settings.DontCenterTaskbar = 1 Then
@@ -185,14 +185,33 @@ Public Class Main
         End Try
     End Sub
 
-    Public Shared Sub mnuRef_Click(sender As Object, e As MouseEventArgs)
-        noty.Visible = False
+    Public Shared Sub MnuRef_Click(sender As Object, e As MouseEventArgs)
+
         If (e.Button = MouseButtons.Left) Then
+            noty.Visible = False
             Application.Restart()
-        Else
+        ElseIf (e.Button = MouseButtons.Right) Then
+            noty.Visible = False
             TaskbarCenter.RevertToZero()
             ResetTaskbarStyle()
             End
+        ElseIf (e.Button = MouseButtons.Middle) Then
+            If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+                Try
+                    Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
+                        .WindowStyle = ProcessWindowStyle.Hidden,
+                        .FileName = "cmd.exe",
+                        .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarXGUI"
+                    }
+                    Process.Start(processInfo)
+                Catch
+                End Try
+            Else
+                Try
+                    System.Diagnostics.Process.Start("TaskbarX Configurator.exe")
+                Catch
+                End Try
+            End If
         End If
 
     End Sub

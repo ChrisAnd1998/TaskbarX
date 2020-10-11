@@ -15,12 +15,9 @@ Public Class MSAA
 
     End Function
 
-    Private Declare Function AccessibleObjectFromWindow Lib "oleacc" (ByVal Hwnd As Int32,
-    ByVal dwId As Int32,
-    ByRef riid As Guid,
-    <MarshalAs(UnmanagedType.IUnknown)> ByRef ppvObject As Object) As Int32
-    Declare Function GetForegroundWindow Lib "user32" () As Int32
-    Public Shared guidAccessible As New Guid("{00020400-0000-0000-C000-000000000046}")
+    Private Declare Function AccessibleObjectFromWindow Lib "oleacc" (ByVal Hwnd As Int32, ByVal dwId As Int32, ByRef riid As Guid, <MarshalAs(UnmanagedType.IUnknown)> ByRef ppvObject As Object) As Int32
+
+    Public Shared guidAccessible As New Guid("{618736E0-3C3D-11CF-810C-00AA00389B71}")
 
     Public Shared Function GetAccessibleChildren(ByVal objAccessible As IAccessible) As IAccessible()
         Dim childCount As Integer
