@@ -73,10 +73,11 @@ Class MainWindow
 
         If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
             Try
-                Dim processInfo As ProcessStartInfo = New ProcessStartInfo()
-                processInfo.WindowStyle = ProcessWindowStyle.Hidden
-                processInfo.FileName = "cmd.exe"
-                processInfo.Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & "-stop"
+                Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
+                    .WindowStyle = ProcessWindowStyle.Hidden,
+                    .FileName = "cmd.exe",
+                    .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & "-stop"
+                }
                 Process.Start(processInfo)
             Catch
             End Try
@@ -89,7 +90,7 @@ Class MainWindow
 
     End Sub
 
-    Private bmp As Bitmap = New Bitmap(1, 1)
+    Private ReadOnly bmp As Bitmap = New Bitmap(1, 1)
 
     Private Function GetColorAt(ByVal x As Integer, ByVal y As Integer) As Color
         Dim bounds As Rectangle = New Rectangle(x, y, 1, 1)
@@ -202,8 +203,9 @@ Class MainWindow
         If Not System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
             Try
                 Dim address As String = "https://raw.githubusercontent.com/ChrisAnd1998/FalconX-Center-Taskbar/master/VERSION"
-                Dim client As WebClient = New WebClient()
-                client.CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
+                Dim client As WebClient = New WebClient With {
+                    .CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
+                }
                 Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
 
                 Dim latest = reader.ReadToEnd.ToString
@@ -418,102 +420,102 @@ Class MainWindow
 
         'ResetTaskbarStyle()
 
-        Dim parameters As String
+        Dim parameters As String = ""
 
         If RadioButton1.IsChecked = True Then
-            parameters = parameters & "-tbs=0 "
+            parameters &= "-tbs=0 "
         End If
         If RadioButton2.IsChecked = True Then
-            parameters = parameters & "-tbs=1 "
+            parameters &= "-tbs=1 "
         End If
         If RadioButton3.IsChecked = True Then
-            parameters = parameters & "-tbs=2 "
+            parameters &= "-tbs=2 "
         End If
         If RadioButton4.IsChecked = True Then
-            parameters = parameters & "-tbs=3 "
+            parameters &= "-tbs=3 "
         End If
         If RadioButtontc.IsChecked = True Then
-            parameters = parameters & "-tbs=4 "
+            parameters &= "-tbs=4 "
         End If
         If RadioButtonoq.IsChecked = True Then
-            parameters = parameters & "-tbs=5 "
+            parameters &= "-tbs=5 "
         End If
 
-        parameters = parameters & "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
+        parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
         If Not ComboBox1.SelectedItem Is Nothing Then
-            parameters = parameters & "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+            parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
         End If
 
         If Not ComboBox2.SelectedItem Is Nothing Then
-            parameters = parameters & "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+            parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
-            parameters = parameters & "-asp=" & NumericUpDown4.Text & " "
+            parameters &= "-asp=" & NumericUpDown4.Text & " "
         End If
 
         If Not NumericUpDown1.Text = Nothing Then
-            parameters = parameters & "-ptbo=" & NumericUpDown1.Text & " "
+            parameters &= "-ptbo=" & NumericUpDown1.Text & " "
         End If
         If Not NumericUpDown2.Text = Nothing Then
-            parameters = parameters & "-stbo=" & NumericUpDown2.Text & " "
+            parameters &= "-stbo=" & NumericUpDown2.Text & " "
         End If
 
         If CheckBox1.IsChecked = True Then
-            parameters = parameters & "-cib=1 "
+            parameters &= "-cib=1 "
         End If
 
         If Not NumericUpDown3.Text = Nothing Then
-            parameters = parameters & "-lr=" & NumericUpDown3.Text & " "
+            parameters &= "-lr=" & NumericUpDown3.Text & " "
         End If
 
         If Not NumericUpDown5.Text = Nothing Then
-            parameters = parameters & "-oblr=" & NumericUpDown5.Text & " "
+            parameters &= "-oblr=" & NumericUpDown5.Text & " "
         End If
 
         If Not NumericUpDown7.Text = Nothing Then
-            parameters = parameters & "-sr=" & NumericUpDown7.Text & " "
+            parameters &= "-sr=" & NumericUpDown7.Text & " "
         End If
 
         If CheckBox2.IsChecked = True Then
-            parameters = parameters & "-cpo=1 "
+            parameters &= "-cpo=1 "
         End If
 
         If CheckBox3.IsChecked = True Then
-            parameters = parameters & "-cso=1 "
+            parameters &= "-cso=1 "
         End If
 
         If CheckBox4.IsChecked = True Then
-            parameters = parameters & "-ftotc=1 "
+            parameters &= "-ftotc=1 "
         End If
 
         If Checkbox10.IsChecked = True Then
-            parameters = parameters & "-dtbsowm=1 "
+            parameters &= "-dtbsowm=1 "
         End If
         If Checkbox9.IsChecked = True Then
-            parameters = parameters & "-cfsa=1 "
+            parameters &= "-cfsa=1 "
         End If
         If CheckBox11.IsChecked = True Then
-            parameters = parameters & "-dct=1 "
+            parameters &= "-dct=1 "
         End If
         If Checkbox12.IsChecked = True Then
-            parameters = parameters & "-hps=1 "
+            parameters &= "-hps=1 "
         End If
         If Checkbox13.IsChecked = True Then
-            parameters = parameters & "-hss=1 "
+            parameters &= "-hss=1 "
         End If
         If Checkbox14.IsChecked = True Then
-            parameters = parameters & "-hpt=1 "
+            parameters &= "-hpt=1 "
         End If
         If Checkbox15.IsChecked = True Then
-            parameters = parameters & "-hst=1 "
+            parameters &= "-hst=1 "
         End If
         If Checkbox16.IsChecked = True Then
-            parameters = parameters & "-sti=1 "
+            parameters &= "-sti=1 "
         End If
         If checkboxconsole.IsChecked = True Then
-            parameters = parameters & "-console "
+            parameters &= "-console "
         End If
 
         Try
@@ -549,10 +551,11 @@ Class MainWindow
 
                     td.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
 
-                    Dim processInfo As ProcessStartInfo = New ProcessStartInfo()
-                    processInfo.WindowStyle = ProcessWindowStyle.Hidden
-                    processInfo.FileName = "cmd.exe"
-                    processInfo.Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+                    Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
+                        .WindowStyle = ProcessWindowStyle.Hidden,
+                        .FileName = "cmd.exe",
+                        .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+                    }
                     Process.Start(processInfo)
                 Else
 
@@ -574,25 +577,6 @@ Class MainWindow
     Public Shared WM_DWMCOLORIZATIONCOLORCHANGED As Integer = &H320
     Public Shared WM_DWMCOMPOSITIONCHANGED As Integer = &H31E
     Public Shared WM_THEMECHANGED As Integer = &H31A
-
-    Public Shared Sub RefreshWindowsExplorer()
-        Dim CLSID_ShellApplication As Guid = New Guid("13709620-C279-11CE-A49E-444553540000")
-        Dim shellApplicationType As Type = Type.GetTypeFromCLSID(CLSID_ShellApplication, True)
-        Dim shellApplication As Object = Activator.CreateInstance(shellApplicationType)
-        Dim windows As Object = shellApplicationType.InvokeMember("Windows", BindingFlags.InvokeMethod, Nothing, shellApplication, New Object(-1) {})
-        Dim windowsType As Type = windows.GetType
-        Dim count As Object = windowsType.InvokeMember("Count", BindingFlags.GetProperty, Nothing, windows, Nothing)
-        Dim i As Integer = 0
-        Do While (i < CType(count, Integer))
-            Dim item As Object = windowsType.InvokeMember("Item", BindingFlags.InvokeMethod, Nothing, windows, New Object() {i})
-            Dim itemType As Type = item.GetType
-            Dim itemName As String = CType(itemType.InvokeMember("Name", BindingFlags.GetProperty, Nothing, item, Nothing), String)
-            If (itemName = "Shell_TrayWnd") Then
-                itemType.InvokeMember("Refresh", BindingFlags.InvokeMethod, Nothing, item, Nothing)
-            End If
-            i = (i + 1)
-        Loop
-    End Sub
 
     Private Sub Button_Click_2(sender As Object, e As RoutedEventArgs)
         'Kill every other running instance of FalconX
@@ -634,102 +618,102 @@ Class MainWindow
 
     Private Async Sub Button_Click_33(sender As Object, e As RoutedEventArgs)
 
-        Dim parameters As String
+        Dim parameters As String = ""
 
         If RadioButton1.IsChecked = True Then
-            parameters = parameters & "-tbs=0 "
+            parameters &= "-tbs=0 "
         End If
         If RadioButton2.IsChecked = True Then
-            parameters = parameters & "-tbs=1 "
+            parameters &= "-tbs=1 "
         End If
         If RadioButton3.IsChecked = True Then
-            parameters = parameters & "-tbs=2 "
+            parameters &= "-tbs=2 "
         End If
         If RadioButton4.IsChecked = True Then
-            parameters = parameters & "-tbs=3 "
+            parameters &= "-tbs=3 "
         End If
         If RadioButtontc.IsChecked = True Then
-            parameters = parameters & "-tbs=4 "
+            parameters &= "-tbs=4 "
         End If
         If RadioButtonoq.IsChecked = True Then
-            parameters = parameters & "-tbs=5 "
+            parameters &= "-tbs=5 "
         End If
 
-        parameters = parameters & "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
+        parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
         If Not ComboBox1.SelectedItem Is Nothing Then
-            parameters = parameters & "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+            parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
         End If
 
         If Not ComboBox2.SelectedItem Is Nothing Then
-            parameters = parameters & "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+            parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
-            parameters = parameters & "-asp=" & NumericUpDown4.Text & " "
+            parameters &= "-asp=" & NumericUpDown4.Text & " "
         End If
 
         If Not NumericUpDown1.Text = Nothing Then
-            parameters = parameters & "-ptbo=" & NumericUpDown1.Text & " "
+            parameters &= "-ptbo=" & NumericUpDown1.Text & " "
         End If
         If Not NumericUpDown2.Text = Nothing Then
-            parameters = parameters & "-stbo=" & NumericUpDown2.Text & " "
+            parameters &= "-stbo=" & NumericUpDown2.Text & " "
         End If
 
         If CheckBox1.IsChecked = True Then
-            parameters = parameters & "-cib=1 "
+            parameters &= "-cib=1 "
         End If
 
         If Not NumericUpDown3.Text = Nothing Then
-            parameters = parameters & "-lr=" & NumericUpDown3.Text & " "
+            parameters &= "-lr=" & NumericUpDown3.Text & " "
         End If
 
         If Not NumericUpDown5.Text = Nothing Then
-            parameters = parameters & "-oblr=" & NumericUpDown5.Text & " "
+            parameters &= "-oblr=" & NumericUpDown5.Text & " "
         End If
 
         If Not NumericUpDown7.Text = Nothing Then
-            parameters = parameters & "-sr=" & NumericUpDown7.Text & " "
+            parameters &= "-sr=" & NumericUpDown7.Text & " "
         End If
 
         If CheckBox2.IsChecked = True Then
-            parameters = parameters & "-cpo=1 "
+            parameters &= "-cpo=1 "
         End If
 
         If CheckBox3.IsChecked = True Then
-            parameters = parameters & "-cso=1 "
+            parameters &= "-cso=1 "
         End If
 
         If CheckBox4.IsChecked = True Then
-            parameters = parameters & "-ftotc=1 "
+            parameters &= "-ftotc=1 "
         End If
 
         If Checkbox10.IsChecked = True Then
-            parameters = parameters & "-dtbsowm=1 "
+            parameters &= "-dtbsowm=1 "
         End If
         If Checkbox9.IsChecked = True Then
-            parameters = parameters & "-cfsa=1 "
+            parameters &= "-cfsa=1 "
         End If
         If CheckBox11.IsChecked = True Then
-            parameters = parameters & "-dct=1 "
+            parameters &= "-dct=1 "
         End If
         If Checkbox12.IsChecked = True Then
-            parameters = parameters & "-hps=1 "
+            parameters &= "-hps=1 "
         End If
         If Checkbox13.IsChecked = True Then
-            parameters = parameters & "-hss=1 "
+            parameters &= "-hss=1 "
         End If
         If Checkbox14.IsChecked = True Then
-            parameters = parameters & "-hpt=1 "
+            parameters &= "-hpt=1 "
         End If
         If Checkbox15.IsChecked = True Then
-            parameters = parameters & "-hst=1 "
+            parameters &= "-hst=1 "
         End If
         If Checkbox16.IsChecked = True Then
-            parameters = parameters & "-sti=1 "
+            parameters &= "-sti=1 "
         End If
         If checkboxconsole.IsChecked = True Then
-            parameters = parameters & "-console "
+            parameters &= "-console "
         End If
 
         Try
@@ -800,8 +784,9 @@ Class MainWindow
 
         Try
             Dim address As String = "https://raw.githubusercontent.com/ChrisAnd1998/FalconX-Center-Taskbar/master/VERSION"
-            Dim client As WebClient = New WebClient()
-            client.CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
+            Dim client As WebClient = New WebClient With {
+                .CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
+            }
             Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
 
             Dim latest = reader.ReadToEnd.ToString
@@ -1033,109 +1018,110 @@ Class MainWindow
 
         'ResetTaskbarStyle()
 
-        Dim parameters As String
+        Dim parameters As String = ""
 
         If RadioButton1.IsChecked = True Then
-            parameters = parameters & "-tbs=0 "
+            parameters &= "-tbs=0 "
         End If
         If RadioButton2.IsChecked = True Then
-            parameters = parameters & "-tbs=1 "
+            parameters &= "-tbs=1 "
         End If
         If RadioButton3.IsChecked = True Then
-            parameters = parameters & "-tbs=2 "
+            parameters &= "-tbs=2 "
         End If
         If RadioButton4.IsChecked = True Then
-            parameters = parameters & "-tbs=3 "
+            parameters &= "-tbs=3 "
         End If
         If RadioButtontc.IsChecked = True Then
-            parameters = parameters & "-tbs=4 "
+            parameters &= "-tbs=4 "
         End If
         If RadioButtonoq.IsChecked = True Then
-            parameters = parameters & "-tbs=5 "
+            parameters &= "-tbs=5 "
         End If
 
-        parameters = parameters & "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
+        parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
         If Not ComboBox1.SelectedItem Is Nothing Then
-            parameters = parameters & "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+            parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
         End If
 
         If Not ComboBox2.SelectedItem Is Nothing Then
-            parameters = parameters & "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+            parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
-            parameters = parameters & "-asp=" & NumericUpDown4.Text & " "
+            parameters &= "-asp=" & NumericUpDown4.Text & " "
         End If
 
         If Not NumericUpDown1.Text = Nothing Then
-            parameters = parameters & "-ptbo=" & NumericUpDown1.Text & " "
+            parameters &= "-ptbo=" & NumericUpDown1.Text & " "
         End If
         If Not NumericUpDown2.Text = Nothing Then
-            parameters = parameters & "-stbo=" & NumericUpDown2.Text & " "
+            parameters &= "-stbo=" & NumericUpDown2.Text & " "
         End If
 
         If CheckBox1.IsChecked = True Then
-            parameters = parameters & "-cib=1 "
+            parameters &= "-cib=1 "
         End If
 
         If Not NumericUpDown3.Text = Nothing Then
-            parameters = parameters & "-lr=" & NumericUpDown3.Text & " "
+            parameters &= "-lr=" & NumericUpDown3.Text & " "
         End If
 
         If Not NumericUpDown5.Text = Nothing Then
-            parameters = parameters & "-oblr=" & NumericUpDown5.Text & " "
+            parameters &= "-oblr=" & NumericUpDown5.Text & " "
         End If
 
         If Not NumericUpDown7.Text = Nothing Then
-            parameters = parameters & "-sr=" & NumericUpDown7.Text & " "
+            parameters &= "-sr=" & NumericUpDown7.Text & " "
         End If
 
         If CheckBox2.IsChecked = True Then
-            parameters = parameters & "-cpo=1 "
+            parameters &= "-cpo=1 "
         End If
 
         If CheckBox3.IsChecked = True Then
-            parameters = parameters & "-cso=1 "
+            parameters &= "-cso=1 "
         End If
 
         If CheckBox4.IsChecked = True Then
-            parameters = parameters & "-ftotc=1 "
+            parameters &= "-ftotc=1 "
         End If
 
         If Checkbox10.IsChecked = True Then
-            parameters = parameters & "-dtbsowm=1 "
+            parameters &= "-dtbsowm=1 "
         End If
         If Checkbox9.IsChecked = True Then
-            parameters = parameters & "-cfsa=1 "
+            parameters &= "-cfsa=1 "
         End If
         If CheckBox11.IsChecked = True Then
-            parameters = parameters & "-dct=1 "
+            parameters &= "-dct=1 "
         End If
         If Checkbox12.IsChecked = True Then
-            parameters = parameters & "-hps=1 "
+            parameters &= "-hps=1 "
         End If
         If Checkbox13.IsChecked = True Then
-            parameters = parameters & "-hss=1 "
+            parameters &= "-hss=1 "
         End If
         If Checkbox14.IsChecked = True Then
-            parameters = parameters & "-hpt=1 "
+            parameters &= "-hpt=1 "
         End If
         If Checkbox15.IsChecked = True Then
-            parameters = parameters & "-hst=1 "
+            parameters &= "-hst=1 "
         End If
         If Checkbox16.IsChecked = True Then
-            parameters = parameters & "-sti=1 "
+            parameters &= "-sti=1 "
         End If
         If Checkbox16.IsChecked = True Then
-            parameters = parameters & "-console "
+            parameters &= "-console "
         End If
 
         If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
-            Dim processInfo As ProcessStartInfo = New ProcessStartInfo()
-            processInfo.WindowStyle = ProcessWindowStyle.Hidden
-            processInfo.FileName = "cmd.exe"
-            processInfo.Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+            Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .FileName = "cmd.exe",
+                .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+            }
             Process.Start(processInfo)
         Else
             System.Diagnostics.Process.Start("TaskbarX.exe", parameters)
@@ -1176,40 +1162,33 @@ Class MainWindow
             Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf RevertToZero)
             t1.Start()
 
-            Dim ggFileDialog As ContentDialog = New ContentDialog With {
+            If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+
+                Dim ggFileDialog As ContentDialog = New ContentDialog With {
         .Title = "Good bye.",
-        .Content = "Ready for uninstall." & vbNewLine & "TaskbarX will be removed within 10 seconds once you click Ok...",
+        .Content = "Ready for uninstall." & vbNewLine & "TaskbarX will be removed within a minute once you click Ok...",
         .PrimaryButtonText = "Ok"
     }
-            Dim results As ContentDialogResult = Await ggFileDialog.ShowAsync()
+                Dim results As ContentDialogResult = Await ggFileDialog.ShowAsync()
 
-            If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
-                Dim processInfo As ProcessStartInfo = New ProcessStartInfo()
-                processInfo.WindowStyle = ProcessWindowStyle.Hidden
-                processInfo.FileName = "powershell.exe"
-                processInfo.Arguments = " Get-AppxPackage *40210ChrisAndriessen.FalconX* | Remove-AppxPackage"
+                Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
+                    .WindowStyle = ProcessWindowStyle.Hidden,
+                    .FileName = "powershell.exe",
+                    .Arguments = " Get-AppxPackage *40210ChrisAndriessen.FalconX* | Remove-AppxPackage"
+                }
                 Process.Start(processInfo)
                 End
             Else
-                My.Computer.FileSystem.WriteAllText(System.AppDomain.CurrentDomain.BaseDirectory & "uninstall.bat", "timeout /t 10 /nobreak & timeout /t 10 /nobreak & RD " & Chr(34) & System.AppDomain.CurrentDomain.BaseDirectory & Chr(34) & " /Q /S", True)
 
-                If Not File.Exists(System.AppDomain.CurrentDomain.BaseDirectory & "uninstall.bat") Then
-                    Dim ffFileDialog As ContentDialog = New ContentDialog With {
-      .Title = "Woops...",
-      .Content = "The uninstaller could not be created." & vbNewLine & "Please remove the install directory manually.",
+                Dim ffFileDialog As ContentDialog = New ContentDialog With {
+      .Title = "Ready for removal.",
+      .Content = "The Taskschedule is successfully removed." & vbNewLine & "You can now remove TaskbarX's files.",
       .PrimaryButtonText = "Ok"
   }
-                    Dim results2 As ContentDialogResult = Await ffFileDialog.ShowAsync()
+                Dim results2 As ContentDialogResult = Await ffFileDialog.ShowAsync()
 
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory)
-                    End
-                End If
+                Process.Start(System.AppDomain.CurrentDomain.BaseDirectory)
 
-                Dim processInfo As ProcessStartInfo = New ProcessStartInfo()
-                processInfo.WindowStyle = ProcessWindowStyle.Hidden
-                processInfo.FileName = System.AppDomain.CurrentDomain.BaseDirectory & "uninstall.bat"
-                processInfo.Arguments = ""
-                Process.Start(processInfo)
                 End
             End If
         Else
@@ -1218,11 +1197,11 @@ Class MainWindow
     End Sub
 
     Private Sub Button_Click_9(sender As Object, e As RoutedEventArgs)
-        callanim()
+        Callanim()
 
     End Sub
 
-    Private Sub callanim()
+    Private Sub Callanim()
         Dim xx As Integer = CInt(NumericUpDown4.Value)
         Dim an As String = ComboBox1.Text
 
@@ -1356,6 +1335,7 @@ Class MainWindow
     End Sub
 
     Private Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
+
         Try
 
             Dim sw As New Stopwatch
@@ -1446,12 +1426,12 @@ Class MainWindow
 
     Private Sub Button_Click_12(sender As Object, e As RoutedEventArgs)
 
-        Dim t1 As Thread = New Thread(AddressOf colorthread)
+        Dim t1 As Thread = New Thread(AddressOf Colorthread)
         t1.Start()
 
     End Sub
 
-    Sub colorthread()
+    Sub Colorthread()
         Dim lpPoint As PointAPI
         Dim x = GetAsyncKeyState(1) = 0
 
