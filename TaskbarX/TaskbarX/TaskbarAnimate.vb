@@ -4,7 +4,7 @@ Public Class TaskbarAnimate
 
     Public Shared current As New ArrayList
 
-    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer)
+    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal isPrimary As Boolean)
         Try
 
             If CInt((valueToReach - oldpos).ToString.Replace("-", "")) = 0 Then
@@ -45,7 +45,12 @@ Public Class TaskbarAnimate
             elapsed = 0
             sw.Start()
 
+            If isPrimary = True Then
+                TaskbarCenter.isanimating = True
+            End If
+
             While Not elapsed >= duration
+
                 elapsed = CInt(sw.ElapsedMilliseconds)
 
                 Dim newValue As Integer = CInt((easing(elapsed, minValue, maxValue, duration)))
@@ -60,6 +65,10 @@ Public Class TaskbarAnimate
                     Win32.SetWindowPos(hwnd, IntPtr.Zero, 0, newValue, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                 End If
             End While
+
+            If isPrimary = True Then
+                TaskbarCenter.isanimating = False
+            End If
 
             sw.Stop()
             current.Remove(hwnd)

@@ -125,6 +125,9 @@ Public Class Main
                 If argument.Contains("-tbsom=") Then
                     Settings.TaskbarStyleOnMax = CInt(val(1))
                 End If
+                If argument.Contains("-stsb=") Then
+                    Settings.StickyStartButton = CInt(val(1))
+                End If
             Next
 
             'If animation speed is lower than 1 then make it 1. Otherwise it will give an error.
@@ -143,7 +146,6 @@ Public Class Main
             Dim Handle As IntPtr
             Do
                 Console.WriteLine("Waiting for Shell_TrayWnd")
-
                 Handle = Nothing
                 Thread.Sleep(250)
                 Dim Shell_TrayWnd = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
@@ -152,7 +154,8 @@ Public Class Main
                 Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
                 Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 Handle = MSTaskListWClass
-                '  Console.WriteLine("Current Handle = " & Handle.ToString)
+                'Lock the Taskbar
+                '  Win32.PostMessage(Shell_TrayWnd, CUInt(&H111), CType(424, IntPtr), CType(vbNullString, IntPtr))
             Loop Until Not Handle = Nothing
 
             'Just empty startup memory before starting

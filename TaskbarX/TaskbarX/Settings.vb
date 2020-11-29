@@ -29,6 +29,7 @@ Public Class Settings
     Public Shared TaskbarStyleBlue As Integer
     Public Shared TaskbarStyleAlpha As Integer
     Public Shared ConsoleEnabled As Integer
+    Public Shared StickyStartButton As Integer
 
     'If on battery TaskbarX will override with these
     Public Shared OnBatteryAnimationStyle As String
