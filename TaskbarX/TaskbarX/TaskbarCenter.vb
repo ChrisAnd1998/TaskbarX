@@ -290,13 +290,6 @@ Public Class TaskbarCenter
 
             Dim TaskObjects As List(Of IAccessible) = TaskObject
 
-            '   Dim cpu As New PerformanceCounter()
-            '  With cpu
-            '  .CategoryName = "Processor"
-            ' .CounterName = "% Processor Time"
-            ' .InstanceName = "_Total"
-            '  End With
-
             'Start the endless loop
             Do
                 Try
@@ -345,7 +338,6 @@ Public Class TaskbarCenter
                         Dim tH = childHeight
                         Dim tW = childWidth
 
-
                         For Each childx As Accessibility.IAccessible In children
                             If CInt(childx.accRole(0)) = &H16 Then
                                 Dim children2() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(childx)
@@ -354,53 +346,52 @@ Public Class TaskbarCenter
                             End If
                         Next
 
-
                         Dim cL = childLeft
                         Dim cT = childTop
                         Dim cW = childWidth
                         Dim cH = childHeight
 
                         Try
-                                Dim testiferror = cL
-                            Catch ex As Exception
-                                'Current taskbar is empty go to next taskbar.
-                                ' Continue For
-                            End Try
+                            Dim testiferror = cL
+                        Catch ex As Exception
+                            'Current taskbar is empty go to next taskbar.
+                            ' Continue For
+                        End Try
 
-                            Dim Orientation As String
-                            Dim TaskbarCount As Integer
-                            Dim TrayWndSize As Integer
+                        Dim Orientation As String
+                        Dim TaskbarCount As Integer
+                        Dim TrayWndSize As Integer
 
-                            'Get current taskbar orientation (H = Horizontal | V = Vertical)
-                            If tH >= 200 Then
-                                Orientation = "V"
-                            Else
-                                Orientation = "H"
-                            End If
+                        'Get current taskbar orientation (H = Horizontal | V = Vertical)
+                        If tH >= tW Then
+                            Orientation = "V"
+                        Else
+                            Orientation = "H"
+                        End If
 
-                            'Get the end position of the last icon in the taskbar
-                            If Orientation = "H" Then
-                                TaskbarCount = cL + cW
-                            Else
-                                TaskbarCount = cT + cH
-                            End If
+                        'Get the end position of the last icon in the taskbar
+                        If Orientation = "H" Then
+                            TaskbarCount = cL + cW
+                        Else
+                            TaskbarCount = cT + cH
+                        End If
 
-                            'Gets the width of the whole taskbars placeholder
-                            If Orientation = "H" Then
-                                TrayWndSize = tW
-                            Else
-                                TrayWndSize = tH
-                            End If
+                        'Gets the width of the whole taskbars placeholder
+                        If Orientation = "H" Then
+                            TrayWndSize = tW
+                        Else
+                            TrayWndSize = tH
+                        End If
 
-                            'Put the results into a string ready to be matched for differences with last loop
-                            results = results & Orientation & TaskbarCount & TrayWndSize
+                        'Put the results into a string ready to be matched for differences with last loop
+                        results = results & Orientation & TaskbarCount & TrayWndSize
 
                         initposcalcready = True
 
                         i += 1
                     Next
 
-                        If Not results = oldresults Then
+                    If Not results = oldresults Then
                         'Something has changed we can now calculate the new position for each taskbar
 
                         initposcalcready = False
@@ -431,7 +422,8 @@ Public Class TaskbarCenter
                             System.Threading.Thread.Sleep(250)
                             Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
                         Loop Until Not Handle = Nothing
-                        'Application.Restart()
+                        System.Threading.Thread.Sleep(1000)
+                        Application.Restart()
                     End If
 
                 End Try
@@ -500,7 +492,7 @@ Public Class TaskbarCenter
                 Dim TrayOrientation As String
 
                 'If the TrayNotifyWnd updates then refresh the taskbar
-                If TaskListcH >= 200 Then
+                If TaskListcH >= TaskListcW Then
                     TrayOrientation = "V"
                 Else
                     TrayOrientation = "H"
@@ -742,7 +734,7 @@ Public Class TaskbarCenter
                 Loop Until curleft = curleft2
 
                 'Get current taskbar orientation (H = Horizontal | V = Vertical)
-                If TaskListcH >= 200 Then
+                If TaskListcH >= TaskListcW Then
                     Orientation = "V"
                 Else
                     Orientation = "H"
