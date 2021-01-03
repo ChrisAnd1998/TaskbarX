@@ -234,7 +234,7 @@ Class MainWindow
 
             Using ts As TaskService = New TaskService()
 
-                Dim td = ts.GetTask("TaskbarX")
+                Dim td = ts.GetTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
 
                 Dim cfg As String = Nothing
 
@@ -382,6 +382,347 @@ Class MainWindow
         Catch ex As Exception
             Console.WriteLine(ex.Message)
         End Try
+
+
+
+        ''Override Older settings if exist
+        Try
+            Using mts As TaskService = New TaskService()
+
+                Dim mtd = mts.GetTask("TaskbarX")
+
+                If mtd.Name = "TaskbarX" Then
+                    Migrate()
+                End If
+
+            End Using
+        Catch
+            'older Task not found
+        End Try
+
+
+
+    End Sub
+
+
+    Sub Migrate()
+
+
+        Try
+
+            Using ts As TaskService = New TaskService()
+
+                Dim td = ts.GetTask("TaskbarX")
+
+
+                Dim cfg As String = Nothing
+
+                If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+                    cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                Else
+                    cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
+                End If
+
+                Dim arguments() As String = cfg.Split(CType(" ", Char()))
+
+                For Each argument In arguments
+                    Dim val() As String = Split(argument, "=")
+                    Console.WriteLine(val(0))
+                    If argument.Contains("-tbs") Then
+                        If CInt(val(1)) = 0 Then
+                            RadioButton1.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 1 Then
+                            RadioButton2.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 2 Then
+                            RadioButton3.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 3 Then
+                            RadioButton4.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 4 Then
+                            RadioButtontc.IsChecked = True
+                        End If
+                        If CInt(val(1)) = 5 Then
+                            RadioButtonoq.IsChecked = True
+                        End If
+
+                    End If
+
+                    If argument.Contains("-color") Then
+                        Dim colorval As String = val(1)
+                        Dim colorsep = colorval.Split(CType(";", Char()))
+
+                        sRed.Value = CDbl(colorsep(0))
+                        sGreen.Value = CDbl(colorsep(1))
+                        sBlue.Value = CDbl(colorsep(2))
+                        sAlpha.Value = CDbl(colorsep(3))
+                    End If
+
+                    If argument.Contains("-ptbo") Then
+                        NumericUpDown1.Text = val(1)
+                    End If
+                    If argument.Contains("-stbo") Then
+                        NumericUpDown2.Text = val(1)
+                    End If
+                    If argument.Contains("-cpo") Then
+                        If val(1) = "1" Then
+                            CheckBox2.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-cso") Then
+                        If val(1) = "1" Then
+                            CheckBox3.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-as") Then
+                        ComboBox1.SelectedItem = val(1)
+
+                    End If
+                    If argument.Contains("-asp") Then
+                        NumericUpDown4.Text = val(1)
+                    End If
+                    If argument.Contains("-sr") Then
+                        NumericUpDown7.Text = val(1)
+                    End If
+                    If argument.Contains("-lr") Then
+                        NumericUpDown3.Text = val(1)
+                    End If
+                    If argument.Contains("-cib") Then
+                        If val(1) = "1" Then
+                            CheckBox1.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-obas") Then
+                        ComboBox2.SelectedItem = val(1)
+                    End If
+                    If argument.Contains("-oblr") Then
+                        NumericUpDown5.Text = val(1)
+                    End If
+                    If argument.Contains("-ftotc") Then
+                        If val(1) = "1" Then
+                            CheckBox4.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-dtbsowm") Then
+                        If val(1) = "1" Then
+                            Checkbox10.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-cfsa") Then
+                        If val(1) = "1" Then
+                            Checkbox9.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-dct") Then
+                        If val(1) = "1" Then
+                            CheckBox11.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-hps") Then
+                        If val(1) = "1" Then
+                            Checkbox12.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-hss") Then
+                        If val(1) = "1" Then
+                            Checkbox13.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-hpt") Then
+                        If val(1) = "1" Then
+                            Checkbox14.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-hst") Then
+                        If val(1) = "1" Then
+                            Checkbox15.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-sti") Then
+                        If val(1) = "1" Then
+                            Checkbox16.IsChecked = True
+                        End If
+                    End If
+                    If argument.Contains("-console") Then
+                        checkboxconsole.IsChecked = True
+                    End If
+
+                Next
+
+                Console.WriteLine(td.Definition.Actions.ToString)
+
+                Dim lg As LogonTrigger = CType(td.Definition.Triggers.Item(0), LogonTrigger)
+                Dim times As TimeSpan = lg.Delay
+
+                NumericUpDown6.Value = times.Seconds
+
+
+
+
+                Dim parameters As String = ""
+
+                If RadioButton1.IsChecked = True Then
+                    parameters &= "-tbs=0 "
+                End If
+                If RadioButton2.IsChecked = True Then
+                    parameters &= "-tbs=1 "
+                End If
+                If RadioButton3.IsChecked = True Then
+                    parameters &= "-tbs=2 "
+                End If
+                If RadioButton4.IsChecked = True Then
+                    parameters &= "-tbs=3 "
+                End If
+                If RadioButtontc.IsChecked = True Then
+                    parameters &= "-tbs=4 "
+                End If
+                If RadioButtonoq.IsChecked = True Then
+                    parameters &= "-tbs=5 "
+                End If
+
+                parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
+
+                If Not ComboBox1.SelectedItem Is Nothing Then
+                    parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+                End If
+
+                If Not ComboBox2.SelectedItem Is Nothing Then
+                    parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+                End If
+
+                If Not NumericUpDown4.Text = Nothing Then
+                    parameters &= "-asp=" & NumericUpDown4.Text & " "
+                End If
+
+                If Not NumericUpDown1.Text = Nothing Then
+                    parameters &= "-ptbo=" & NumericUpDown1.Text & " "
+                End If
+                If Not NumericUpDown2.Text = Nothing Then
+                    parameters &= "-stbo=" & NumericUpDown2.Text & " "
+                End If
+
+                If CheckBox1.IsChecked = True Then
+                    parameters &= "-cib=1 "
+                End If
+
+                If Not NumericUpDown3.Text = Nothing Then
+                    parameters &= "-lr=" & NumericUpDown3.Text & " "
+                End If
+
+                If Not NumericUpDown5.Text = Nothing Then
+                    parameters &= "-oblr=" & NumericUpDown5.Text & " "
+                End If
+
+                If Not NumericUpDown7.Text = Nothing Then
+                    parameters &= "-sr=" & NumericUpDown7.Text & " "
+                End If
+
+                If CheckBox2.IsChecked = True Then
+                    parameters &= "-cpo=1 "
+                End If
+
+                If CheckBox3.IsChecked = True Then
+                    parameters &= "-cso=1 "
+                End If
+
+                If CheckBox4.IsChecked = True Then
+                    parameters &= "-ftotc=1 "
+                End If
+
+                If Checkbox10.IsChecked = True Then
+                    parameters &= "-dtbsowm=1 "
+                End If
+                If Checkbox9.IsChecked = True Then
+                    parameters &= "-cfsa=1 "
+                End If
+                If CheckBox11.IsChecked = True Then
+                    parameters &= "-dct=1 "
+                End If
+                If Checkbox12.IsChecked = True Then
+                    parameters &= "-hps=1 "
+                End If
+                If Checkbox13.IsChecked = True Then
+                    parameters &= "-hss=1 "
+                End If
+                If Checkbox14.IsChecked = True Then
+                    parameters &= "-hpt=1 "
+                End If
+                If Checkbox15.IsChecked = True Then
+                    parameters &= "-hst=1 "
+                End If
+                If Checkbox16.IsChecked = True Then
+                    parameters &= "-sti=1 "
+                End If
+                If checkboxconsole.IsChecked = True Then
+                    parameters &= "-console "
+                End If
+
+                Try
+                    Using ts2 As TaskService = New TaskService()
+                        ts2.RootFolder.DeleteTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
+                        ts2.RootFolder.DeleteTask("TaskbarX")
+                    End Using
+                Catch ex As Exception
+                    ' MessageBox.Show(ex.Message)
+                End Try
+
+                Try
+                    Using ts2 As TaskService = New TaskService()
+
+                        Dim td2 As TaskDefinition = ts2.NewTask()
+                        Dim delay As Integer = CInt(NumericUpDown6.Text)
+
+                        td2.RegistrationInfo.Description = "Center taskbar icons"
+
+                        td2.Triggers.Add(New LogonTrigger With {
+                            .UserId = System.Security.Principal.WindowsIdentity.GetCurrent().Name,
+                            .Delay = TimeSpan.FromSeconds(delay)})
+
+                        td2.Settings.DisallowStartIfOnBatteries = False
+                        td2.Settings.StopIfGoingOnBatteries = False
+                        td2.Settings.RunOnlyIfIdle = False
+                        td2.Settings.IdleSettings.RestartOnIdle = False
+                        td2.Settings.IdleSettings.StopOnIdleEnd = False
+                        td2.Settings.Hidden = True
+                        td2.Settings.ExecutionTimeLimit = TimeSpan.Zero
+                        td2.RegistrationInfo.Author = "Chris Andriessen"
+
+                        If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+
+                            td2.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
+                        Else
+
+                            td2.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
+
+                        End If
+
+                        ts2.RootFolder.RegisterTaskDefinition("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""), td2)
+
+                    End Using
+                Catch ex As Exception
+                    ' MessageBox.Show(ex.Message)
+                End Try
+
+
+
+
+
+            End Using
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+        End Try
+
+
+        Try
+            Using ts3 As TaskService = New TaskService()
+                ts3.RootFolder.DeleteTask("TaskbarX")
+            End Using
+        Catch ex As Exception
+            ' MessageBox.Show(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub ListBox_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
@@ -520,6 +861,7 @@ Class MainWindow
 
         Try
             Using ts As TaskService = New TaskService()
+                ts.RootFolder.DeleteTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
                 ts.RootFolder.DeleteTask("TaskbarX")
             End Using
         Catch ex As Exception
@@ -565,7 +907,7 @@ Class MainWindow
 
                 End If
 
-                ts.RootFolder.RegisterTaskDefinition("TaskbarX", td)
+                ts.RootFolder.RegisterTaskDefinition("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""), td)
 
             End Using
         Catch ex As Exception
@@ -601,6 +943,7 @@ Class MainWindow
     Private Async Sub Button_Click_3(sender As Object, e As RoutedEventArgs)
         Try
             Using ts As TaskService = New TaskService()
+                ts.RootFolder.DeleteTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
                 ts.RootFolder.DeleteTask("TaskbarX")
             End Using
         Catch ex As Exception
@@ -718,6 +1061,7 @@ Class MainWindow
 
         Try
             Using ts As TaskService = New TaskService()
+                ts.RootFolder.DeleteTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
                 ts.RootFolder.DeleteTask("TaskbarX")
             End Using
         Catch ex As Exception
@@ -754,7 +1098,7 @@ Class MainWindow
 
                 End If
 
-                ts.RootFolder.RegisterTaskDefinition("TaskbarX", td)
+                ts.RootFolder.RegisterTaskDefinition("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""), td)
 
             End Using
         Catch ex As Exception
@@ -814,7 +1158,7 @@ Class MainWindow
 
             Using ts As TaskService = New TaskService()
 
-                Dim td = ts.GetTask("TaskbarX")
+                Dim td = ts.GetTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
 
                 Dim cfg As String = Nothing
 
@@ -1142,6 +1486,7 @@ Class MainWindow
         If result = ContentDialogResult.Primary Then
             Try
                 Using ts As TaskService = New TaskService()
+                    ts.RootFolder.DeleteTask("TaskbarX" & " " & System.Security.Principal.WindowsIdentity.GetCurrent().Name.Replace("\", ""))
                     ts.RootFolder.DeleteTask("TaskbarX")
                 End Using
             Catch ex As Exception
@@ -1377,13 +1722,15 @@ Class MainWindow
     End Sub
 
     Private Sub Button_Click_10(sender As Object, e As RoutedEventArgs)
-        ComboBox1.SelectedIndex = ComboBox1.SelectedIndex + 1
-
+        If Not ComboBox1.SelectedIndex = ComboBox1.Items.Count Then
+            ComboBox1.SelectedIndex = ComboBox1.SelectedIndex + 1
+        End If
     End Sub
 
     Private Sub Button_Click_11(sender As Object, e As RoutedEventArgs)
-        ComboBox1.SelectedIndex = ComboBox1.SelectedIndex - 1
-
+        If Not ComboBox1.SelectedIndex = 0 Then
+            ComboBox1.SelectedIndex = ComboBox1.SelectedIndex - 1
+        End If
     End Sub
 
     Private Sub Alpha_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double))
