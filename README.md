@@ -33,7 +33,7 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 
 ## Mockup
  
-![Mockup](https://chrisandriessen.nl/images/Mockup.png)
+![Mockup](https://chrisandriessen.nl/images/FlatMock2.png)
   
   
 
