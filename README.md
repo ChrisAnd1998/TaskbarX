@@ -31,6 +31,13 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 &nbsp;
 
 
+## Configurator
+
+![Untitled-2](https://user-images.githubusercontent.com/50437199/104807537-fda98180-57df-11eb-820a-5ab4e3cbeeaa.png)
+  
+&nbsp;
+
+
 ## Mockup
  
 ![Mockup](https://chrisandriessen.nl/images/FlatMock2.png)
@@ -46,7 +53,7 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 _**-stop** will stop TaskbarX, puts all icons back to the left and resets the taskbar style.  
 **-tbs=1** will make the taskbar transparent. 2 blur, 3 acrylic, 4 transparent (with gradient), 5 opaque and 0 is disabled.  
 **-ptbo=0** will set the offset of the primary taskbar based on the center.  
-**-stbo=0** will set the offset of the primary taskbar based on the center.  
+**-stbo=0** will set the offset of the secondary taskbar based on the center.  
 **-cpo=1** will only center the primary taskbar. 0 is disabled.  
 **-cso=1** will only center the secondary taskbar(s). 0 is disabled.  
 **-as=backeaseout** will set the animation style to BackEaseOut. "none" is instant.  
