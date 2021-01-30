@@ -45,6 +45,7 @@ Public Class TaskbarCenter
 #End Region
 
     Public Shared Sub TaskbarCenterer()
+
         RevertToZero()
 
         AddHandler SystemEvents.DisplaySettingsChanged, AddressOf DPChange
@@ -241,34 +242,48 @@ Public Class TaskbarCenter
                 If sClassName.ToString = "Shell_TrayWnd" Then
                     Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
 
+                    If Not Settings.TotalPrimaryOpacity = Nothing Then
+                        Win32.SetWindowLong(CType(Taskbar, IntPtr), CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H80000)
+                        Win32.SetLayeredWindowAttributes(CType(Taskbar, IntPtr), 0, CByte(255 / 100 * CByte(Settings.TotalPrimaryOpacity)), &H2)
+                    End If
+
                     If Settings.HidePrimaryStartButton = 1 Then
-                        Dim MStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
-                        Win32.ShowWindow(MStart, Win32.ShowWindowCommands.Hide)
+                            Dim MStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
+                            Win32.ShowWindow(MStart, Win32.ShowWindowCommands.Hide)
+                            Win32.SetLayeredWindowAttributes(MStart, 0, 0, &H2)
+                        End If
+
+                        If Settings.HidePrimaryNotifyWnd = 1 Then
+                            Dim MTray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "TrayNotifyWnd", Nothing)
+                            Win32.ShowWindow(MTray, Win32.ShowWindowCommands.Hide)
+                            Win32.SetWindowLong(MTray, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H7E000000)
+                            Win32.SetWindowLong(MTray, CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H80000)
+                            Win32.SendMessage(MTray, 11, False, 0)
+                            Win32.SetLayeredWindowAttributes(MTray, 0, 0, &H2)
+                        End If
+
+                        Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+                        MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                     End If
 
-                    If Settings.HidePrimaryNotifyWnd = 1 Then
-                        Dim MTray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "TrayNotifyWnd", Nothing)
-                        Win32.ShowWindow(MTray, Win32.ShowWindowCommands.Hide)
-                        Win32.SetWindowLong(MTray, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H7E000000)
-                        Win32.SetWindowLong(MTray, CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H8110460)
-                        Win32.SendMessage(MTray, 11, False, 0)
-                    End If
-
-                    Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
-                    MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
-                End If
-
-                If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
+                    If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
                     Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
+
+                    If Not Settings.TotalSecondaryOpacity = Nothing Then
+                        Win32.SetWindowLong(CType(Taskbar, IntPtr), CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H80000)
+                        Win32.SetLayeredWindowAttributes(CType(Taskbar, IntPtr), 0, CByte(255 / 100 * CByte(Settings.TotalSecondaryOpacity)), &H2)
+                    End If
 
                     If Settings.HideSecondaryStartButton = 1 Then
                         Dim SStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
                         Win32.ShowWindow(SStart, Win32.ShowWindowCommands.Hide)
+                        Win32.SetLayeredWindowAttributes(SStart, 0, 0, &H2)
                     End If
 
                     If Settings.HideSecondaryNotifyWnd = 1 Then
                         Dim STray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ClockButton", Nothing)
                         Win32.ShowWindow(STray, Win32.ShowWindowCommands.Hide)
+                        Win32.SetLayeredWindowAttributes(STray, 0, 0, &H2)
                     End If
 
                     MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
@@ -304,6 +319,20 @@ Public Class TaskbarCenter
                         End If
                     End If
 
+                    If Not Settings.SkipResolution2 = 0 Then
+                        If Screen.PrimaryScreen.Bounds.Width = Settings.SkipResolution2 Then
+                            RevertToZero()
+                            Exit Do
+                        End If
+                    End If
+
+                    If Not Settings.SkipResolution3 = 0 Then
+                        If Screen.PrimaryScreen.Bounds.Width = Settings.SkipResolution3 Then
+                            RevertToZero()
+                            Exit Do
+                        End If
+                    End If
+
                     If Settings.CheckFullscreenApp = 1 Then
                         Dim activewindow = Win32.GetForegroundWindow()
                         Dim curmonx As Screen = Screen.FromHandle(activewindow)
@@ -312,6 +341,7 @@ Public Class TaskbarCenter
 
                         If activewindowsize.Top = curmonx.Bounds.Top And activewindowsize.Bottom = curmonx.Bounds.Bottom And activewindowsize.Left = curmonx.Bounds.Left And activewindowsize.Right = curmonx.Bounds.Right Then
                             Console.WriteLine("Fullscreen App detected " & activewindowsize.Bottom & "," & activewindowsize.Top & "," & activewindowsize.Left & "," & activewindowsize.Right)
+
                             Settings.Pause = True
                             Do
                                 System.Threading.Thread.Sleep(500)
@@ -321,6 +351,7 @@ Public Class TaskbarCenter
 
                             Loop While activewindowsize.Top = curmonx.Bounds.Top And activewindowsize.Bottom = curmonx.Bounds.Bottom And activewindowsize.Left = curmonx.Bounds.Left And activewindowsize.Right = curmonx.Bounds.Right
                             Console.WriteLine("Fullscreen App deactivated")
+
                             Settings.Pause = False
                         End If
                     End If
@@ -508,7 +539,7 @@ Public Class TaskbarCenter
                                 Exit Sub
                             End If
 
-                            Dim pos = (TaskListcL - ReBarcL).ToString.Replace("-", "")
+                            Dim pos = Math.Abs((TaskListcL - ReBarcL))
 
                             trayfixed = False
 
@@ -590,8 +621,9 @@ Public Class TaskbarCenter
                 End If
 
                 If MSTaskListWClass = Nothing Then
-                    MessageBox.Show("TaskbarX: Could not find the handle of the taskbar. Your current OS may not be supported.")
-                    End
+                    Console.WriteLine("TaskbarX: Could not find the handle of the taskbar. Restarting...")
+                    System.Threading.Thread.Sleep(1000)
+                    Application.Restart()
                 End If
 
                 Taskbars.Add(MSTaskListWClass)
@@ -754,15 +786,15 @@ Public Class TaskbarCenter
 
                 'Get info needed to calculate the position
                 If Orientation = "H" Then
-                    TrayWndLeft = CInt(TrayWndcL.ToString.Replace("-", ""))
-                    TrayWndWidth = CInt(TrayWndcW.ToString.Replace("-", ""))
-                    RebarWndLeft = CInt(RebarcL.ToString.Replace("-", ""))
-                    TaskbarLeft = CInt((RebarWndLeft - TrayWndLeft).ToString.Replace("-", ""))
+                    TrayWndLeft = Math.Abs(CInt(TrayWndcL))
+                    TrayWndWidth = Math.Abs(CInt(TrayWndcW))
+                    RebarWndLeft = Math.Abs(CInt(RebarcL))
+                    TaskbarLeft = Math.Abs(CInt(RebarWndLeft - TrayWndLeft))
                 Else
-                    TrayWndLeft = CInt(TrayWndcT.ToString.Replace("-", ""))
-                    TrayWndWidth = CInt(TrayWndcH.ToString.Replace("-", ""))
-                    RebarWndLeft = CInt(RebarcT.ToString.Replace("-", ""))
-                    TaskbarLeft = CInt((RebarWndLeft - TrayWndLeft).ToString.Replace("-", ""))
+                    TrayWndLeft = Math.Abs(CInt(TrayWndcT))
+                    TrayWndWidth = Math.Abs(CInt(TrayWndcH))
+                    RebarWndLeft = Math.Abs(CInt(RebarcT))
+                    TaskbarLeft = Math.Abs(CInt(RebarWndLeft - TrayWndLeft))
                 End If
 
                 'Calculate new position
@@ -770,16 +802,16 @@ Public Class TaskbarCenter
                     If Settings.CenterInBetween = 1 Then
                         If Orientation = "H" Then
                             Dim offset = (TrayNotifycW / 2 - (TaskbarLeft \ 2))
-                            Position = CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset).ToString.Replace("-", "")) + Settings.PrimaryTaskbarOffset
+                            Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
                         Else
                             Dim offset = (TrayNotifycH / 2 - (TaskbarLeft \ 2))
-                            Position = CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset).ToString.Replace("-", "")) + Settings.PrimaryTaskbarOffset
+                            Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
                         End If
                     Else
-                        Position = CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft).ToString.Replace("-", "")) + Settings.PrimaryTaskbarOffset
+                        Position = Math.Abs(CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft))) + Settings.PrimaryTaskbarOffset
                     End If
                 Else
-                    Position = CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft).ToString.Replace("-", "")) + Settings.SecondaryTaskbarOffset
+                    Position = Math.Abs(CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft))) + Settings.SecondaryTaskbarOffset
                 End If
 
                 'Trigger the animator
@@ -902,6 +934,7 @@ Public Class TaskbarCenter
     End Sub
 
     Private Shared Sub DaAnimator(animationStyle As String, taskList As IntPtr, taskListc As Integer, rebarc As Integer, orient As String, position As Integer, isprimary As Boolean)
+
         If animationStyle = "linear" Then
             Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.Linear, position, Settings.AnimationSpeed, isprimary)
         ElseIf animationStyle = "expoeaseout" Then

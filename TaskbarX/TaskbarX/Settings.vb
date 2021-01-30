@@ -15,6 +15,8 @@ Public Class Settings
     Public Shared CenterInBetween As Integer
     Public Shared FixToolbarsOnTrayChange As Integer
     Public Shared SkipResolution As Integer
+    Public Shared SkipResolution2 As Integer
+    Public Shared SkipResolution3 As Integer
     Public Shared CheckFullscreenApp As Integer
     Public Shared DefaultTaskbarStyleOnWinMax As Integer
     Public Shared DontCenterTaskbar As Integer
@@ -30,6 +32,8 @@ Public Class Settings
     Public Shared TaskbarStyleAlpha As Integer
     Public Shared ConsoleEnabled As Integer
     Public Shared StickyStartButton As Integer
+    Public Shared TotalPrimaryOpacity As Integer
+    Public Shared TotalSecondaryOpacity As Integer
 
     'If on battery TaskbarX will override with these
     Public Shared OnBatteryAnimationStyle As String

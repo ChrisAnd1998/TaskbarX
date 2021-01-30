@@ -7,12 +7,12 @@ Public Class TaskbarAnimate
     Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal isPrimary As Boolean)
         Try
 
-            If CInt((valueToReach - oldpos).ToString.Replace("-", "")) = 0 Then
+            If Math.Abs(CInt((valueToReach - oldpos))) = 0 Then
                 'The difference is 0 so there is no need to trigger the animator.
                 Exit Sub
             End If
 
-            If valueToReach = oldpos Or CInt((valueToReach - oldpos).ToString.Replace("-", "")) <= 10 Then
+            If valueToReach = oldpos Or Math.Abs(CInt((valueToReach - oldpos))) <= 10 Then
                 'Prevent Wiggling (if the new position has a difference of 10 or lower then there is no reason to move)
                 Exit Sub
             End If
@@ -39,7 +39,7 @@ Public Class TaskbarAnimate
                 minValue = valueToReach
             End If
 
-            Dim maxValue As Integer = CInt((valueToReach - originalValue).ToString.Replace("-", ""))
+            Dim maxValue As Integer = Math.Abs(CInt((valueToReach - originalValue)))
             Dim increasing As Boolean = originalValue < valueToReach
 
             elapsed = 0

@@ -29,7 +29,11 @@ Public Class MSAA
 
         Dim accObjects = New IAccessible((childCount) - 1) {}
         Dim count As Integer = 0
+
+        Console.WriteLine(count)
+
         If (childCount <> 0) Then
+
             AccessibleChildren(objAccessible, 0, childCount, accObjects, count)
         End If
 

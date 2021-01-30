@@ -98,6 +98,12 @@ Public Class Main
                 If argument.Contains("-sr=") Then
                     Settings.SkipResolution = CInt(val(1))
                 End If
+                If argument.Contains("-sr2=") Then
+                    Settings.SkipResolution2 = CInt(val(1))
+                End If
+                If argument.Contains("-sr3=") Then
+                    Settings.SkipResolution3 = CInt(val(1))
+                End If
                 If argument.Contains("-dtbsowm=") Then
                     Settings.DefaultTaskbarStyleOnWinMax = CInt(val(1))
                 End If
@@ -127,6 +133,12 @@ Public Class Main
                 End If
                 If argument.Contains("-stsb=") Then
                     Settings.StickyStartButton = CInt(val(1))
+                End If
+                If argument.Contains("-tpop=") Then
+                    Settings.TotalPrimaryOpacity = CInt(val(1))
+                End If
+                If argument.Contains("-tsop=") Then
+                    Settings.TotalSecondaryOpacity = CInt(val(1))
                 End If
             Next
 

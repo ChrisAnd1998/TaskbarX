@@ -100,6 +100,11 @@ Public Class Win32
     Public Shared Function SendNotifyMessage(ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As String) As Boolean
     End Function
 
+
+    <DllImport("user32.dll")>
+    Public Shared Function SetLayeredWindowAttributes(ByVal hwnd As IntPtr, ByVal crKey As UInteger, ByVal bAlpha As Byte, ByVal dwFlags As UInteger) As Boolean
+    End Function
+
     Enum DWMWINDOWATTRIBUTE As UInteger
         NCRenderingEnabled = 1
         NCRenderingPolicy
