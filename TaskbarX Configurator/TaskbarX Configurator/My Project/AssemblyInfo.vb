@@ -15,7 +15,7 @@ Imports System.Windows
 <Assembly: AssemblyDescription("Configurator for TaskbarX")>
 <Assembly: AssemblyCompany("Chris Andriessen")>
 <Assembly: AssemblyProduct("TaskbarX Configurator")>
-<Assembly: AssemblyCopyright("Copyright © Chris Andriessen 2020")>
+<Assembly: AssemblyCopyright("Copyright © Chris Andriessen 2021")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(false)>
 
@@ -55,5 +55,5 @@ Imports System.Windows
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.6.4.0")>
-<Assembly: AssemblyFileVersion("1.6.4.0")>
+<Assembly: AssemblyVersion("1.6.5.0")>
+<Assembly: AssemblyFileVersion("1.6.5.0")>
