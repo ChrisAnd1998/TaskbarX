@@ -95,6 +95,14 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
   
 &nbsp;
 
+## References
+
+ModernWPF:  https://github.com/Kinnara/ModernWpf
+TaskScheduler:  https://github.com/dahall/TaskScheduler
+Emoji.Wpf:  https://github.com/samhocevar/emoji.wpf
+
+&nbsp;
+
 
 ## Downloads
 
