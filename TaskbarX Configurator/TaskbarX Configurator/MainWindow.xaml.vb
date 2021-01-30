@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Security.Principal
 Imports System.Text
 Imports System.Threading
 Imports Microsoft.Win32.TaskScheduler
@@ -102,13 +103,29 @@ Class MainWindow
         Return bmp.GetPixel(0, 0)
     End Function
 
-    Private Sub Window_Loaded(ByVal sender As Object, ByVal e As RoutedEventArgs)
+    Private Async Sub Window_Loaded(ByVal sender As Object, ByVal e As RoutedEventArgs)
+
+
+
+        Dim identity = WindowsIdentity.GetCurrent()
+        Dim principal = New WindowsPrincipal(identity)
+        Dim isElevated As Boolean = principal.IsInRole(WindowsBuiltInRole.Administrator)
+        If isElevated Then
+            Dim adminDialog As ContentDialog = New ContentDialog With {
+        .Title = "Warning!",
+        .Content = "Please DON'T run the Configurator as Administrator. This may cause the start-up task not to work properly!",
+        .PrimaryButtonText = "Ok"
+    }
+            Dim result As ContentDialogResult = Await adminDialog.ShowAsync()
+        End If
 
         'Checkbox10.Visibility = Visibility.Hidden
 
         ListBox1.SelectedIndex = 0
 
         sAlpha.Value = 50
+        tpop.Value = 100
+        tsop.Value = 100
 
         ComboBox1.Items.Add("none")
         ComboBox1.Items.Add("linear")
@@ -238,7 +255,10 @@ Class MainWindow
 
                 Dim cfg As String = Nothing
 
+
+
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+
                     cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
                 Else
                     cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
@@ -281,6 +301,14 @@ Class MainWindow
                         sAlpha.Value = CDbl(colorsep(3))
                     End If
 
+                    If argument.Contains("-tpop") Then
+                        tpop.Value = CDbl(val(1))
+                    End If
+
+                    If argument.Contains("-tsop") Then
+                        tsop.Value = CDbl(val(1))
+                    End If
+
                     If argument.Contains("-ptbo") Then
                         NumericUpDown1.Text = val(1)
                     End If
@@ -306,6 +334,12 @@ Class MainWindow
                     End If
                     If argument.Contains("-sr") Then
                         NumericUpDown7.Text = val(1)
+                    End If
+                    If argument.Contains("-sr2") Then
+                        NumericUpDown7_Copy.Text = val(1)
+                    End If
+                    If argument.Contains("-sr3") Then
+                        NumericUpDown7_Copy1.Text = val(1)
                     End If
                     If argument.Contains("-lr") Then
                         NumericUpDown3.Text = val(1)
@@ -417,6 +451,8 @@ Class MainWindow
 
                 Dim cfg As String = Nothing
 
+
+
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
                     cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
                 Else
@@ -460,6 +496,14 @@ Class MainWindow
                         sAlpha.Value = CDbl(colorsep(3))
                     End If
 
+                    If argument.Contains("-tpop") Then
+                        tpop.Value = CDbl(val(1))
+                    End If
+
+                    If argument.Contains("-tsop") Then
+                        tsop.Value = CDbl(val(1))
+                    End If
+
                     If argument.Contains("-ptbo") Then
                         NumericUpDown1.Text = val(1)
                     End If
@@ -485,6 +529,12 @@ Class MainWindow
                     End If
                     If argument.Contains("-sr") Then
                         NumericUpDown7.Text = val(1)
+                    End If
+                    If argument.Contains("-sr2") Then
+                        NumericUpDown7_Copy.Text = val(1)
+                    End If
+                    If argument.Contains("-sr3") Then
+                        NumericUpDown7_Copy1.Text = val(1)
                     End If
                     If argument.Contains("-lr") Then
                         NumericUpDown3.Text = val(1)
@@ -584,6 +634,10 @@ Class MainWindow
 
                 parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
+                parameters &= "-tpop=" & tpopla.Text.ToString.Replace("%", "") & " "
+
+                parameters &= "-tsop=" & tsopla.Text.ToString.Replace("%", "") & " "
+
                 If Not ComboBox1.SelectedItem Is Nothing Then
                     parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
                 End If
@@ -617,6 +671,14 @@ Class MainWindow
 
                 If Not NumericUpDown7.Text = Nothing Then
                     parameters &= "-sr=" & NumericUpDown7.Text & " "
+                End If
+
+                If Not NumericUpDown7_Copy.Text = Nothing Then
+                    parameters &= "-sr2=" & NumericUpDown7_Copy.Text & " "
+                End If
+
+                If Not NumericUpDown7_Copy1.Text = Nothing Then
+                    parameters &= "-sr3=" & NumericUpDown7_Copy1.Text & " "
                 End If
 
                 If CheckBox2.IsChecked = True Then
@@ -784,6 +846,10 @@ Class MainWindow
 
         parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
+        parameters &= "-tpop=" & tpopla.Text.ToString.Replace("%", "") & " "
+
+        parameters &= "-tsop=" & tsopla.Text.ToString.Replace("%", "") & " "
+
         If Not ComboBox1.SelectedItem Is Nothing Then
             parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
         End If
@@ -817,6 +883,14 @@ Class MainWindow
 
         If Not NumericUpDown7.Text = Nothing Then
             parameters &= "-sr=" & NumericUpDown7.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy.Text = Nothing Then
+            parameters &= "-sr2=" & NumericUpDown7_Copy.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy1.Text = Nothing Then
+            parameters &= "-sr3=" & NumericUpDown7_Copy1.Text & " "
         End If
 
         If CheckBox2.IsChecked = True Then
@@ -984,6 +1058,10 @@ Class MainWindow
 
         parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
+        parameters &= "-tpop=" & tpopla.Text.ToString.Replace("%", "") & " "
+
+        parameters &= "-tsop=" & tsopla.Text.ToString.Replace("%", "") & " "
+
         If Not ComboBox1.SelectedItem Is Nothing Then
             parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
         End If
@@ -1017,6 +1095,14 @@ Class MainWindow
 
         If Not NumericUpDown7.Text = Nothing Then
             parameters &= "-sr=" & NumericUpDown7.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy.Text = Nothing Then
+            parameters &= "-sr2=" & NumericUpDown7_Copy.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy1.Text = Nothing Then
+            parameters &= "-sr3=" & NumericUpDown7_Copy1.Text & " "
         End If
 
         If CheckBox2.IsChecked = True Then
@@ -1162,6 +1248,8 @@ Class MainWindow
 
                 Dim cfg As String = Nothing
 
+
+
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
                     cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
                 Else
@@ -1206,6 +1294,14 @@ Class MainWindow
                         sAlpha.Value = CDbl(colorsep(3))
                     End If
 
+                    If argument.Contains("-tpop") Then
+                        tpop.Value = CDbl(val(1))
+                    End If
+
+                    If argument.Contains("-tsop") Then
+                        tsop.Value = CDbl(val(1))
+                    End If
+
                     If argument.Contains("-ptbo") Then
                         NumericUpDown1.Text = val(1)
                     End If
@@ -1231,6 +1327,12 @@ Class MainWindow
                     End If
                     If argument.Contains("-sr") Then
                         NumericUpDown7.Text = val(1)
+                    End If
+                    If argument.Contains("-sr2") Then
+                        NumericUpDown7_Copy.Text = val(1)
+                    End If
+                    If argument.Contains("-sr3") Then
+                        NumericUpDown7_Copy1.Text = val(1)
                     End If
                     If argument.Contains("-lr") Then
                         NumericUpDown3.Text = val(1)
@@ -1333,10 +1435,15 @@ Class MainWindow
         NumericUpDown3.Text = "400"
         NumericUpDown5.Text = "400"
         NumericUpDown7.Text = "0"
+        NumericUpDown7_Copy.Text = "0"
+        NumericUpDown7_Copy1.Text = "0"
         sAlpha.Value = 50
+        tpop.Value = 100
+        tsop.Value = 100
         sRed.Value = 0
         sGreen.Value = 0
         sBlue.Value = 0
+
     End Sub
 
     Private Sub Button_Click_7(sender As Object, e As RoutedEventArgs)
@@ -1385,6 +1492,10 @@ Class MainWindow
 
         parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
 
+        parameters &= "-tpop=" & tpopla.Text.ToString.Replace("%", "") & " "
+
+        parameters &= "-tsop=" & tsopla.Text.ToString.Replace("%", "") & " "
+
         If Not ComboBox1.SelectedItem Is Nothing Then
             parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
         End If
@@ -1418,6 +1529,14 @@ Class MainWindow
 
         If Not NumericUpDown7.Text = Nothing Then
             parameters &= "-sr=" & NumericUpDown7.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy.Text = Nothing Then
+            parameters &= "-sr2=" & NumericUpDown7_Copy.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy1.Text = Nothing Then
+            parameters &= "-sr3=" & NumericUpDown7_Copy1.Text & " "
         End If
 
         If CheckBox2.IsChecked = True Then
@@ -1741,6 +1860,8 @@ Class MainWindow
 
         colorprev.Opacity = sAlpha.Value / 100
 
+
+        calchexcolor2()
     End Sub
 
     Private Sub Blue_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double))
@@ -1750,6 +1871,8 @@ Class MainWindow
         colorprev.Fill = New SolidColorBrush(System.Windows.Media.Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
 
         colorprev.Opacity = sAlpha.Value / 100
+
+        calchexcolor2()
     End Sub
 
     Private Sub Green_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double))
@@ -1760,6 +1883,7 @@ Class MainWindow
 
         colorprev.Opacity = sAlpha.Value / 100
 
+        calchexcolor2()
     End Sub
 
     Private Sub Red_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double))
@@ -1769,6 +1893,36 @@ Class MainWindow
         colorprev.Fill = New SolidColorBrush(System.Windows.Media.Color.FromRgb(CByte(sRed.Value), CByte(sGreen.Value), CByte(sBlue.Value)))
 
         colorprev.Opacity = sAlpha.Value / 100
+
+        calchexcolor2()
+    End Sub
+
+
+    Sub calchexcolor2()
+        Try
+            Dim myColor As Color = Color.FromArgb(CInt(sRed.Value), CInt(sGreen.Value), CInt(sBlue.Value))
+            Dim hex As String = myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2")
+
+            hexcolorbox.Text = "#" & hex
+        Catch
+        End Try
+
+
+    End Sub
+    Sub calchexcolor()
+        Try
+            Dim color As Color = ColorTranslator.FromHtml(hexcolorbox.Text)
+            Dim r As Integer = Convert.ToInt16(color.R)
+            Dim g As Integer = Convert.ToInt16(color.G)
+            Dim b As Integer = Convert.ToInt16(color.B)
+
+            sRed.Value = r
+            sGreen.Value = g
+            sBlue.Value = b
+        Catch
+        End Try
+
+
     End Sub
 
     Private Sub Button_Click_12(sender As Object, e As RoutedEventArgs)
@@ -1800,4 +1954,139 @@ Class MainWindow
         Loop Until Not GetAsyncKeyState(1) = 0
     End Sub
 
+    Private Sub Button_Click_13(sender As Object, e As RoutedEventArgs)
+
+        Dim parameters As String = ""
+
+        If RadioButton1.IsChecked = True Then
+            parameters &= "-tbs=0 "
+        End If
+        If RadioButton2.IsChecked = True Then
+            parameters &= "-tbs=1 "
+        End If
+        If RadioButton3.IsChecked = True Then
+            parameters &= "-tbs=2 "
+        End If
+        If RadioButton4.IsChecked = True Then
+            parameters &= "-tbs=3 "
+        End If
+        If RadioButtontc.IsChecked = True Then
+            parameters &= "-tbs=4 "
+        End If
+        If RadioButtonoq.IsChecked = True Then
+            parameters &= "-tbs=5 "
+        End If
+
+        parameters &= "-color=" & tRed.Text.ToString & ";" & tGreen.Text.ToString & ";" & tBlue.Text.ToString & ";" & tAlpha.Text.ToString.Replace("%", "") & " "
+
+        parameters &= "-tpop=" & tpopla.Text.ToString.Replace("%", "") & " "
+
+        parameters &= "-tsop=" & tsopla.Text.ToString.Replace("%", "") & " "
+
+        If Not ComboBox1.SelectedItem Is Nothing Then
+            parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+        End If
+
+        If Not ComboBox2.SelectedItem Is Nothing Then
+            parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+        End If
+
+        If Not NumericUpDown4.Text = Nothing Then
+            parameters &= "-asp=" & NumericUpDown4.Text & " "
+        End If
+
+        If Not NumericUpDown1.Text = Nothing Then
+            parameters &= "-ptbo=" & NumericUpDown1.Text & " "
+        End If
+        If Not NumericUpDown2.Text = Nothing Then
+            parameters &= "-stbo=" & NumericUpDown2.Text & " "
+        End If
+
+        If CheckBox1.IsChecked = True Then
+            parameters &= "-cib=1 "
+        End If
+
+        If Not NumericUpDown3.Text = Nothing Then
+            parameters &= "-lr=" & NumericUpDown3.Text & " "
+        End If
+
+        If Not NumericUpDown5.Text = Nothing Then
+            parameters &= "-oblr=" & NumericUpDown5.Text & " "
+        End If
+
+        If Not NumericUpDown7.Text = Nothing Then
+            parameters &= "-sr=" & NumericUpDown7.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy.Text = Nothing Then
+            parameters &= "-sr2=" & NumericUpDown7_Copy.Text & " "
+        End If
+
+        If Not NumericUpDown7_Copy1.Text = Nothing Then
+            parameters &= "-sr3=" & NumericUpDown7_Copy1.Text & " "
+        End If
+
+
+        If CheckBox2.IsChecked = True Then
+            parameters &= "-cpo=1 "
+        End If
+
+        If CheckBox3.IsChecked = True Then
+            parameters &= "-cso=1 "
+        End If
+
+        If CheckBox4.IsChecked = True Then
+            parameters &= "-ftotc=1 "
+        End If
+
+        If Checkbox10.IsChecked = True Then
+            parameters &= "-dtbsowm=1 "
+        End If
+        If Checkbox9.IsChecked = True Then
+            parameters &= "-cfsa=1 "
+        End If
+        If CheckBox11.IsChecked = True Then
+            parameters &= "-dct=1 "
+        End If
+        If Checkbox12.IsChecked = True Then
+            parameters &= "-hps=1 "
+        End If
+        If Checkbox13.IsChecked = True Then
+            parameters &= "-hss=1 "
+        End If
+        If Checkbox14.IsChecked = True Then
+            parameters &= "-hpt=1 "
+        End If
+        If Checkbox15.IsChecked = True Then
+            parameters &= "-hst=1 "
+        End If
+        If Checkbox16.IsChecked = True Then
+            parameters &= "-sti=1 "
+        End If
+        If checkboxconsole.IsChecked = True Then
+            parameters &= "-console "
+        End If
+
+        If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+            TextboxLink.Text = "cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+        Else
+            TextboxLink.Text = System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe " & parameters
+        End If
+
+    End Sub
+
+    Private Sub hexcolorbox_TextChanged(sender As Object, e As TextChangedEventArgs) Handles hexcolorbox.TextChanged
+        hexcolorbox.MaxLength = 7
+        calchexcolor()
+    End Sub
+
+    Private Sub tpop_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double)) Handles tpop.ValueChanged
+        Dim val As Integer = CInt(tpop.Value)
+        tpopla.Text = CType(val, String) & "%"
+    End Sub
+
+    Private Sub tsop_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double)) Handles tsop.ValueChanged
+        Dim val As Integer = CInt(tsop.Value)
+        tsopla.Text = CType(val, String) & "%"
+    End Sub
 End Class
