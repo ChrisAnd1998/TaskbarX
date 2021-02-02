@@ -78,6 +78,7 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 **-dtbsowm=1** will revert to the default taskbar on maximized window.  
 **-tpop=100** will set the total opacity of the primary taskbar.  
 **-tsop=100** will set the total opacity of the secondary taskbar.  
+**-rzbt=1** will revert the taskbar back to the left when the icons start overlapping with the Tray area.  
 **-color=0;0;0;1** will set the color of the taskbar when using taskbar styling. RGBA._
   
 > **Example:** _C:\Program Files (x86)\TaskbarX\TaskbarX.exe -tbs=1 -as=backeaseout_
