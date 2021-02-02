@@ -36,6 +36,10 @@ Public Class Win32
     Public Shared Function GetParent(ByVal hWnd As IntPtr) As IntPtr
     End Function
 
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
+    End Function
+
     <DllImport("user32.dll")>
     Public Shared Function MonitorFromWindow(ByVal hwnd As IntPtr, ByVal dwFlags As UInteger) As IntPtr
     End Function

@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Text
 Imports System.Threading
@@ -162,6 +163,31 @@ Public Class TaskbarStyle
             For Each tray As IntPtr In trays
                 Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
                 Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
+
+                '' Dim tt As New ListBox
+                '' Dim TrayPos2 As Win32.RECT
+                '' Win32.GetWindowRect(tray, TrayPos2)
+                '' tt.Top = 0
+                '' tt.Left = 0
+                '' tt.Height = 2000
+                '' tt.Width = 2000
+                '' tt.BackColor = Color.Red
+
+                ''  tt.FormBorderStyle = FormBorderStyle.None
+                ''  Win32.SetWindowLong(tt.Handle, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H80000000L)
+                '' tt.Show()
+                '' Dim myProg As New Process
+                '' With myProg.StartInfo
+                ''     .FileName = "D:\Visual Studio Projects\!TaskbarX\APPX\TaskbarX\Release\TaskbarX Configurator.exe"
+                ''     .Arguments = ""
+                '' End With
+                '' myProg.Start()
+
+                '' Thread.Sleep(5000)
+
+
+                ''Win32.SetParent(myProg.MainWindowHandle, tray)
+
             Next
 
             Do

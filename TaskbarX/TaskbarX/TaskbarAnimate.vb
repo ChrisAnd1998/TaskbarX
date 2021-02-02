@@ -4,13 +4,36 @@ Public Class TaskbarAnimate
 
     Public Shared current As New ArrayList
 
-    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal isPrimary As Boolean)
+    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal isPrimary As Boolean, ByVal width As Integer)
+
+
         Try
 
             If Math.Abs(CInt((valueToReach - oldpos))) = 0 Then
                 'The difference is 0 so there is no need to trigger the animator.
                 Exit Sub
             End If
+
+
+            If Settings.RevertZeroBeyondTray = 1 Then
+                'Prevent moving beyond Tray area.
+                Dim TrayPos2 As Win32.RECT
+                Win32.GetWindowRect(Win32.GetParent(hwnd), TrayPos2)
+                Dim rightposition = valueToReach + width
+
+                If orient = "H" Then
+                    If rightposition >= TrayPos2.Right - TrayPos2.Left Then
+                        Win32.SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                        Exit Sub
+                    End If
+                Else
+                    If rightposition >= TrayPos2.Bottom - TrayPos2.Top Then
+                        Win32.SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                        Exit Sub
+                    End If
+                End If
+            End If
+
 
             If valueToReach = oldpos Or Math.Abs(CInt((valueToReach - oldpos))) <= 10 Then
                 'Prevent Wiggling (if the new position has a difference of 10 or lower then there is no reason to move)

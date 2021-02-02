@@ -118,9 +118,9 @@ Public Class TaskbarCenter
         End If
     End Sub
 
-    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal isPrimary As Boolean)
+    Public Shared Sub Animate(ByVal hwnd As IntPtr, ByVal oldpos As Integer, ByVal orient As String, ByVal easing As EasingDelegate, ByVal valueToReach As Integer, ByVal duration As Integer, ByVal isPrimary As Boolean, ByVal width As Integer)
         Try
-            Dim t1 As Thread = New Thread(Sub() TaskbarAnimate.Animate(hwnd, oldpos, orient, easing, valueToReach, duration, isPrimary))
+            Dim t1 As Thread = New Thread(Sub() TaskbarAnimate.Animate(hwnd, oldpos, orient, easing, valueToReach, duration, isPrimary, width))
             t1.Start()
         Catch ex As Exception
 
@@ -227,6 +227,8 @@ Public Class TaskbarCenter
 #Region "Looper"
 
     Public Shared Sub Looper()
+
+
         Try
             'This loop will check if the taskbar changes and requires a move
             GetActiveWindows()
@@ -239,6 +241,8 @@ Public Class TaskbarCenter
                 Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
                 Dim MSTaskListWClass As IntPtr
 
+
+
                 If sClassName.ToString = "Shell_TrayWnd" Then
                     Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
 
@@ -248,25 +252,25 @@ Public Class TaskbarCenter
                     End If
 
                     If Settings.HidePrimaryStartButton = 1 Then
-                            Dim MStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
-                            Win32.ShowWindow(MStart, Win32.ShowWindowCommands.Hide)
-                            Win32.SetLayeredWindowAttributes(MStart, 0, 0, &H2)
-                        End If
-
-                        If Settings.HidePrimaryNotifyWnd = 1 Then
-                            Dim MTray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "TrayNotifyWnd", Nothing)
-                            Win32.ShowWindow(MTray, Win32.ShowWindowCommands.Hide)
-                            Win32.SetWindowLong(MTray, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H7E000000)
-                            Win32.SetWindowLong(MTray, CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H80000)
-                            Win32.SendMessage(MTray, 11, False, 0)
-                            Win32.SetLayeredWindowAttributes(MTray, 0, 0, &H2)
-                        End If
-
-                        Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
-                        MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
+                        Dim MStart = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "Start", Nothing)
+                        Win32.ShowWindow(MStart, Win32.ShowWindowCommands.Hide)
+                        Win32.SetLayeredWindowAttributes(MStart, 0, 0, &H2)
                     End If
 
-                    If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
+                    If Settings.HidePrimaryNotifyWnd = 1 Then
+                        Dim MTray = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "TrayNotifyWnd", Nothing)
+                        Win32.ShowWindow(MTray, Win32.ShowWindowCommands.Hide)
+                        Win32.SetWindowLong(MTray, CType(Win32.GWL_STYLE, Win32.WindowStyles), &H7E000000)
+                        Win32.SetWindowLong(MTray, CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H80000)
+                        Win32.SendMessage(MTray, 11, False, 0)
+                        Win32.SetLayeredWindowAttributes(MTray, 0, 0, &H2)
+                    End If
+
+                    Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
+                    MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
+                End If
+
+                If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
                     Dim WorkerW = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "WorkerW", Nothing)
 
                     If Not Settings.TotalSecondaryOpacity = Nothing Then
@@ -620,6 +624,8 @@ Public Class TaskbarCenter
                     MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
                 End If
 
+                Win32.SetWindowLong(CType(Taskbar, IntPtr), CType(Win32.GWL_EXSTYLE, Win32.WindowStyles), &H80L)
+
                 If MSTaskListWClass = Nothing Then
                     Console.WriteLine("TaskbarX: Could not find the handle of the taskbar. Restarting...")
                     System.Threading.Thread.Sleep(1000)
@@ -825,12 +831,12 @@ Public Class TaskbarCenter
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
-                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, True)
+                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, True, TaskbarWidth)
                             Else
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, True)
+                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, True, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -840,13 +846,13 @@ Public Class TaskbarCenter
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False)
+                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
                                 End If
                             Else
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False)
+                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -855,13 +861,13 @@ Public Class TaskbarCenter
                             If Settings.OnBatteryAnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False)
+                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
                             End If
                         Else
                             If Settings.OnBatteryAnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False)
+                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
                             End If
                         End If
                     End If
@@ -878,13 +884,13 @@ Public Class TaskbarCenter
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, True)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, True, TaskbarWidth)
                                 End If
                             Else
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, True)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, True, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -895,13 +901,13 @@ Public Class TaskbarCenter
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
                                 End If
                             Else
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -910,13 +916,13 @@ Public Class TaskbarCenter
                             If Settings.AnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False)
+                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
                             End If
                         Else
                             If Settings.AnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False)
+                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
                             End If
                         End If
                     End If
@@ -931,92 +937,94 @@ Public Class TaskbarCenter
             Console.WriteLine("@Calculator | " & ex.Message)
 
         End Try
+
+
     End Sub
 
-    Private Shared Sub DaAnimator(animationStyle As String, taskList As IntPtr, taskListc As Integer, rebarc As Integer, orient As String, position As Integer, isprimary As Boolean)
+    Private Shared Sub DaAnimator(animationStyle As String, taskList As IntPtr, taskListc As Integer, rebarc As Integer, orient As String, position As Integer, isprimary As Boolean, width As Integer)
 
         If animationStyle = "linear" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.Linear, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.Linear, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "expoeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "expoeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "expoeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "expoeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ExpoEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "circeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "circeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "circeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "circeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CircEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quadeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quadeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quadeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quadeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuadEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "sineeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "sineeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "sineeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "sineeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.SineEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "cubiceaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "cubiceasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "cubiceaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "cubiceaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.CubicEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quarteaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quarteasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quarteaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quarteaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuartEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quinteaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quinteasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quinteaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "quinteaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.QuintEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "elasticeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "elasticeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "elasticeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "elasticeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.ElasticEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "bounceeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "bounceeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "bounceeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "bounceeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BounceEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "backeaseout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "backeasein" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseIn, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "backeaseinout" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseInOut, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseInOut, position, Settings.AnimationSpeed, isprimary, width)
         ElseIf animationStyle = "backeaseoutin" Then
-            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseOutIn, position, Settings.AnimationSpeed, isprimary)
+            Animate(CType(taskList, IntPtr), (taskListc - rebarc), orient, AddressOf Easings.BackEaseOutIn, position, Settings.AnimationSpeed, isprimary, width)
         End If
     End Sub
 

@@ -33,6 +33,7 @@ Public Class Main
             Settings.FixToolbarsOnTrayChange = 1
             Settings.OnBatteryAnimationStyle = "cubiceaseinout"
             Settings.OnBatteryLoopRefreshRate = 400
+            Settings.RevertZeroBeyondTray = 1
 
             'Read the arguments for the settings
             Dim arguments() As String = Environment.GetCommandLineArgs
@@ -94,6 +95,9 @@ Public Class Main
                 End If
                 If argument.Contains("-ftotc=") Then
                     Settings.FixToolbarsOnTrayChange = CInt(val(1))
+                End If
+                If argument.Contains("-rzbt=") Then
+                    Settings.RevertZeroBeyondTray = CInt(val(1))
                 End If
                 If argument.Contains("-sr=") Then
                     Settings.SkipResolution = CInt(val(1))

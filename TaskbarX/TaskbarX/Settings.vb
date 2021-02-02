@@ -34,6 +34,7 @@ Public Class Settings
     Public Shared StickyStartButton As Integer
     Public Shared TotalPrimaryOpacity As Integer
     Public Shared TotalSecondaryOpacity As Integer
+    Public Shared RevertZeroBeyondTray As Integer
 
     'If on battery TaskbarX will override with these
     Public Shared OnBatteryAnimationStyle As String
