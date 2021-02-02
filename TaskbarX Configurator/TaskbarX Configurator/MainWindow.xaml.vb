@@ -33,6 +33,36 @@ Class MainWindow
 
     Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
 
+    Friend Structure WindowCompositionAttributeData
+        Public Attribute As WindowCompositionAttribute
+        Public Data As IntPtr
+        Public SizeOfData As Integer
+    End Structure
+
+    Friend Enum WindowCompositionAttribute
+        WCA_ACCENT_POLICY = 19
+    End Enum
+
+    Friend Enum AccentState
+        ACCENT_DISABLED = 0
+        ACCENT_ENABLE_GRADIENT = 1
+        ACCENT_ENABLE_TRANSPARENTGRADIENT = 2
+        ACCENT_ENABLE_BLURBEHIND = 3
+        ACCENT_ENABLE_TRANSPARANT = 6
+        ACCENT_ENABLE_ACRYLICBLURBEHIND = 4
+    End Enum
+
+    <StructLayout(LayoutKind.Sequential)>
+    Friend Structure AccentPolicy
+        Public AccentState As AccentState
+        Public AccentFlags As Integer
+        Public GradientColor As Integer
+        Public AnimationId As Integer
+    End Structure
+
+    Friend Declare Function SetWindowCompositionAttribute Lib "user32.dll" (ByVal hwnd As IntPtr, ByRef data As WindowCompositionAttributeData) As Integer
+    Private Declare Auto Function FindWindow Lib "user32.dll" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+
     Structure PointAPI
         Public x As Int32
         Public y As Int32
@@ -103,9 +133,59 @@ Class MainWindow
         Return bmp.GetPixel(0, 0)
     End Function
 
+    Friend Sub EnableTaskbarStyle()
+        Dim tskBarHwnd As IntPtr = Process.GetCurrentProcess().MainWindowHandle
+        Dim accent = New AccentPolicy()
+        Dim accentStructSize = Marshal.SizeOf(accent)
+
+        ' # Taskbar Style Acrylic
+        accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
+        '' accent.GradientColor = 10 'Or 16777215
+        accent.GradientColor = BitConverter.ToInt32(New Byte() {CByte(0), CByte(0), CByte(0), CByte(1 * 2.55)}, 0)
+
+        ' # Taskbar Style Blur
+        ' accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND
+
+        ' # Taskbar Style Transparant
+        '' accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
+
+        Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
+        Marshal.StructureToPtr(accent, accentPtr, False)
+        Dim data = New WindowCompositionAttributeData()
+        data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY
+        data.SizeOfData = accentStructSize
+        data.Data = accentPtr
+        SetWindowCompositionAttribute(tskBarHwnd, data)
+        Marshal.FreeHGlobal(accentPtr)
+    End Sub
+
     Private Async Sub Window_Loaded(ByVal sender As Object, ByVal e As RoutedEventArgs)
 
 
+
+        If Me.Background.ToString = "#FF000000" Then
+            Dim mySolidColorBrush As SolidColorBrush = New SolidColorBrush()
+            mySolidColorBrush.Color = System.Windows.Media.Color.FromArgb(255, 20, 20, 20)
+            Dim mySolidColorBrush2 As SolidColorBrush = New SolidColorBrush()
+            mySolidColorBrush2.Color = System.Windows.Media.Color.FromArgb(150, 20, 20, 20)
+            placeholder.Fill = mySolidColorBrush
+            Me.Background = mySolidColorBrush2
+
+        End If
+
+        If Me.Background.ToString = "#FFFFFFFF" Then
+            Dim mySolidColorBrush As SolidColorBrush = New SolidColorBrush()
+            mySolidColorBrush.Color = System.Windows.Media.Color.FromArgb(255, 255, 255, 255)
+            Dim mySolidColorBrush2 As SolidColorBrush = New SolidColorBrush()
+            mySolidColorBrush2.Color = System.Windows.Media.Color.FromArgb(150, 255, 255, 255)
+            placeholder.Fill = mySolidColorBrush
+            Me.Background = mySolidColorBrush2
+
+        End If
+
+
+
+        EnableTaskbarStyle()
 
         Dim identity = WindowsIdentity.GetCurrent()
         Dim principal = New WindowsPrincipal(identity)
@@ -360,6 +440,15 @@ Class MainWindow
                             CheckBox4.IsChecked = True
                         End If
                     End If
+                    If argument.Contains("-rzbt") Then
+                        If val(1) = "1" Then
+                            CheckBox4_Copy.IsChecked = True
+                        End If
+                        If val(1) = "0" Then
+                            CheckBox4_Copy.IsChecked = False
+                        End If
+                    End If
+
                     If argument.Contains("-dtbsowm") Then
                         If val(1) = "1" Then
                             Checkbox10.IsChecked = True
@@ -555,6 +644,14 @@ Class MainWindow
                             CheckBox4.IsChecked = True
                         End If
                     End If
+                    If argument.Contains("-rzbt") Then
+                        If val(1) = "1" Then
+                            CheckBox4_Copy.IsChecked = True
+                        End If
+                        If val(1) = "0" Then
+                            CheckBox4_Copy.IsChecked = False
+                        End If
+                    End If
                     If argument.Contains("-dtbsowm") Then
                         If val(1) = "1" Then
                             Checkbox10.IsChecked = True
@@ -691,6 +788,15 @@ Class MainWindow
 
                 If CheckBox4.IsChecked = True Then
                     parameters &= "-ftotc=1 "
+                End If
+
+                If CheckBox4_Copy.IsChecked = True Then
+                    parameters &= "-rzbt=1 "
+                End If
+
+
+                If CheckBox4_Copy.IsChecked = False Then
+                    parameters &= "-rzbt=0 "
                 End If
 
                 If Checkbox10.IsChecked = True Then
@@ -905,6 +1011,14 @@ Class MainWindow
             parameters &= "-ftotc=1 "
         End If
 
+        If CheckBox4_Copy.IsChecked = True Then
+            parameters &= "-rzbt=1 "
+        End If
+
+        If CheckBox4_Copy.IsChecked = False Then
+            parameters &= "-rzbt=0 "
+        End If
+
         If Checkbox10.IsChecked = True Then
             parameters &= "-dtbsowm=1 "
         End If
@@ -1115,6 +1229,15 @@ Class MainWindow
 
         If CheckBox4.IsChecked = True Then
             parameters &= "-ftotc=1 "
+        End If
+
+        If CheckBox4_Copy.IsChecked = True Then
+            parameters &= "-rzbt=1 "
+        End If
+
+
+        If CheckBox4_Copy.IsChecked = False Then
+            parameters &= "-rzbt=0 "
         End If
 
         If Checkbox10.IsChecked = True Then
@@ -1353,6 +1476,14 @@ Class MainWindow
                             CheckBox4.IsChecked = True
                         End If
                     End If
+                    If argument.Contains("-rzbt") Then
+                        If val(1) = "1" Then
+                            CheckBox4_Copy.IsChecked = True
+                        End If
+                        If val(1) = "0" Then
+                            CheckBox4_Copy.IsChecked = False
+                        End If
+                    End If
                     If argument.Contains("-dtbsowm") Then
                         If val(1) = "1" Then
                             Checkbox10.IsChecked = True
@@ -1424,6 +1555,7 @@ Class MainWindow
         CheckBox2.IsChecked = False
         CheckBox3.IsChecked = False
         CheckBox4.IsChecked = True
+        CheckBox4_Copy.IsChecked = True
         Checkbox9.IsChecked = False
         CheckBox11.IsChecked = False
         Checkbox12.IsChecked = False
@@ -1549,6 +1681,12 @@ Class MainWindow
 
         If CheckBox4.IsChecked = True Then
             parameters &= "-ftotc=1 "
+        End If
+        If CheckBox4_Copy.IsChecked = True Then
+            parameters &= "-rzbt=1 "
+        End If
+        If CheckBox4_Copy.IsChecked = False Then
+            parameters &= "-rzbt=0 "
         End If
 
         If Checkbox10.IsChecked = True Then
@@ -1861,6 +1999,7 @@ Class MainWindow
         colorprev.Opacity = sAlpha.Value / 100
 
 
+
         calchexcolor2()
     End Sub
 
@@ -2037,6 +2176,14 @@ Class MainWindow
 
         If CheckBox4.IsChecked = True Then
             parameters &= "-ftotc=1 "
+        End If
+
+        If CheckBox4_Copy.IsChecked = True Then
+            parameters &= "-rzbt=1 "
+        End If
+
+        If CheckBox4_Copy.IsChecked = False Then
+            parameters &= "-rzbt=0 "
         End If
 
         If Checkbox10.IsChecked = True Then
