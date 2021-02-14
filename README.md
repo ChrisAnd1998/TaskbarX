@@ -134,11 +134,15 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 
 
 
-**How do i uninstall TaskbarX?** Open the "TaskbarX Configurator" and hit the "Stop TaskbarX" button. This will stop the TaskbarX process and put your icons back to the left. Then go to the "Taskschedule" tab and hit the "Remove" button. After that you can simply remove the files where you installed TaskbarX.  
+**How do i uninstall TaskbarX?** Open the "TaskbarX Configurator" and hit the "Stop TaskbarX" button. This will stop the TaskbarX process and put your icons back to the left. Then go to the "Taskschedule" tab and hit the "Remove" button. After that you can simply remove the files where you installed TaskbarX. https://www.youtube.com/watch?v=Fj-gSF_nEyo  
 
 
 
-**Error Windows cannot find 'shell:AppsFolder\Chris... after uninstalling Store version?** At the moment the Store has no option to remove a taskschedule. So it has to be done manually until Microsoft provides a solution. Here's how to fix it. In your startmenu search for "Task Scheduler". On the left menu click on "Task Scheduler Library". In the middle a list will appear. Right click on the "TaskbarX" or "FalconX" entry and click "Delete".  
+**How to update TaskbarX?** Open the "TaskbarX Configurator" and hit the "Stop TaskbarX" button. This will stop the TaskbarX process and put your icons back to the left. Then overwrite the old TaskbarX files with the updated ones. https://www.youtube.com/watch?v=4dG8MlmeQsg  
+
+
+
+**Error Windows cannot find 'shell:AppsFolder\Chris... after uninstalling Store version?** At the moment the Store has no option to remove a taskschedule. So it has to be done manually until Microsoft provides a solution. Here's how to fix it. In your startmenu search for "Task Scheduler". On the left menu click on "Task Scheduler Library". In the middle a list will appear. Right click on the "TaskbarX" or "FalconX" entry and click "Delete". https://www.youtube.com/watch?v=QtvxF1S7Dsw  
 
 
 &nbsp;
