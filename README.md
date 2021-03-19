@@ -31,14 +31,6 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 &nbsp;
 
 
-## Configurator
-
-
-![conf](https://user-images.githubusercontent.com/50437199/104807613-7d375080-57e0-11eb-9217-6e92c62b6a57.png)
-
-
-&nbsp;
-
 
 ## Mockup
  
