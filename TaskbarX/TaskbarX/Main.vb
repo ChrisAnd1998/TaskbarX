@@ -9,6 +9,9 @@ Public Class Main
 
     Public Shared Sub Main()
         Try
+
+
+
             'Kill every other running instance of TaskbarX
             Try
                 For Each prog As Process In Process.GetProcessesByName("TaskbarX")
@@ -174,6 +177,10 @@ Public Class Main
                 '  Win32.PostMessage(Shell_TrayWnd, CUInt(&H111), CType(424, IntPtr), CType(vbNullString, IntPtr))
             Loop Until Not Handle = Nothing
 
+            If Settings.ShowTrayIcon = 1 Then
+                TrayIconBuster.TrayIconBuster.RemovePhantomIcons()
+            End If
+
             'Just empty startup memory before starting
             ClearMemory()
 
@@ -181,9 +188,13 @@ Public Class Main
             ResetTaskbarStyle()
 
             If Settings.ShowTrayIcon = 1 Then
+
+
                 noty.Text = "TaskbarX (L = Restart) (M = Config) (R = Stop)"
                 noty.Icon = My.Resources.icon
                 noty.Visible = True
+
+
             End If
 
             AddHandler noty.MouseClick, AddressOf MnuRef_Click
@@ -202,6 +213,13 @@ Public Class Main
         Catch ex As Exception
             Console.WriteLine(ex.Message)
         End Try
+    End Sub
+
+    Public Shared Sub Toaster(ByVal message As String)
+        noty.BalloonTipTitle = "TaskbarX"
+        noty.BalloonTipText = message
+        noty.Visible = True
+        noty.ShowBalloonTip(3000)
     End Sub
 
     Public Shared Sub MnuRef_Click(sender As Object, e As MouseEventArgs)

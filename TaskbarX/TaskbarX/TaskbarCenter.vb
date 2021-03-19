@@ -224,6 +224,8 @@ Public Class TaskbarCenter
 
 #End Region
 
+
+
 #Region "Looper"
 
     Public Shared Sub Looper()
@@ -309,6 +311,8 @@ Public Class TaskbarCenter
 
             Dim TaskObjects As List(Of IAccessible) = TaskObject
 
+
+
             'Start the endless loop
             Do
                 Try
@@ -337,6 +341,8 @@ Public Class TaskbarCenter
                         End If
                     End If
 
+
+
                     If Settings.CheckFullscreenApp = 1 Then
                         Dim activewindow = Win32.GetForegroundWindow()
                         Dim curmonx As Screen = Screen.FromHandle(activewindow)
@@ -345,6 +351,8 @@ Public Class TaskbarCenter
 
                         If activewindowsize.Top = curmonx.Bounds.Top And activewindowsize.Bottom = curmonx.Bounds.Bottom And activewindowsize.Left = curmonx.Bounds.Left And activewindowsize.Right = curmonx.Bounds.Right Then
                             Console.WriteLine("Fullscreen App detected " & activewindowsize.Bottom & "," & activewindowsize.Top & "," & activewindowsize.Left & "," & activewindowsize.Right)
+
+                            Main.Toaster("Fullscreen App detected... TaskbarX will now be disabled.")
 
                             Settings.Pause = True
                             Do
@@ -355,6 +363,8 @@ Public Class TaskbarCenter
 
                             Loop While activewindowsize.Top = curmonx.Bounds.Top And activewindowsize.Bottom = curmonx.Bounds.Bottom And activewindowsize.Left = curmonx.Bounds.Left And activewindowsize.Right = curmonx.Bounds.Right
                             Console.WriteLine("Fullscreen App deactivated")
+
+                            Main.Toaster("Fullscreen App closed or minimized... TaskbarX will now be enabled.")
 
                             Settings.Pause = False
                         End If

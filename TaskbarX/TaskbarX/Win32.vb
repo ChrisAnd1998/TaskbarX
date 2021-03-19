@@ -32,8 +32,16 @@ Public Class Win32
     Public Shared Function FindWindowEx(ByVal parentHandle As IntPtr, ByVal childAfter As IntPtr, ByVal lclassName As String, ByVal windowTitle As String) As IntPtr
     End Function
 
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function FindWindow(ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+    End Function
+
     <DllImport("user32.dll", ExactSpelling:=True, CharSet:=CharSet.Auto)>
     Public Shared Function GetParent(ByVal hWnd As IntPtr) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    Public Shared Function GetClientRect(ByVal hWnd As System.IntPtr, ByRef lpRECT As RECT) As Integer
     End Function
 
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
@@ -109,6 +117,10 @@ Public Class Win32
     Public Shared Function SetLayeredWindowAttributes(ByVal hwnd As IntPtr, ByVal crKey As UInteger, ByVal bAlpha As Byte, ByVal dwFlags As UInteger) As Boolean
     End Function
 
+
+    <DllImport("user32.dll")>
+    Public Shared Function RedrawWindow(hWnd As IntPtr, lprcUpdate As IntPtr, hrgnUpdate As IntPtr, flags As RedrawWindowFlags) As Boolean
+    End Function
     Enum DWMWINDOWATTRIBUTE As UInteger
         NCRenderingEnabled = 1
         NCRenderingPolicy
@@ -125,6 +137,22 @@ Public Class Win32
         Cloak
         Cloaked
         FreezeRepresentation
+    End Enum
+
+
+    Enum RedrawWindowFlags As UInteger
+        Invalidate = &H1
+        InternalPaint = &H2
+        [Erase] = &H4
+        Validate = &H8
+        NoInternalPaint = &H10
+        NoErase = &H20
+        NoChildren = &H40
+        AllChildren = &H80
+        UpdateNow = &H100
+        EraseNow = &H200
+        Frame = &H400
+        NoFrame = &H800
     End Enum
 
     Public Structure POINTAPI
