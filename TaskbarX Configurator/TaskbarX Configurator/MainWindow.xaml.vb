@@ -33,6 +33,32 @@ Class MainWindow
 
     Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
 
+    <System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint:="SetWindowLong")>
+    Public Shared Function SetWindowLong(ByVal hWnd As IntPtr, <MarshalAs(UnmanagedType.I4)> nIndex As WindowStyles, ByVal dwNewLong As Integer) As Integer
+    End Function
+
+    Public Enum WindowStyles
+        WS_BORDER = &H800000
+        WS_CAPTION = &HC00000
+        WS_CHILD = &H40000000
+        WS_CLIPCHILDREN = &H2000000
+        WS_CLIPSIBLINGS = &H4000000
+        WS_DISABLED = &H8000000
+        WS_DLGFRAME = &H400000
+        WS_GROUP = &H20000
+        WS_HSCROLL = &H100000
+        WS_MAXIMIZE = &H1000000
+        WS_MAXIMIZEBOX = &H10000
+        WS_MINIMIZE = &H20000000
+        WS_MINIMIZEBOX = &H20000
+        WS_OVERLAPPED = &H0
+        WS_OVERLAPPEDWINDOW = WS_OVERLAPPED Or WS_CAPTION Or WS_SYSMENU Or WS_SIZEFRAME Or WS_MINIMIZEBOX Or WS_MAXIMIZEBOX
+        WS_SIZEFRAME = &H40000
+        WS_SYSMENU = &H80000
+        WS_TABSTOP = &H10000
+        WS_VISIBLE = &H10000000
+        WS_VSCROLL = &H200000
+    End Enum
     Friend Structure WindowCompositionAttributeData
         Public Attribute As WindowCompositionAttribute
         Public Data As IntPtr
@@ -67,6 +93,12 @@ Class MainWindow
         Public x As Int32
         Public y As Int32
     End Structure
+
+    Public Const GWL_STYLE = -16
+    Public Const GWL_EXSTYLE = -20
+    Public Const WS_MAXIMIZE = 16777216
+    Public Const WS_POPUP = 2147483648
+    Public Const WS_EX_LAYERED As Integer = 524288
 
     Public Shared SWP_NOSIZE As UInt32 = 1
     Public Shared SWP_ASYNCWINDOWPOS As UInt32 = 16384
@@ -106,8 +138,8 @@ Class MainWindow
             Try
                 Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
                     .WindowStyle = ProcessWindowStyle.Hidden,
-                    .FileName = "cmd.exe",
-                    .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & "-stop"
+                    .FileName = "explorer.exe",
+                    .Arguments = " taskbarx:" & Chr(34) & "-stop" & Chr(34)
                 }
                 Process.Start(processInfo)
             Catch
@@ -133,59 +165,38 @@ Class MainWindow
         Return bmp.GetPixel(0, 0)
     End Function
 
-    Friend Sub EnableTaskbarStyle()
-        Dim tskBarHwnd As IntPtr = Process.GetCurrentProcess().MainWindowHandle
-        Dim accent = New AccentPolicy()
-        Dim accentStructSize = Marshal.SizeOf(accent)
 
-        ' # Taskbar Style Acrylic
-        accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND
-        '' accent.GradientColor = 10 'Or 16777215
-        accent.GradientColor = BitConverter.ToInt32(New Byte() {CByte(0), CByte(0), CByte(0), CByte(1 * 2.55)}, 0)
 
-        ' # Taskbar Style Blur
-        ' accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND
 
-        ' # Taskbar Style Transparant
-        '' accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARANT
 
-        Dim accentPtr = Marshal.AllocHGlobal(accentStructSize)
-        Marshal.StructureToPtr(accent, accentPtr, False)
-        Dim data = New WindowCompositionAttributeData()
-        data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY
-        data.SizeOfData = accentStructSize
-        data.Data = accentPtr
-        SetWindowCompositionAttribute(tskBarHwnd, data)
-        Marshal.FreeHGlobal(accentPtr)
-    End Sub
+    Private Async Sub Window_Loaded(ByVal sender As Object, ByVal e As EventArgs)
 
-    Private Async Sub Window_Loaded(ByVal sender As Object, ByVal e As RoutedEventArgs)
+        InitializeComponent()
 
 
 
         If Me.Background.ToString = "#FF000000" Then
             Dim mySolidColorBrush As SolidColorBrush = New SolidColorBrush()
-            mySolidColorBrush.Color = System.Windows.Media.Color.FromArgb(255, 20, 20, 20)
+            mySolidColorBrush.Color = System.Windows.Media.Color.FromArgb(255, 10, 10, 10)
             Dim mySolidColorBrush2 As SolidColorBrush = New SolidColorBrush()
-            mySolidColorBrush2.Color = System.Windows.Media.Color.FromArgb(150, 20, 20, 20)
+            mySolidColorBrush2.Color = System.Windows.Media.Color.FromArgb(255, 20, 20, 20)
             placeholder.Fill = mySolidColorBrush
-            Me.Background = mySolidColorBrush2
-
+            Me.Background = mySolidColorBrush
+            ListBox1.Background = mySolidColorBrush2
         End If
 
         If Me.Background.ToString = "#FFFFFFFF" Then
             Dim mySolidColorBrush As SolidColorBrush = New SolidColorBrush()
-            mySolidColorBrush.Color = System.Windows.Media.Color.FromArgb(255, 255, 255, 255)
+            mySolidColorBrush.Color = System.Windows.Media.Color.FromArgb(255, 240, 240, 240)
             Dim mySolidColorBrush2 As SolidColorBrush = New SolidColorBrush()
-            mySolidColorBrush2.Color = System.Windows.Media.Color.FromArgb(150, 255, 255, 255)
+            mySolidColorBrush2.Color = System.Windows.Media.Color.FromArgb(255, 255, 255, 255)
             placeholder.Fill = mySolidColorBrush
             Me.Background = mySolidColorBrush2
-
+            ListBox1.Background = mySolidColorBrush
         End If
 
 
 
-        EnableTaskbarStyle()
 
         Dim identity = WindowsIdentity.GetCurrent()
         Dim principal = New WindowsPrincipal(identity)
@@ -297,6 +308,8 @@ Class MainWindow
 
         ComboBox2.SelectedItem = "cubiceaseinout"
 
+        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
+
         If Not System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
             Try
                 Dim address As String = "https://raw.githubusercontent.com/ChrisAnd1998/FalconX-Center-Taskbar/master/VERSION"
@@ -306,6 +319,8 @@ Class MainWindow
                 Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
 
                 Dim latest = reader.ReadToEnd.ToString
+
+
 
                 If latest.Contains(Assembly.GetExecutingAssembly().GetName().Version.ToString()) Then
                     vers.Text = "You are up to date."
@@ -339,7 +354,8 @@ Class MainWindow
 
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
 
-                    cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                    ''cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                    cfg = td.Definition.Actions.ToString.Replace("explorer.exe taskbarx:", "")
                 Else
                     cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
                 End If
@@ -544,6 +560,7 @@ Class MainWindow
 
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
                     cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                    ''  cfg = td.Definition.Actions.ToString.Replace("explorer.exe taskbarx:", "")
                 Else
                     cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
                 End If
@@ -859,7 +876,7 @@ Class MainWindow
 
                         If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
 
-                            td2.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
+                            td2.Actions.Add(New ExecAction("explorer.exe", "taskbarx:" & Chr(34) & parameters & Chr(34), Nothing))
                         Else
 
                             td2.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
@@ -1079,12 +1096,12 @@ Class MainWindow
 
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
 
-                    td.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
+                    td.Actions.Add(New ExecAction("explorer.exe", "taskbarx:" & Chr(34) & parameters & Chr(34), Nothing))
 
                     Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
                         .WindowStyle = ProcessWindowStyle.Hidden,
-                        .FileName = "cmd.exe",
-                        .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+                        .FileName = "explorer.exe",
+                        .Arguments = " taskbarx:" & Chr(34) & parameters & Chr(34)
                     }
                     Process.Start(processInfo)
                 Else
@@ -1300,7 +1317,7 @@ Class MainWindow
 
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
 
-                    td.Actions.Add(New ExecAction("cmd.exe", "/c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters, Nothing))
+                    td.Actions.Add(New ExecAction("explorer.exe", "taskbarx: " & Chr(34) & parameters & Chr(34), Nothing))
                 Else
 
                     td.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
@@ -1374,7 +1391,9 @@ Class MainWindow
 
 
                 If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
-                    cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                    ''cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
+                    cfg = td.Definition.Actions.ToString.Replace("explorer.exe taskbarx:", "")
+
                 Else
                     cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
                 End If
@@ -1720,8 +1739,8 @@ Class MainWindow
         If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
             Dim processInfo As ProcessStartInfo = New ProcessStartInfo With {
                 .WindowStyle = ProcessWindowStyle.Hidden,
-                .FileName = "cmd.exe",
-                .Arguments = " /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+                .FileName = "explorer.exe",
+                .Arguments = " taskbarx:" & Chr(34) & parameters & Chr(34)
             }
             Process.Start(processInfo)
         Else
@@ -2215,9 +2234,10 @@ Class MainWindow
         End If
 
         If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
-            TextboxLink.Text = "cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+            '' TextboxLink.Text = "cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX " & parameters
+            TextboxLink.Text = "explorer.exe taskbarx:" & Chr(34) & parameters & Chr(34)
         Else
-            TextboxLink.Text = System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe " & parameters
+            TextboxLink.Text = Chr(34) & System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe" & Chr(34) & " " & parameters
         End If
 
     End Sub

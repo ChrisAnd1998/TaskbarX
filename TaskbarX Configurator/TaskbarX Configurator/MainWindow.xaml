@@ -7,12 +7,12 @@
         mc:Ignorable="d"
         Title="TaskbarX Configurator" Height="649.581" Width="863.329" 
         ResizeMode="NoResize"
-        Loaded="Window_Loaded"
+       ContentRendered="Window_Loaded"
     xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         
         
-    ui:WindowHelper.UseModernWindowStyle="True" Icon="StoreLogo2-71.ico" AllowsTransparency="True" WindowStyle="None" >
+    ui:WindowHelper.UseModernWindowStyle="true" Icon="StoreLogo2-71.ico" AllowsTransparency="True" WindowStyle="None" >
 
 
 
@@ -23,13 +23,9 @@
 
 
 
-        <Rectangle x:Name="placeholder" Fill="White" HorizontalAlignment="Left" Height="648" VerticalAlignment="Top" Width="684" Margin="167,-44,-12,-504">
-            <Rectangle.Effect>
-                <DropShadowEffect ShadowDepth="2" Direction="180" Color="Black" Opacity="0.2" BlurRadius="6"/>
-            </Rectangle.Effect>
-        </Rectangle>
+        <Rectangle x:Name="placeholder" Fill="White" Height="11" VerticalAlignment="Top" Margin="795,608,12,-519" Visibility="Hidden"/>
 
-        <ListBox x:Name="ListBox1"  HorizontalAlignment="Left" Height="615" VerticalAlignment="Top" Width="179" Margin="-12,-135,0,-448" SelectionChanged="ListBox_SelectionChanged" Background="{x:Null}">
+        <ListBox x:Name="ListBox1"  HorizontalAlignment="Left" Height="615" VerticalAlignment="Top" Width="179" Margin="-12,-135,0,-448" SelectionChanged="ListBox_SelectionChanged" >
 
 
 
@@ -85,6 +81,7 @@
                     <RadioButton ToolTip="Make the taskbar background Acrylic/Fluent with a gradient color." x:Name="RadioButton4" Content="Acrylic (can flicker)" HorizontalAlignment="Left" Margin="11,274,0,0" VerticalAlignment="Top" Height="32" Width="151" />
                     <CheckBox ToolTip="Revert the taskbar to the default background when a window is maximized." x:Name="Checkbox10" Content="Switch back to Default on maximized window" HorizontalAlignment="Left" Margin="11,334,0,0" VerticalAlignment="Top" Width="364" Grid.ColumnSpan="2" Height="32" />
                     <Slider x:Name="sRed" HorizontalAlignment="Left" VerticalAlignment="Top" Width="255" Maximum="255" ValueChanged="Red_ValueChanged" Foreground="#FFD70000" Height="32" Margin="56,403,0,0" Grid.Column="1" />
+                    
                     <Rectangle x:Name="colorprev" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="150"  VerticalAlignment="Top" Width="150" Margin="11,400,0,0" />
                     <Slider x:Name="sGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="255" Maximum="255" ValueChanged="Green_ValueChanged" Foreground="#FF29B01C" Height="32" Margin="56,440,0,0" Grid.Column="1" />
                     <Slider x:Name="sBlue" VerticalAlignment="Top" Maximum="255" ValueChanged="Blue_ValueChanged" Foreground="#FF0023FF" Height="32" Margin="56,477,184,0" Grid.Column="1" />
@@ -221,7 +218,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
                     <Image Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="476,128,0,0" VerticalAlignment="Top" Width="32" Source="Resources/Logo-2021-150.png" RenderTransformOrigin="1.037,1.32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.6.6.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.6.7.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />
