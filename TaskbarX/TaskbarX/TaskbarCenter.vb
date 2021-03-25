@@ -15,21 +15,6 @@ Public Class TaskbarCenter
 
     Public Shared windowHandles As ArrayList = New ArrayList()
 
-    Public Shared childLeft As Integer
-    Public Shared childTop As Integer
-    Public Shared childWidth As Integer
-    Public Shared childHeight As Integer
-
-    Public Shared childLeft2 As Integer
-    Public Shared childTop2 As Integer
-    Public Shared childWidth2 As Integer
-    Public Shared childHeight2 As Integer
-
-    Public Shared childLeft3 As Integer
-    Public Shared childTop3 As Integer
-    Public Shared childWidth3 As Integer
-    Public Shared childHeight3 As Integer
-
     Public Shared trayfixed As Boolean
     Public Shared setposhwnd As IntPtr
     Public Shared setpospos As Integer
@@ -85,19 +70,17 @@ Public Class TaskbarCenter
         Return True
     End Function
 
-    Public Shared Function GetLocation(ByVal acc As Accessibility.IAccessible, ByVal idChild As Integer) As Integer
-        acc.accLocation(childLeft, childTop, childWidth, childHeight, idChild)
-        Return Nothing
-    End Function
+    Structure RectangleX
+        Dim left As Integer
+        Dim top As Integer
+        Dim width As Integer
+        Dim height As Integer
+    End Structure
 
-    Public Shared Function GetLocation2(ByVal acc As Accessibility.IAccessible, ByVal idChild As Integer) As Integer
-        acc.accLocation(childLeft2, childTop2, childWidth2, childHeight2, idChild)
-        Return Nothing
-    End Function
-
-    Public Shared Function GetLocation3(ByVal acc As Accessibility.IAccessible, ByVal idChild As Integer) As Integer
-        acc.accLocation(childLeft3, childTop3, childWidth3, childHeight3, idChild)
-        Return Nothing
+    Public Shared Function GetLocation(ByVal acc As Accessibility.IAccessible, ByVal idChild As Integer) As RectangleX
+        Dim rect As New RectangleX
+        acc.accLocation(rect.left, rect.top, rect.width, rect.height, idChild)
+        Return rect
     End Function
 
     Public Shared Sub SetPos()
@@ -188,7 +171,7 @@ Public Class TaskbarCenter
 #Region "Events"
 
     Public Shared Sub HandlePrefChange(ByVal sender As Object, ByVal e As Microsoft.Win32.UserPreferenceChangedEventArgs)
-        Console.WriteLine(e.Category)
+        '' Console.WriteLine(e.Category)
         If e.Category = Microsoft.Win32.UserPreferenceCategory.General Then
 
             Console.WriteLine()
@@ -224,12 +207,9 @@ Public Class TaskbarCenter
 
 #End Region
 
-
-
 #Region "Looper"
 
     Public Shared Sub Looper()
-
 
         Try
             'This loop will check if the taskbar changes and requires a move
@@ -242,8 +222,6 @@ Public Class TaskbarCenter
                 Dim sClassName As New StringBuilder("", 256)
                 Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
                 Dim MSTaskListWClass As IntPtr
-
-
 
                 If sClassName.ToString = "Shell_TrayWnd" Then
                     Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
@@ -311,8 +289,6 @@ Public Class TaskbarCenter
 
             Dim TaskObjects As List(Of IAccessible) = TaskObject
 
-
-
             'Start the endless loop
             Do
                 Try
@@ -341,8 +317,6 @@ Public Class TaskbarCenter
                         End If
                     End If
 
-
-
                     If Settings.CheckFullscreenApp = 1 Then
                         Dim activewindow = Win32.GetForegroundWindow()
                         Dim curmonx As Screen = Screen.FromHandle(activewindow)
@@ -353,6 +327,8 @@ Public Class TaskbarCenter
                             Console.WriteLine("Fullscreen App detected " & activewindowsize.Bottom & "," & activewindowsize.Top & "," & activewindowsize.Left & "," & activewindowsize.Right)
 
                             Main.Toaster("Fullscreen App detected... TaskbarX will now be disabled.")
+                            Main.ResetTaskbarStyle()
+                            RevertToZero()
 
                             Settings.Pause = True
                             Do
@@ -378,29 +354,30 @@ Public Class TaskbarCenter
 
                         Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(CType(TaskList, IAccessible))
 
-                        GetLocation(CType(TaskList, IAccessible), 0)
+                        Dim TaskListPos As RectangleX = GetLocation(CType(TaskList, IAccessible), 0)
 
-                        Dim tH = childHeight
-                        Dim tW = childWidth
+                        Dim tH = TaskListPos.height
+                        Dim tW = TaskListPos.width
+
+                        Dim LastChildPos As RectangleX
 
                         For Each childx As Accessibility.IAccessible In children
-                            If CInt(childx.accRole(0)) = &H16 Then
-                                Dim children2() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(childx)
-                                GetLocation(childx, children2.Count)
-                                Continue For
+                            If CInt(childx.accRole(0)) = &H16 Then '0x16 = toolbar
+                                LastChildPos = GetLocation(childx, MSAA.GetAccessibleChildren(childx).Length)
+                                Exit For
                             End If
                         Next
 
-                        Dim cL = childLeft
-                        Dim cT = childTop
-                        Dim cW = childWidth
-                        Dim cH = childHeight
+                        Dim cL = LastChildPos.left
+                        Dim cT = LastChildPos.top
+                        Dim cW = LastChildPos.width
+                        Dim cH = LastChildPos.height
 
                         Try
                             Dim testiferror = cL
                         Catch ex As Exception
                             'Current taskbar is empty go to next taskbar.
-                            ' Continue For
+                            ''Continue For
                         End Try
 
                         Dim Orientation As String
@@ -492,11 +469,6 @@ Public Class TaskbarCenter
             Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
             Dim MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
 
-            If MSTaskListWClass = Nothing Then
-                MessageBox.Show("TaskbarX: Could not find the handle of the taskbar. Your current OS may not be supported.")
-                End
-            End If
-
             Dim accessible As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(MSTaskListWClass)
 
             Dim accessible2 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayNotifyWnd)
@@ -511,23 +483,9 @@ Public Class TaskbarCenter
 
             Do
 
-                GetLocation3(accessible3, 0)
-                Dim ReBarcL = childLeft3
-                Dim ReBarcT = childTop3
-                Dim ReBarcW = childWidth3
-                Dim ReBarcH = childHeight3
-
-                GetLocation3(accessible2, 0)
-                Dim TrayNotifycL = childLeft3
-                Dim TrayNotifycT = childTop3
-                Dim TrayNotifycW = childWidth3
-                Dim TrayNotifycH = childHeight3
-
-                GetLocation3(accessible, 0)
-                Dim TaskListcL = childLeft3
-                Dim TaskListcT = childTop3
-                Dim TaskListcW = childWidth3
-                Dim TaskListcH = childHeight3
+                Dim RebarPos As RectangleX = GetLocation(accessible3, 0)
+                Dim TrayNotifyPos As RectangleX = GetLocation(accessible2, 0)
+                Dim TaskListPos As RectangleX = GetLocation(accessible, 0)
 
                 Win32.SendMessage(ReBarWindow32, 11, False, 0)
                 Win32.SendMessage(Win32.GetParent(Shell_TrayWnd), 11, False, 0)
@@ -537,23 +495,23 @@ Public Class TaskbarCenter
                 Dim TrayOrientation As String
 
                 'If the TrayNotifyWnd updates then refresh the taskbar
-                If TaskListcH >= TaskListcW Then
+                If TaskListPos.height >= TaskListPos.width Then
                     TrayOrientation = "V"
                 Else
                     TrayOrientation = "H"
                 End If
 
-                TrayNotifyWidth = TrayNotifycW
+                TrayNotifyWidth = TrayNotifyPos.width
 
                 If Not TrayNotifyWidth = OldTrayNotifyWidth Then
                     If Not OldTrayNotifyWidth = 0 Then
-                        If Not TaskListcL = 0 Then
-                            If TrayNotifycL = 3 Then
+                        If Not TaskListPos.left = 0 Then
+                            If TrayNotifyPos.left = 3 Then
                                 '
                                 Exit Sub
                             End If
 
-                            Dim pos = Math.Abs((TaskListcL - ReBarcL))
+                            Dim pos = Math.Abs((TaskListPos.left - RebarPos.left))
 
                             trayfixed = False
 
@@ -651,67 +609,20 @@ Public Class TaskbarCenter
                 Dim sClassName As New StringBuilder("", 256)
                 Call Win32.GetClassName(CType(TaskList, IntPtr), sClassName, 256)
 
-                Dim ChildFirstcL As Integer
-                Dim ChildFirstcT As Integer
-                Dim ChildFirstcW As Integer
-                Dim ChildFirstcH As Integer
-
-                Dim ChildLastcL As Integer
-                Dim ChildLastcT As Integer
-                Dim ChildLastcW As Integer
-                Dim ChildLastcH As Integer
+                Dim LastChildPos As RectangleX
+                Dim TaskListPos As RectangleX
 
                 Dim accessible As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(CType(TaskList, IntPtr))
                 Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(accessible)
 
-                GetLocation2(accessible, 0)
-
-                Dim TaskListcL As Integer = childLeft2
-                Dim TaskListcT As Integer = childTop2
-                Dim TaskListcW As Integer = childWidth2
-                Dim TaskListcH As Integer = childHeight2
-
-                ' Try
+                TaskListPos = GetLocation(accessible, 0)
 
                 For Each childx As Accessibility.IAccessible In children
-
-                    If CInt(childx.accRole(0)) = 22 Then
-
-                        Dim children2() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(childx)
-                        Dim Count As Integer = 0
-                        Count = 0
-
-                        For Each ccc As Accessibility.IAccessible In children2
-                            Try
-                                If CInt(childx.accRole(ccc)) = &H2B Or CInt(childx.accRole(ccc)) = &H39 Then 'push button (0x2B) | menu button (0x39)
-                                    Count += 1
-                                End If
-                            Catch
-                                Count += 1
-                            End Try
-
-                        Next
-
-                        GetLocation2(childx, 0)
-                        ChildFirstcL = childLeft2
-                        ChildFirstcT = childTop2
-                        ChildFirstcW = childWidth2
-                        ChildFirstcH = childHeight2
-
-                        GetLocation2(childx, Count)
-                        ChildLastcL = childLeft2
-                        ChildLastcT = childTop2
-                        ChildLastcW = childWidth2
-                        ChildLastcH = childHeight2
-
-                        Continue For
-
+                    If CInt(childx.accRole(0)) = &H16 Then '0x16 = toolbar
+                        LastChildPos = GetLocation(childx, MSAA.GetAccessibleChildren(childx).Length)
+                        Exit For
                     End If
-
                 Next
-
-                ' Catch
-                'End Try
 
                 Dim RebarHandle = Win32.GetParent(CType(TaskList, IntPtr))
                 Dim accessible3 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(RebarHandle)
@@ -729,10 +640,7 @@ Public Class TaskbarCenter
                 Dim curleft As Integer
                 Dim curleft2 As Integer
 
-                Dim TrayNotifycL As Integer
-                Dim TrayNotifycT As Integer
-                Dim TrayNotifycW As Integer
-                Dim TrayNotifycH As Integer
+                Dim TrayNotifyPos As RectangleX
 
                 Dim TrayWndHandle = Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr)))
 
@@ -747,11 +655,7 @@ Public Class TaskbarCenter
                     Dim TrayNotify = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing)
                     Dim accessible4 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayNotify)
 
-                    GetLocation2(accessible4, 0)
-                    TrayNotifycL = childLeft2
-                    TrayNotifycT = childTop2
-                    TrayNotifycW = childWidth2
-                    TrayNotifycH = childHeight2
+                    TrayNotifyPos = GetLocation(accessible4, 0)
 
                     Win32.SendMessage(Win32.GetParent(TrayWndHandle), 11, False, 0)
 
@@ -760,29 +664,20 @@ Public Class TaskbarCenter
                 Call Win32.GetClassName(TrayWndHandle, TrayWndClassName, 256)
                 Dim accessible2 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayWndHandle)
 
-                GetLocation2(accessible2, 0)
-                Dim TrayWndcL As Integer = childLeft2
-                Dim TrayWndcT As Integer = childTop2
-                Dim TrayWndcW As Integer = childWidth2
-                Dim TrayWndcH As Integer = childHeight2
-
-                GetLocation2(accessible3, 0)
-                Dim RebarcL As Integer = childLeft2
-                Dim RebarcT As Integer = childTop2
-                Dim RebarcW As Integer = childWidth2
-                Dim RebarcH As Integer = childHeight2
+                Dim TrayWndPos As RectangleX = GetLocation(accessible2, 0)
+                Dim RebarPos As RectangleX = GetLocation(accessible3, 0)
 
                 'If the taskbar is still moving then wait until it's not (This will prevent unneeded calculations that trigger the animator)
                 Do
-                    curleft = TaskListcL
-                    GetLocation2(accessible, 0)
-                    TaskListcL = childLeft2
+                    curleft = TaskListPos.left
+                    TaskListPos = GetLocation(accessible, 0)
+                    '' TaskListcL = childLeft2
                     System.Threading.Thread.Sleep(30)
-                    curleft2 = TaskListcL
+                    curleft2 = TaskListPos.left
                 Loop Until curleft = curleft2
 
                 'Get current taskbar orientation (H = Horizontal | V = Vertical)
-                If TaskListcH >= TaskListcW Then
+                If TaskListPos.height >= TaskListPos.width Then
                     Orientation = "V"
                 Else
                     Orientation = "H"
@@ -791,9 +686,9 @@ Public Class TaskbarCenter
                 'Calculate the exact width of the total icons
                 Try
                     If Orientation = "H" Then
-                        TaskbarWidth = CInt((ChildFirstcL - TaskListcL) + (ChildLastcL - TaskListcL) + ChildLastcW)
+                        TaskbarWidth = CInt((LastChildPos.left - TaskListPos.left)) ''TaskbarTotalHeight
                     Else
-                        TaskbarWidth = CInt((ChildFirstcT - TaskListcT) + (ChildLastcT - TaskListcT) + ChildLastcH)
+                        TaskbarWidth = CInt((LastChildPos.top - TaskListPos.top))
                     End If
                 Catch
                     TaskbarWidth = 0
@@ -802,14 +697,14 @@ Public Class TaskbarCenter
 
                 'Get info needed to calculate the position
                 If Orientation = "H" Then
-                    TrayWndLeft = Math.Abs(CInt(TrayWndcL))
-                    TrayWndWidth = Math.Abs(CInt(TrayWndcW))
-                    RebarWndLeft = Math.Abs(CInt(RebarcL))
+                    TrayWndLeft = Math.Abs(CInt(TrayWndPos.left))
+                    TrayWndWidth = Math.Abs(CInt(TrayWndPos.width))
+                    RebarWndLeft = Math.Abs(CInt(RebarPos.left))
                     TaskbarLeft = Math.Abs(CInt(RebarWndLeft - TrayWndLeft))
                 Else
-                    TrayWndLeft = Math.Abs(CInt(TrayWndcT))
-                    TrayWndWidth = Math.Abs(CInt(TrayWndcH))
-                    RebarWndLeft = Math.Abs(CInt(RebarcT))
+                    TrayWndLeft = Math.Abs(CInt(TrayWndPos.top))
+                    TrayWndWidth = Math.Abs(CInt(TrayWndPos.height))
+                    RebarWndLeft = Math.Abs(CInt(RebarPos.top))
                     TaskbarLeft = Math.Abs(CInt(RebarWndLeft - TrayWndLeft))
                 End If
 
@@ -817,10 +712,10 @@ Public Class TaskbarCenter
                 If TrayWndClassName.ToString = "Shell_TrayWnd" Then
                     If Settings.CenterInBetween = 1 Then
                         If Orientation = "H" Then
-                            Dim offset = (TrayNotifycW / 2 - (TaskbarLeft \ 2))
+                            Dim offset = (TrayNotifyPos.width / 2 - (TaskbarLeft \ 2))
                             Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
                         Else
-                            Dim offset = (TrayNotifycH / 2 - (TaskbarLeft \ 2))
+                            Dim offset = (TrayNotifyPos.height / 2 - (TaskbarLeft \ 2))
                             Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
                         End If
                     Else
@@ -833,20 +728,18 @@ Public Class TaskbarCenter
                 'Trigger the animator
                 If SystemInformation.PowerStatus.PowerLineStatus = PowerLineStatus.Offline Then
 
-#Region "Animation Trigger On Battery"
-
                     If Settings.CenterPrimaryOnly = 1 Then
                         If TrayWndClassName.ToString = "Shell_TrayWnd" Then
                             If Orientation = "H" Then
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 End If
-                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, True, TaskbarWidth)
+                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListPos.left, RebarPos.left, "H", Position, True, TaskbarWidth)
                             Else
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, True, TaskbarWidth)
+                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListPos.top, RebarPos.top, "V", Position, True, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -856,13 +749,13 @@ Public Class TaskbarCenter
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
+                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListPos.left, RebarPos.left, "H", Position, False, TaskbarWidth)
                                 End If
                             Else
                                 If Settings.OnBatteryAnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
+                                    DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListPos.top, RebarPos.top, "V", Position, False, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -871,36 +764,31 @@ Public Class TaskbarCenter
                             If Settings.OnBatteryAnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
+                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListPos.left, RebarPos.left, "H", Position, False, TaskbarWidth)
                             End If
                         Else
                             If Settings.OnBatteryAnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
+                                DaAnimator(Settings.OnBatteryAnimationStyle, CType(TaskList, IntPtr), TaskListPos.top, RebarPos.top, "V", Position, False, TaskbarWidth)
                             End If
                         End If
                     End If
-
-#End Region
-
                 Else
 
-#Region "Animation Trigger"
-
                     If Settings.CenterPrimaryOnly = 1 Then
                         If TrayWndClassName.ToString = "Shell_TrayWnd" Then
                             If Orientation = "H" Then
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, True, TaskbarWidth)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListPos.left, RebarPos.left, "H", Position, True, TaskbarWidth)
                                 End If
                             Else
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, True, TaskbarWidth)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListPos.top, RebarPos.top, "V", Position, True, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -911,13 +799,13 @@ Public Class TaskbarCenter
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListPos.left, RebarPos.left, "H", Position, False, TaskbarWidth)
                                 End If
                             Else
                                 If Settings.AnimationStyle = "none" Then
                                     Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                                 Else
-                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
+                                    DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListPos.top, RebarPos.top, "V", Position, False, TaskbarWidth)
                                 End If
                             End If
                         End If
@@ -926,18 +814,16 @@ Public Class TaskbarCenter
                             If Settings.AnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, Position, 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcL, RebarcL, "H", Position, False, TaskbarWidth)
+                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListPos.left, RebarPos.left, "H", Position, False, TaskbarWidth)
                             End If
                         Else
                             If Settings.AnimationStyle = "none" Then
                                 Win32.SetWindowPos(CType(TaskList, IntPtr), IntPtr.Zero, 0, Position, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
                             Else
-                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListcT, RebarcT, "V", Position, False, TaskbarWidth)
+                                DaAnimator(Settings.AnimationStyle, CType(TaskList, IntPtr), TaskListPos.top, RebarPos.top, "V", Position, False, TaskbarWidth)
                             End If
                         End If
                     End If
-
-#End Region
 
                 End If
 
@@ -947,7 +833,6 @@ Public Class TaskbarCenter
             Console.WriteLine("@Calculator | " & ex.Message)
 
         End Try
-
 
     End Sub
 

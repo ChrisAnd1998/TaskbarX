@@ -283,7 +283,7 @@ Public Class Main
 
         Dim trays As New ArrayList
         For Each trayWnd As IntPtr In windowHandles
-            Console.WriteLine(trayWnd)
+            ''Console.WriteLine(trayWnd)
             trays.Add(trayWnd)
         Next
 

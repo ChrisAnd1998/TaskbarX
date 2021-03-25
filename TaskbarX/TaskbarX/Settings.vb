@@ -36,6 +36,8 @@ Public Class Settings
     Public Shared TotalSecondaryOpacity As Integer
     Public Shared RevertZeroBeyondTray As Integer
 
+    Public Shared UseUIA As Integer
+
     'If on battery TaskbarX will override with these
     Public Shared OnBatteryAnimationStyle As String
 
