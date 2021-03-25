@@ -2256,4 +2256,8 @@ Class MainWindow
         Dim val As Integer = CInt(tsop.Value)
         tsopla.Text = CType(val, String) & "%"
     End Sub
+
+    Private Sub Button_Click_14(sender As Object, e As RoutedEventArgs)
+        Process.Start("https://docs.microsoft.com/en-us/windows/win32/winauto/microsoft-active-accessibility-and-ui-automation-compared")
+    End Sub
 End Class
