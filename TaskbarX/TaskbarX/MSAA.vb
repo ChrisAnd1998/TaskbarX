@@ -18,16 +18,11 @@ Public Class MSAA
 
     Private Declare Function AccessibleObjectFromWindow Lib "oleacc" (ByVal Hwnd As Int32, ByVal dwId As Int32, ByRef riid As Guid, <MarshalAs(UnmanagedType.IUnknown)> ByRef ppvObject As Object) As Int32
 
-
-
     <DllImport("oleacc.dll")>
     Public Shared Function GetStateText(ByVal dwStateBit As UInteger, <Out> ByVal lpszStateBit As StringBuilder, ByVal cchStateBitMax As UInteger) As UInteger
     End Function
 
     Public Shared guidAccessible As New Guid("{618736E0-3C3D-11CF-810C-00AA00389B71}")
-
-
-
 
     Public Shared Function GetAccessibleChildren(ByVal objAccessible As IAccessible) As IAccessible()
         Dim childCount As Integer
@@ -98,13 +93,10 @@ Public Class MSAA
             Return focusableStateText.ToString
         End If
 
-
-
         Dim stateText = New StringBuilder(CInt(maxLength))
         GetStateText(stateID, stateText, maxLength)
         Return stateText.ToString()
     End Function
-
 
 End Class
 
