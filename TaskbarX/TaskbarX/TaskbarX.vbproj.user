@@ -15,7 +15,7 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartArguments>-ls=20</StartArguments>
+    <StartArguments>-ls=20 -cib=1</StartArguments>
     <StartAction>Project</StartAction>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>

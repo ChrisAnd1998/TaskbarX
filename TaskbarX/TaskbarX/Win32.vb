@@ -44,6 +44,15 @@ Public Class Win32
     Public Shared Function GetClientRect(ByVal hWnd As System.IntPtr, ByRef lpRECT As RECT) As Integer
     End Function
 
+    <DllImport("user32.dll")>
+    Shared Function SetWindowRgn(ByVal hWnd As IntPtr, ByVal hRgn As IntPtr, ByVal bRedraw As Boolean) As Integer
+    End Function
+
+    <DllImport("gdi32.dll")>
+    Public Shared Function CreateRoundRectRgn(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByVal w As Integer, ByVal h As Integer) As IntPtr
+    End Function
+
+
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
     End Function

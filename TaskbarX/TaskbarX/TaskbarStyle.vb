@@ -88,6 +88,12 @@ Public Class TaskbarStyle
                         If curmonx.DeviceName = curmontbx.DeviceName Then
                             trays.Remove(tray)
                             trays.Add(tray)
+
+                            ''If Not Settings.TaskbarRounding = 0 Then
+                            ''Dim tt As New Win32.RECT
+                            ''Win32.GetClientRect(tray, tt)
+                            ''Win32.SetWindowRgn(CType(tray, IntPtr), Win32.CreateRoundRectRgn(0, 0, tt.Right, tt.Bottom - tt.Top, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+                            ''End If
                         End If
                     Next
                 Next
@@ -99,6 +105,11 @@ Public Class TaskbarStyle
                         If curmonx.DeviceName = curmontbx.DeviceName Then
                             trays.Remove(tray)
                             Win32.PostMessage(tray, &H31E, CType(&H1, IntPtr), CType(&H0, IntPtr))
+                            ''  If Not Settings.TaskbarRounding = 0 Then
+                            ''  Dim tt As New Win32.RECT
+                            ''  Win32.GetClientRect(tray, tt)
+                            ''  Win32.SetWindowRgn(CType(tray, IntPtr), Win32.CreateRoundRectRgn(0, 0, tt.Right, tt.Bottom - tt.Top, 0, 0), True)
+                            ''End If
                         End If
                     Next
                 Next

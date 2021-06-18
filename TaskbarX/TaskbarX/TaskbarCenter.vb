@@ -1,5 +1,7 @@
 ﻿Option Strict On
 
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports System.Text
 Imports System.Threading
 Imports Accessibility
@@ -207,6 +209,7 @@ Public Class TaskbarCenter
 
 #End Region
 
+
 #Region "Looper"
 
     Public Shared Sub Looper()
@@ -248,6 +251,10 @@ Public Class TaskbarCenter
 
                     Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
                     MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
+
+
+
+
                 End If
 
                 If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
@@ -271,6 +278,8 @@ Public Class TaskbarCenter
                     End If
 
                     MSTaskListWClass = Win32.FindWindowEx(WorkerW, CType(0, IntPtr), "MSTaskListWClass", Nothing)
+
+
                 End If
 
                 If MSTaskListWClass = Nothing Then
@@ -356,6 +365,7 @@ Public Class TaskbarCenter
 
                         Dim TaskListPos As RectangleX = GetLocation(CType(TaskList, IAccessible), 0)
 
+
                         Dim tH = TaskListPos.height
                         Dim tW = TaskListPos.width
 
@@ -413,6 +423,9 @@ Public Class TaskbarCenter
                         i += 1
                     Next
 
+
+
+
                     If Not results = oldresults Then
                         'Something has changed we can now calculate the new position for each taskbar
 
@@ -427,6 +440,11 @@ Public Class TaskbarCenter
 
                     'Save current results for next loop
                     oldresults = results
+
+
+
+
+
 
                     If SystemInformation.PowerStatus.PowerLineStatus = PowerLineStatus.Offline Then
                         Thread.Sleep(Settings.OnBatteryLoopRefreshRate)
@@ -641,6 +659,9 @@ Public Class TaskbarCenter
                 Dim curleft2 As Integer
 
                 Dim TrayNotifyPos As RectangleX
+                Dim NewsAndInterestsPos As RectangleX
+                Dim NewsAndInterestsHandle As IntPtr
+
 
                 Dim TrayWndHandle = Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr)))
 
@@ -654,12 +675,22 @@ Public Class TaskbarCenter
 
                     Dim TrayNotify = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing)
                     Dim accessible4 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayNotify)
-
                     TrayNotifyPos = GetLocation(accessible4, 0)
+
+
+                    Dim NewsAndInterests = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "DynamicContent1", Nothing)
+                    NewsAndInterestsHandle = NewsAndInterests
+                    Dim accessible5 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(NewsAndInterests)
+                    NewsAndInterestsPos = GetLocation(accessible5, 0)
+
+
+
 
                     Win32.SendMessage(Win32.GetParent(TrayWndHandle), 11, False, 0)
 
                 End If
+
+
 
                 Call Win32.GetClassName(TrayWndHandle, TrayWndClassName, 256)
                 Dim accessible2 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayWndHandle)
@@ -682,6 +713,16 @@ Public Class TaskbarCenter
                 Else
                     Orientation = "H"
                 End If
+
+
+
+
+                If Not Settings.TaskbarRounding = 0 Then
+                    Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(0, 0, TrayWndPos.width, TrayWndPos.height, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+                End If
+
+
+
 
                 'Calculate the exact width of the total icons
                 Try
@@ -708,14 +749,16 @@ Public Class TaskbarCenter
                     TaskbarLeft = Math.Abs(CInt(RebarWndLeft - TrayWndLeft))
                 End If
 
+                Console.WriteLine("!" & NewsAndInterestsPos.width)
+
                 'Calculate new position
                 If TrayWndClassName.ToString = "Shell_TrayWnd" Then
                     If Settings.CenterInBetween = 1 Then
                         If Orientation = "H" Then
-                            Dim offset = (TrayNotifyPos.width / 2 - (TaskbarLeft \ 2))
+                            Dim offset = (TrayNotifyPos.width / 2 - (TaskbarLeft \ 2)) + NewsAndInterestsPos.width / 2
                             Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
                         Else
-                            Dim offset = (TrayNotifyPos.height / 2 - (TaskbarLeft \ 2))
+                            Dim offset = (TrayNotifyPos.height / 2 - (TaskbarLeft \ 2)) + NewsAndInterestsPos.height / 2
                             Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
                         End If
                     Else

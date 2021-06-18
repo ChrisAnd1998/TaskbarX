@@ -37,6 +37,7 @@ Public Class Main
             Settings.OnBatteryAnimationStyle = "cubiceaseinout"
             Settings.OnBatteryLoopRefreshRate = 400
             Settings.RevertZeroBeyondTray = 1
+            Settings.TaskbarRounding = 0
 
             'Read the arguments for the settings
             Dim arguments() As String = Environment.GetCommandLineArgs
@@ -146,6 +147,9 @@ Public Class Main
                 End If
                 If argument.Contains("-tsop=") Then
                     Settings.TotalSecondaryOpacity = CInt(val(1))
+                End If
+                If argument.Contains("-tbr=") Then
+                    Settings.TaskbarRounding = CInt(val(1))
                 End If
             Next
 
@@ -292,6 +296,18 @@ Public Class Main
             Win32.SendMessage(trayptr, Win32.WM_THEMECHANGED, True, 0)
             Win32.SendMessage(trayptr, Win32.WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
             Win32.SendMessage(trayptr, Win32.WM_DWMCOMPOSITIONCHANGED, True, 0)
+
+
+
+
+
+            Dim tt As New Win32.RECT
+            Win32.GetClientRect(trayptr, tt)
+            Win32.SetWindowRgn(CType(trayptr, IntPtr), Win32.CreateRoundRectRgn(0, 0, tt.Right, tt.Bottom - tt.Top, 0, 0), True)
+
+
+
+
         Next
     End Sub
 
