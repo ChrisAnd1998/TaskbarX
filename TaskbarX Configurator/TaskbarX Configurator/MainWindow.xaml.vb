@@ -218,6 +218,8 @@ Class MainWindow
         tpop.Value = 100
         tsop.Value = 100
 
+        tbrounding.Value = 0
+
         ComboBox1.Items.Add("none")
         ComboBox1.Items.Add("linear")
         ComboBox1.Items.Add("expoeaseout")
@@ -399,6 +401,10 @@ Class MainWindow
 
                     If argument.Contains("-tpop") Then
                         tpop.Value = CDbl(val(1))
+                    End If
+
+                    If argument.Contains("-tbr") Then
+                        tbrounding.Text = val(1)
                     End If
 
                     If argument.Contains("-tsop") Then
@@ -606,6 +612,10 @@ Class MainWindow
                         tpop.Value = CDbl(val(1))
                     End If
 
+                    If argument.Contains("-tbr") Then
+                        tbrounding.Text = val(1)
+                    End If
+
                     If argument.Contains("-tsop") Then
                         tsop.Value = CDbl(val(1))
                     End If
@@ -758,6 +768,10 @@ Class MainWindow
 
                 If Not ComboBox2.SelectedItem Is Nothing Then
                     parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+                End If
+
+                If Not tbrounding.Text = Nothing Then
+                    parameters &= "-tbr=" & tbrounding.Text & " "
                 End If
 
                 If Not NumericUpDown4.Text = Nothing Then
@@ -979,6 +993,10 @@ Class MainWindow
 
         If Not ComboBox2.SelectedItem Is Nothing Then
             parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+        End If
+
+        If Not tbrounding.Text = Nothing Then
+            parameters &= "-tbr=" & tbrounding.Text & " "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
@@ -1203,6 +1221,10 @@ Class MainWindow
 
         If Not NumericUpDown4.Text = Nothing Then
             parameters &= "-asp=" & NumericUpDown4.Text & " "
+        End If
+
+        If Not tbrounding.Text = Nothing Then
+            parameters &= "-tbr=" & tbrounding.Text & " "
         End If
 
         If Not NumericUpDown1.Text = Nothing Then
@@ -1440,6 +1462,10 @@ Class MainWindow
                         tpop.Value = CDbl(val(1))
                     End If
 
+                    If argument.Contains("-tbr") Then
+                        tbrounding.Text = val(1)
+                    End If
+
                     If argument.Contains("-tsop") Then
                         tsop.Value = CDbl(val(1))
                     End If
@@ -1653,6 +1679,10 @@ Class MainWindow
 
         If Not ComboBox2.SelectedItem Is Nothing Then
             parameters &= "-obas=" & ComboBox2.SelectedItem.ToString.ToLower & " "
+        End If
+
+        If Not tbrounding.Text = Nothing Then
+            parameters &= "-tbr=" & tbrounding.Text & " "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
@@ -2143,6 +2173,10 @@ Class MainWindow
 
         If Not ComboBox1.SelectedItem Is Nothing Then
             parameters &= "-as=" & ComboBox1.SelectedItem.ToString.ToLower & " "
+        End If
+
+        If Not tbrounding.Text = Nothing Then
+            parameters &= "-tbr=" & tbrounding.Text & " "
         End If
 
         If Not ComboBox2.SelectedItem Is Nothing Then

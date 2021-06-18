@@ -92,13 +92,16 @@
                     <RadioButton  ToolTip="Make the taskbar background Opaque with a gradient color." x:Name="RadioButtonoq" Content="Opaque" HorizontalAlignment="Left" Margin="11,200,0,0" VerticalAlignment="Top" Height="32" Width="193" Grid.ColumnSpan="2" />
                     <emoji:TextBlock  Text="🎨" Margin="430,58,10,585" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                     <TextBox x:Name="hexcolorbox" HorizontalAlignment="Left" Height="23" Margin="390,440,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="76" Grid.Column="1" />
-                    <Slider x:Name="tpop" VerticalAlignment="Top" Maximum="100" Foreground="#FF898989" Height="32" Margin="286,162,72,0" Grid.Column="1" />
-                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Primary taskbar" VerticalAlignment="Top" Height="19" Width="97" Margin="180,168,0,0" Grid.Column="1" />
-                    <TextBlock x:Name="tpopla" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="66" Margin="432,168,-3,0" Grid.Column="1" />
-                    <Slider x:Name="tsop" VerticalAlignment="Top" Maximum="100"  Foreground="#FF898989" Height="32" Margin="286,199,72,0" Grid.Column="1" />
-                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Secondary taskbar" VerticalAlignment="Top" Height="19" Width="114" Margin="163,205,0,0" Grid.Column="1" />
-                    <TextBlock x:Name="tsopla" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="66" Margin="432,205,-3,0" Grid.Column="1" />
-                    <Label Content="Total Opacity" Grid.Column="1" HorizontalAlignment="Left" Margin="190,131,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+                    <Slider x:Name="tpop" VerticalAlignment="Top" Maximum="100" Foreground="#FF898989" Height="32" Margin="286,130,72,0" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Primary taskbar" VerticalAlignment="Top" Height="19" Width="97" Margin="180,136,0,0" Grid.Column="1" />
+                    <TextBlock x:Name="tpopla" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="66" Margin="432,136,-3,0" Grid.Column="1" />
+                    <Slider x:Name="tsop" VerticalAlignment="Top" Maximum="100"  Foreground="#FF898989" Height="32" Margin="286,167,72,0" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Secondary taskbar" VerticalAlignment="Top" Height="19" Width="114" Margin="163,173,0,0" Grid.Column="1" />
+                    <TextBlock x:Name="tsopla" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="66" Margin="432,173,-3,0" Grid.Column="1" />
+                    <Label Content="Total Opacity" Grid.Column="1" HorizontalAlignment="Left" Margin="190,99,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+                    <ui:NumberBox ToolTip="Set the radius of the taskbar(s) corners in pixels." x:Name="tbrounding" Text="0" HorizontalAlignment="Left" Margin="163,270,0,0" VerticalAlignment="Top" Width="83" PreviewTextInput="NumberValidationTextBox" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" Margin="163,246,0,0" TextWrapping="Wrap" Text="Corner Radius" VerticalAlignment="Top" Width="201" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" Margin="251,276,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Top" Width="201" Grid.Column="1" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -223,7 +226,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,310,0,0" TextWrapping="Wrap" Text="E-mail: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.6.9.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.0.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />
