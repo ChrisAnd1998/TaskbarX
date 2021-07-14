@@ -303,7 +303,7 @@ Public Class Main
 
             Dim tt As New Win32.RECT
             Win32.GetClientRect(trayptr, tt)
-            Win32.SetWindowRgn(CType(trayptr, IntPtr), Win32.CreateRoundRectRgn(0, 0, tt.Right, tt.Bottom - tt.Top, 0, 0), True)
+            Win32.SetWindowRgn(CType(trayptr, IntPtr), Win32.CreateRoundRectRgn(-1, -1, tt.Right + 1, tt.Bottom - tt.Top + 1, -1, -1), True)
 
 
 
