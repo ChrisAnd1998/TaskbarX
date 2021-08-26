@@ -678,13 +678,10 @@ Public Class TaskbarCenter
                     TrayNotifyPos = GetLocation(accessible4, 0)
 
 
-                    Dim NewsAndInterests = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "DynamicContent1", Nothing)
-                    NewsAndInterestsHandle = NewsAndInterests
-                    Dim accessible5 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(NewsAndInterests)
-                    NewsAndInterestsPos = GetLocation(accessible5, 0)
-
-
-
+                    ''Dim NewsAndInterests = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "DynamicContent1", Nothing)
+                    ''NewsAndInterestsHandle = NewsAndInterests
+                    ''Dim accessible5 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(NewsAndInterests)
+                    ''NewsAndInterestsPos = GetLocation(accessible5, 0)
 
                     Win32.SendMessage(Win32.GetParent(TrayWndHandle), 11, False, 0)
 
