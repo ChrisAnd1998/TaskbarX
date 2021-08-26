@@ -659,9 +659,6 @@ Public Class TaskbarCenter
                 Dim curleft2 As Integer
 
                 Dim TrayNotifyPos As RectangleX
-                Dim NewsAndInterestsPos As RectangleX
-                Dim NewsAndInterestsHandle As IntPtr
-
 
                 Dim TrayWndHandle = Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr)))
 
@@ -676,12 +673,6 @@ Public Class TaskbarCenter
                     Dim TrayNotify = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing)
                     Dim accessible4 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(TrayNotify)
                     TrayNotifyPos = GetLocation(accessible4, 0)
-
-
-                    ''Dim NewsAndInterests = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "DynamicContent1", Nothing)
-                    ''NewsAndInterestsHandle = NewsAndInterests
-                    ''Dim accessible5 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(NewsAndInterests)
-                    ''NewsAndInterestsPos = GetLocation(accessible5, 0)
 
                     Win32.SendMessage(Win32.GetParent(TrayWndHandle), 11, False, 0)
 
@@ -746,17 +737,13 @@ Public Class TaskbarCenter
                     TaskbarLeft = Math.Abs(CInt(RebarWndLeft - TrayWndLeft))
                 End If
 
-                Console.WriteLine("!" & NewsAndInterestsPos.width)
-
                 'Calculate new position
                 If TrayWndClassName.ToString = "Shell_TrayWnd" Then
                     If Settings.CenterInBetween = 1 Then
                         If Orientation = "H" Then
-                            Dim offset = (TrayNotifyPos.width / 2 - (TaskbarLeft \ 2)) + NewsAndInterestsPos.width / 2
-                            Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
+                            Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft))) + Settings.PrimaryTaskbarOffset
                         Else
-                            Dim offset = (TrayNotifyPos.height / 2 - (TaskbarLeft \ 2)) + NewsAndInterestsPos.height / 2
-                            Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft - offset))) + Settings.PrimaryTaskbarOffset
+                            Position = Math.Abs(CInt((TrayWndWidth / 2 - (TaskbarWidth / 2) - TaskbarLeft))) + Settings.PrimaryTaskbarOffset
                         End If
                     Else
                         Position = Math.Abs(CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft))) + Settings.PrimaryTaskbarOffset
