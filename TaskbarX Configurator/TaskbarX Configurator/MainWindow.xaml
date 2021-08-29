@@ -226,7 +226,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,310,0,0" TextWrapping="Wrap" Text="E-mail: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.1.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.2.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />
@@ -234,7 +234,7 @@
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,304,0,0" TextWrapping="Wrap" Text="chrisand1998@gmail.com" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,341,0,0" TextWrapping="Wrap" Text="u/chrisand1998" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <Button ToolTip="Check if there is a new version available." x:Name="bb" Content="Check" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="57" Margin="69,91,0,0" Style="{StaticResource AccentButtonStyle}" Grid.Column="1" Click="Button_Click_4" />
-                    <TextBlock x:Name="vers" Grid.Column="1" HorizontalAlignment="Left" Margin="131,99,0,0"  Text="TextBlock" VerticalAlignment="Top" Width="197" Height="19" />
+                    <TextBlock x:Name="vers" Grid.Column="1" HorizontalAlignment="Left" Margin="131,99,0,0"  Text="No connection.." VerticalAlignment="Top" Width="197" Height="19" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,412,0,0" TextWrapping="Wrap" Text="References: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBox IsReadOnly="True" Grid.Column="1" HorizontalAlignment="Left" Height="71" Margin="0,406,0,0" TextWrapping="Wrap" Text="ModernWPF:  https://github.com/Kinnara/ModernWpf&#xD;&#xA;TaskScheduler:  https://github.com/dahall/TaskScheduler&#xD;&#xA;Emoji.Wpf:  https://github.com/samhocevar/emoji.wpf" VerticalAlignment="Top" Width="447" />
                 </Grid>
