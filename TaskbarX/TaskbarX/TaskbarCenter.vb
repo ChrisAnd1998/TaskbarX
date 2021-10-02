@@ -81,7 +81,9 @@ Public Class TaskbarCenter
 
     Public Shared Function GetLocation(ByVal acc As Accessibility.IAccessible, ByVal idChild As Integer) As RectangleX
         Dim rect As New RectangleX
-        acc.accLocation(rect.left, rect.top, rect.width, rect.height, idChild)
+        If Not IsNothing(acc) Then        
+            acc.accLocation(rect.left, rect.top, rect.width, rect.height, idChild)
+        End If            
         Return rect
     End Function
 
