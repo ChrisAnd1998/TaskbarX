@@ -32,14 +32,14 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 
 
 
-## Mockup
+## How to use TaskbarX with Windows 11?
  
-![Mockup](https://chrisandriessen.nl/images/FlatMock2.png)
+Do you want to install Windows 11 but you really like the taskbar of windows 10? Then you can actualy patch the Windows 11 Explorer to get back the old taskbar. Doing this will make TaskbarX functional again in Windows 11. https://github.com/valinet/ExplorerPatcher
   
-  
+  &nbsp;
 
   
-&nbsp;
+
 
 
 ## Commandline Arguments
@@ -144,7 +144,7 @@ Right click on the "**TaskbarX**" or "**FalconX**" entry and click "**Delete**".
 
 ![Taskbar error](https://user-images.githubusercontent.com/50437199/80919928-e0757580-8d6c-11ea-9106-b0b1ff33f740.png)
 
-_You can also use `SCHTASKS /DELETE /TN "TaskbarX"` to remove the scheduled task from the command line._
+_You can also use `SCHTASKS /DELETE /TN "TaskbarX PCNAMEUSERNAME"` to remove the scheduled task from the command line._
 
 &nbsp;
 
