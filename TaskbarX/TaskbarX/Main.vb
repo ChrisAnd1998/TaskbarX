@@ -3,6 +3,7 @@
 Imports System.Text
 Imports System.Threading
 
+
 Public Class Main
 
     Public Shared noty As New NotifyIcon
@@ -218,6 +219,9 @@ Public Class Main
             Console.WriteLine(ex.Message)
         End Try
     End Sub
+
+
+
 
     Public Shared Sub Toaster(ByVal message As String)
         noty.BalloonTipTitle = "TaskbarX"

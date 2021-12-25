@@ -15,6 +15,39 @@ Public Class TaskbarStyle
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
+
+
+        Dim maintaskbarfound As Boolean = False
+        Dim sectaskbarfound As Boolean = False
+
+        For Each Taskbar In windowHandles
+            Dim sClassName As New StringBuilder("", 256)
+            Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
+            If sClassName.ToString = "Shell_TrayWnd" Then
+                maintaskbarfound = True
+            End If
+            If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
+                sectaskbarfound = True
+            End If
+            Console.WriteLine("=" & maintaskbarfound)
+        Next
+
+        If maintaskbarfound = False Then
+            Try
+                windowHandles.Add(Win32.FindWindow("Shell_TrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+        If sectaskbarfound = False Then
+            Try
+                windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+
+
         Return ActiveWindows
     End Function
 
@@ -122,6 +155,7 @@ Public Class TaskbarStyle
         Try
 
             GetActiveWindows()
+
 
             Dim accent = New Win32.AccentPolicy()
             Dim accentStructSize = Marshal.SizeOf(accent)

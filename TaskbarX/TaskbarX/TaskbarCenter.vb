@@ -37,6 +37,8 @@ Public Class TaskbarCenter
 
         AddHandler SystemEvents.DisplaySettingsChanged, AddressOf DPChange
 
+        AddHandler SystemEvents.SessionSwitch, AddressOf SystemEvents_SessionSwitch
+
         'Start the Looper
         Dim t1 As Thread = New Thread(AddressOf Looper)
         t1.Start()
@@ -60,6 +62,37 @@ Public Class TaskbarCenter
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
+
+        Dim maintaskbarfound As Boolean = False
+        Dim sectaskbarfound As Boolean = False
+
+        For Each Taskbar In windowHandles
+            Dim sClassName As New StringBuilder("", 256)
+            Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
+            If sClassName.ToString = "Shell_TrayWnd" Then
+                maintaskbarfound = True
+            End If
+            If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
+                sectaskbarfound = True
+            End If
+            Console.WriteLine("=" & maintaskbarfound)
+        Next
+
+        If maintaskbarfound = False Then
+            Try
+                windowHandles.Add(Win32.FindWindow("Shell_TrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+        If sectaskbarfound = False Then
+            Try
+                windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+
         Return ActiveWindows
     End Function
 
@@ -149,6 +182,7 @@ Public Class TaskbarCenter
 
                 Dim MSTaskSwWClass = Win32.FindWindowEx(ReBarWindow32, CType(0, IntPtr), "MSTaskSwWClass", Nothing)
                 MSTaskListWClass = Win32.FindWindowEx(MSTaskSwWClass, CType(0, IntPtr), "MSTaskListWClass", Nothing)
+
             End If
 
             If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
@@ -209,6 +243,21 @@ Public Class TaskbarCenter
         Application.Restart()
     End Sub
 
+    Public Shared Sub SystemEvents_SessionSwitch(sender As Object, e As SessionSwitchEventArgs)
+        Console.WriteLine()
+        Thread.Sleep(1000)
+        'Wait for Shell_TrayWnd
+        Dim Handle As IntPtr
+        Do
+            Console.WriteLine("Waiting for Shell_TrayWnd")
+
+            Thread.Sleep(250)
+            Handle = Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr))
+        Loop Until Not Handle = Nothing
+
+        Application.Restart()
+    End Sub
+
 #End Region
 
 
@@ -222,11 +271,18 @@ Public Class TaskbarCenter
 
             Dim Taskbars As New ArrayList
 
+
+
+
+
             'Put all Taskbars into an ArrayList based on each TrayWnd in the TrayWnds ArrayList
             For Each Taskbar In windowHandles
                 Dim sClassName As New StringBuilder("", 256)
                 Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
                 Dim MSTaskListWClass As IntPtr
+
+                Console.WriteLine(sClassName.ToString)
+
 
                 If sClassName.ToString = "Shell_TrayWnd" Then
                     Dim ReBarWindow32 = Win32.FindWindowEx(CType(Taskbar, IntPtr), CType(0, IntPtr), "ReBarWindow32", Nothing)
@@ -302,6 +358,9 @@ Public Class TaskbarCenter
 
             'Start the endless loop
             Do
+
+
+
                 Try
 
                     Dim results As String = Nothing
@@ -374,11 +433,13 @@ Public Class TaskbarCenter
                         Dim LastChildPos As RectangleX
 
                         For Each childx As Accessibility.IAccessible In children
-                            If CInt(childx.accRole(0)) = &H16 Then '0x16 = toolbar
+                            If CInt(childx.accRole(0)) = CInt(22) Then '0x16 = toolbar
                                 LastChildPos = GetLocation(childx, MSAA.GetAccessibleChildren(childx).Length)
                                 Exit For
                             End If
                         Next
+
+
 
                         Dim cL = LastChildPos.left
                         Dim cT = LastChildPos.top
@@ -638,7 +699,7 @@ Public Class TaskbarCenter
                 TaskListPos = GetLocation(accessible, 0)
 
                 For Each childx As Accessibility.IAccessible In children
-                    If CInt(childx.accRole(0)) = &H16 Then '0x16 = toolbar
+                    If CInt(childx.accRole(0)) = CInt(22) Then '0x16 = toolbar
                         LastChildPos = GetLocation(childx, MSAA.GetAccessibleChildren(childx).Length)
                         Exit For
                     End If
@@ -680,12 +741,13 @@ Public Class TaskbarCenter
                     TrayNotifyPos = GetLocation(accessible4, 0)
 
 
+
                     Dim NewsAndInterests = Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "DynamicContent1", Nothing)
-                    NewsAndInterestsHandle = NewsAndInterests
-                    Dim accessible5 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(NewsAndInterests)
-                    NewsAndInterestsPos = GetLocation(accessible5, 0)
-
-
+                    If Not CInt(NewsAndInterests.ToString) = CInt("0") Then
+                        NewsAndInterestsHandle = NewsAndInterests
+                        Dim accessible5 As Accessibility.IAccessible = MSAA.GetAccessibleObjectFromHandle(NewsAndInterests)
+                        NewsAndInterestsPos = GetLocation(accessible5, 0)
+                    End If
 
 
                     Win32.SendMessage(Win32.GetParent(TrayWndHandle), 11, False, 0)
