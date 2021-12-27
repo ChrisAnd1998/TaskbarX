@@ -39,8 +39,13 @@ Do you want to install Windows 11 but you really like the taskbar of windows 10?
   &nbsp;
 
   
+## Start icon file
 
+![start](https://user-images.githubusercontent.com/50437199/147479778-efed8dce-058e-408e-89f8-18b1bd4ecbf8.png) Looking for a start icon file?
+[start.ico](https://github.com/ChrisAnd1998/TaskbarX/releases/download/1.7.5.0/start.ico)
 
+  &nbsp;
+  
 
 ## Commandline Arguments
 
