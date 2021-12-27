@@ -50,6 +50,11 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
+                <emoji:TextBlock Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" Text="⚙️" />
+                <TextBlock Text="Start Button"  Margin="24,0,0,0" VerticalAlignment="Center" Width="77" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0">
                 <emoji:TextBlock  Text="ℹ️" Margin="0,0,0,0" FontSize="20" VerticalAlignment="Center" />
                 <TextBlock Text="About"  Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
@@ -99,9 +104,10 @@
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Secondary taskbar" VerticalAlignment="Top" Height="19" Width="114" Margin="163,173,0,0" Grid.Column="1" />
                     <TextBlock x:Name="tsopla" HorizontalAlignment="Left" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="66" Margin="432,173,-3,0" Grid.Column="1" />
                     <Label Content="Total Opacity" Grid.Column="1" HorizontalAlignment="Left" Margin="190,99,0,0" VerticalAlignment="Top" FontWeight="Bold" />
-                    <ui:NumberBox ToolTip="Set the radius of the taskbar(s) corners in pixels." x:Name="tbrounding" Text="0" HorizontalAlignment="Left" Margin="163,270,0,0" VerticalAlignment="Top" Width="83" PreviewTextInput="NumberValidationTextBox" Grid.Column="1" />
-                    <TextBlock HorizontalAlignment="Left" Margin="163,246,0,0" TextWrapping="Wrap" Text="Corner Radius" VerticalAlignment="Top" Width="201" Grid.Column="1" />
-                    <TextBlock HorizontalAlignment="Left" Margin="251,276,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Top" Width="201" Grid.Column="1" />
+                    <ui:NumberBox ToolTip="Set the radius of the taskbar(s) corners in pixels." x:Name="tbrounding" Text="0" HorizontalAlignment="Left" Margin="163,252,0,0" VerticalAlignment="Top" Width="83" PreviewTextInput="NumberValidationTextBox" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" Margin="163,228,0,0" TextWrapping="Wrap" Text="Corner Radius" VerticalAlignment="Top" Width="201" Grid.Column="1" />
+                    <TextBlock HorizontalAlignment="Left" Margin="251,258,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Top" Width="201" Grid.Column="1" />
+                    <CheckBox ToolTip="Only show taskbar background on taskbar icons." x:Name="tbsegments" Content="Taskbar Segments" Margin="309,252,0,0" Width="365" Height="32" Grid.Column="1" VerticalAlignment="Top" />
                 </Grid>
             </TabItem>
             <TabItem>
@@ -213,6 +219,26 @@
                 </Grid>
             </TabItem>
             <TabItem>
+                <Grid Margin="0,0,0,-18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="139*" />
+                        <ColumnDefinition Width="457*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Start Button" FontSize="20" Margin="10,50,0,512" VerticalAlignment="Center" Height="32" Grid.ColumnSpan="2" />
+                    <emoji:TextBlock  Text="⚙️" Margin="442,58,10,479" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,96,0,0" TextWrapping="Wrap" Text="How to add a custom start button?" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="226" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,131,0,0" TextWrapping="Wrap" Text="1. Create a new shortcut on your desktop." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="303" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,155,0,0" TextWrapping="Wrap" Text="2. Copy the string below for the location." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="303" />
+                    <TextBox x:Name="startbutton_shortcut" HorizontalAlignment="Left" Margin="10,185,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="388" Grid.ColumnSpan="2" Height="81"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,278,0,0" TextWrapping="Wrap" Text="3. Give it a name.. Like Start" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="303" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,302,0,0" TextWrapping="Wrap" Text="4. Then hit Finish." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="303" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,326,0,0" TextWrapping="Wrap" Text="5. Change the icon of the shortcut to any ico you like." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="369" />
+                    <TextBlock HorizontalAlignment="Left" Margin="25,350,0,0" TextWrapping="Wrap" Text="To do this. Right click on the icon and hit properties. Then hit the 'Change Icon...' button. After changing the icon hit the 'Apply' button followed by 'OK'." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="383" FontSize="11" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,384,0,0" TextWrapping="Wrap" Text="6. Finally drag the shortcut to your taskbar to pin it and remove the shortcut from your desktop." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="614" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,490,0,0" TextWrapping="Wrap" Text="This might be automated in a future update." VerticalAlignment="Top" Grid.ColumnSpan="2" Width="303" FontStyle="Italic" />
+                </Grid>
+            </TabItem>
+            <TabItem>
                 <Grid Margin="0,0,-27,16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="137*" />
@@ -226,7 +252,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,310,0,0" TextWrapping="Wrap" Text="E-mail: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.4.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.5.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />

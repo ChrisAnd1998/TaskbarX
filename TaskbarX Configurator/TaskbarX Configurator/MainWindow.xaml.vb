@@ -29,6 +29,8 @@ Class MainWindow
     Private Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
     End Function
 
+
+
     Public Declare Function GetCursorPos Lib "user32" (ByRef lpPoint As PointAPI) As Boolean
 
     Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
@@ -118,6 +120,37 @@ Class MainWindow
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
+
+        Dim maintaskbarfound As Boolean = False
+        Dim sectaskbarfound As Boolean = False
+
+        For Each Taskbar In windowHandles
+            Dim sClassName As New StringBuilder("", 256)
+            Call GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
+            If sClassName.ToString = "Shell_TrayWnd" Then
+                maintaskbarfound = True
+            End If
+            If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
+                sectaskbarfound = True
+            End If
+            Console.WriteLine("=" & maintaskbarfound)
+        Next
+
+        If maintaskbarfound = False Then
+            Try
+                windowHandles.Add(FindWindow("Shell_TrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+        If sectaskbarfound = False Then
+            Try
+                windowHandles.Add(FindWindow("Shell_SecondaryTrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+
         Return ActiveWindows
     End Function
 
@@ -310,6 +343,25 @@ Class MainWindow
 
         ComboBox2.SelectedItem = "cubiceaseinout"
 
+
+
+
+
+        If System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
+            startbutton_shortcut.Text = "explorer.exe taskbarx: -showstartmenu"
+        Else
+
+
+            startbutton_shortcut.Text = Chr(34) & System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe" & Chr(34) & " -showstartmenu"
+
+        End If
+
+
+
+
+
+
+
         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
 
         If Not System.AppDomain.CurrentDomain.BaseDirectory.Contains("40210ChrisAndriessen") Then
@@ -367,7 +419,8 @@ Class MainWindow
                 For Each argument In arguments
                     Dim val() As String = Split(argument, "=")
                     Console.WriteLine(val(0))
-                    If argument.Contains("-tbs") Then
+                    If argument.Contains("-tbs=") Then
+
                         If CInt(val(1)) = 0 Then
                             RadioButton1.IsChecked = True
                         End If
@@ -389,7 +442,7 @@ Class MainWindow
 
                     End If
 
-                    If argument.Contains("-color") Then
+                    If argument.Contains("-color=") Then
                         Dim colorval As String = val(1)
                         Dim colorsep = colorval.Split(CType(";", Char()))
 
@@ -399,70 +452,76 @@ Class MainWindow
                         sAlpha.Value = CDbl(colorsep(3))
                     End If
 
-                    If argument.Contains("-tpop") Then
+                    If argument.Contains("-tpop=") Then
                         tpop.Value = CDbl(val(1))
                     End If
 
-                    If argument.Contains("-tbr") Then
+                    If argument.Contains("-tbr=") Then
                         tbrounding.Text = val(1)
                     End If
 
-                    If argument.Contains("-tsop") Then
+                    If argument.Contains("-tbsg=") Then
+                        If val(1) = "1" Then
+                            tbsegments.IsChecked = True
+                        End If
+                    End If
+
+                    If argument.Contains("-tsop=") Then
                         tsop.Value = CDbl(val(1))
                     End If
 
-                    If argument.Contains("-ptbo") Then
+                    If argument.Contains("-ptbo=") Then
                         NumericUpDown1.Text = val(1)
                     End If
-                    If argument.Contains("-stbo") Then
+                    If argument.Contains("-stbo=") Then
                         NumericUpDown2.Text = val(1)
                     End If
-                    If argument.Contains("-cpo") Then
+                    If argument.Contains("-cpo=") Then
                         If val(1) = "1" Then
                             CheckBox2.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-cso") Then
+                    If argument.Contains("-cso=") Then
                         If val(1) = "1" Then
                             CheckBox3.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-as") Then
+                    If argument.Contains("-as=") Then
                         ComboBox1.SelectedItem = val(1)
 
                     End If
-                    If argument.Contains("-asp") Then
+                    If argument.Contains("-asp=") Then
                         NumericUpDown4.Text = val(1)
                     End If
-                    If argument.Contains("-sr") Then
+                    If argument.Contains("-sr=") Then
                         NumericUpDown7.Text = val(1)
                     End If
-                    If argument.Contains("-sr2") Then
+                    If argument.Contains("-sr2=") Then
                         NumericUpDown7_Copy.Text = val(1)
                     End If
-                    If argument.Contains("-sr3") Then
+                    If argument.Contains("-sr3=") Then
                         NumericUpDown7_Copy1.Text = val(1)
                     End If
-                    If argument.Contains("-lr") Then
+                    If argument.Contains("-lr=") Then
                         NumericUpDown3.Text = val(1)
                     End If
-                    If argument.Contains("-cib") Then
+                    If argument.Contains("-cib=") Then
                         If val(1) = "1" Then
                             CheckBox1.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-obas") Then
+                    If argument.Contains("-obas=") Then
                         ComboBox2.SelectedItem = val(1)
                     End If
-                    If argument.Contains("-oblr") Then
+                    If argument.Contains("-oblr=") Then
                         NumericUpDown5.Text = val(1)
                     End If
-                    If argument.Contains("-ftotc") Then
+                    If argument.Contains("-ftotc=") Then
                         If val(1) = "1" Then
                             CheckBox4.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-rzbt") Then
+                    If argument.Contains("-rzbt=") Then
                         If val(1) = "1" Then
                             CheckBox4_Copy.IsChecked = True
                         End If
@@ -471,42 +530,42 @@ Class MainWindow
                         End If
                     End If
 
-                    If argument.Contains("-dtbsowm") Then
+                    If argument.Contains("-dtbsowm=") Then
                         If val(1) = "1" Then
                             Checkbox10.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-cfsa") Then
+                    If argument.Contains("-cfsa=") Then
                         If val(1) = "1" Then
                             Checkbox9.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-dct") Then
+                    If argument.Contains("-dct=") Then
                         If val(1) = "1" Then
                             CheckBox11.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hps") Then
+                    If argument.Contains("-hps=") Then
                         If val(1) = "1" Then
                             Checkbox12.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hss") Then
+                    If argument.Contains("-hss=") Then
                         If val(1) = "1" Then
                             Checkbox13.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hpt") Then
+                    If argument.Contains("-hpt=") Then
                         If val(1) = "1" Then
                             Checkbox14.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hst") Then
+                    If argument.Contains("-hst=") Then
                         If val(1) = "1" Then
                             Checkbox15.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-sti") Then
+                    If argument.Contains("-sti=") Then
                         If val(1) = "1" Then
                             Checkbox16.IsChecked = True
                         End If
@@ -576,7 +635,7 @@ Class MainWindow
                 For Each argument In arguments
                     Dim val() As String = Split(argument, "=")
                     Console.WriteLine(val(0))
-                    If argument.Contains("-tbs") Then
+                    If argument.Contains("-tbs=") Then
                         If CInt(val(1)) = 0 Then
                             RadioButton1.IsChecked = True
                         End If
@@ -598,7 +657,7 @@ Class MainWindow
 
                     End If
 
-                    If argument.Contains("-color") Then
+                    If argument.Contains("-color=") Then
                         Dim colorval As String = val(1)
                         Dim colorsep = colorval.Split(CType(";", Char()))
 
@@ -608,70 +667,76 @@ Class MainWindow
                         sAlpha.Value = CDbl(colorsep(3))
                     End If
 
-                    If argument.Contains("-tpop") Then
+                    If argument.Contains("-tpop=") Then
                         tpop.Value = CDbl(val(1))
                     End If
 
-                    If argument.Contains("-tbr") Then
+                    If argument.Contains("-tbr=") Then
                         tbrounding.Text = val(1)
                     End If
 
-                    If argument.Contains("-tsop") Then
+                    If argument.Contains("-tbsg=") Then
+                        If val(1) = "1" Then
+                            tbsegments.IsChecked = True
+                        End If
+                    End If
+
+                    If argument.Contains("-tsop=") Then
                         tsop.Value = CDbl(val(1))
                     End If
 
-                    If argument.Contains("-ptbo") Then
+                    If argument.Contains("-ptbo=") Then
                         NumericUpDown1.Text = val(1)
                     End If
-                    If argument.Contains("-stbo") Then
+                    If argument.Contains("-stbo=") Then
                         NumericUpDown2.Text = val(1)
                     End If
-                    If argument.Contains("-cpo") Then
+                    If argument.Contains("-cpo=") Then
                         If val(1) = "1" Then
                             CheckBox2.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-cso") Then
+                    If argument.Contains("-cso=") Then
                         If val(1) = "1" Then
                             CheckBox3.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-as") Then
+                    If argument.Contains("-as=") Then
                         ComboBox1.SelectedItem = val(1)
 
                     End If
-                    If argument.Contains("-asp") Then
+                    If argument.Contains("-asp=") Then
                         NumericUpDown4.Text = val(1)
                     End If
-                    If argument.Contains("-sr") Then
+                    If argument.Contains("-sr=") Then
                         NumericUpDown7.Text = val(1)
                     End If
-                    If argument.Contains("-sr2") Then
+                    If argument.Contains("-sr2=") Then
                         NumericUpDown7_Copy.Text = val(1)
                     End If
-                    If argument.Contains("-sr3") Then
+                    If argument.Contains("-sr3=") Then
                         NumericUpDown7_Copy1.Text = val(1)
                     End If
-                    If argument.Contains("-lr") Then
+                    If argument.Contains("-lr=") Then
                         NumericUpDown3.Text = val(1)
                     End If
-                    If argument.Contains("-cib") Then
+                    If argument.Contains("-cib=") Then
                         If val(1) = "1" Then
                             CheckBox1.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-obas") Then
+                    If argument.Contains("-obas=") Then
                         ComboBox2.SelectedItem = val(1)
                     End If
-                    If argument.Contains("-oblr") Then
+                    If argument.Contains("-oblr=") Then
                         NumericUpDown5.Text = val(1)
                     End If
-                    If argument.Contains("-ftotc") Then
+                    If argument.Contains("-ftotc=") Then
                         If val(1) = "1" Then
                             CheckBox4.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-rzbt") Then
+                    If argument.Contains("-rzbt=") Then
                         If val(1) = "1" Then
                             CheckBox4_Copy.IsChecked = True
                         End If
@@ -679,42 +744,42 @@ Class MainWindow
                             CheckBox4_Copy.IsChecked = False
                         End If
                     End If
-                    If argument.Contains("-dtbsowm") Then
+                    If argument.Contains("-dtbsowm=") Then
                         If val(1) = "1" Then
                             Checkbox10.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-cfsa") Then
+                    If argument.Contains("-cfsa=") Then
                         If val(1) = "1" Then
                             Checkbox9.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-dct") Then
+                    If argument.Contains("-dct=") Then
                         If val(1) = "1" Then
                             CheckBox11.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hps") Then
+                    If argument.Contains("-hps=") Then
                         If val(1) = "1" Then
                             Checkbox12.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hss") Then
+                    If argument.Contains("-hss=") Then
                         If val(1) = "1" Then
                             Checkbox13.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hpt") Then
+                    If argument.Contains("-hpt=") Then
                         If val(1) = "1" Then
                             Checkbox14.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hst") Then
+                    If argument.Contains("-hst=") Then
                         If val(1) = "1" Then
                             Checkbox15.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-sti") Then
+                    If argument.Contains("-sti=") Then
                         If val(1) = "1" Then
                             Checkbox16.IsChecked = True
                         End If
@@ -772,6 +837,10 @@ Class MainWindow
 
                 If Not tbrounding.Text = Nothing Then
                     parameters &= "-tbr=" & tbrounding.Text & " "
+                End If
+
+                If tbsegments.IsChecked = True Then
+                    parameters &= "-tbsg=1 "
                 End If
 
                 If Not NumericUpDown4.Text = Nothing Then
@@ -958,7 +1027,7 @@ Class MainWindow
 
         System.Threading.Thread.Sleep(1000)
 
-        'ResetTaskbarStyle()
+
 
         Dim parameters As String = ""
 
@@ -997,6 +1066,10 @@ Class MainWindow
 
         If Not tbrounding.Text = Nothing Then
             parameters &= "-tbr=" & tbrounding.Text & " "
+        End If
+
+        If tbsegments.IsChecked = True Then
+            parameters &= "-tbsg=1 "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
@@ -1157,11 +1230,22 @@ Class MainWindow
 
         System.Threading.Thread.Sleep(50)
 
+
+
         Dim t1 As System.Threading.Thread = New System.Threading.Thread(AddressOf RevertToZero)
         t1.Start()
 
+
+
         ' ResetTaskbarStyle()
     End Sub
+
+
+
+
+
+
+
 
     Private Async Sub Button_Click_3(sender As Object, e As RoutedEventArgs)
         Try
@@ -1225,6 +1309,10 @@ Class MainWindow
 
         If Not tbrounding.Text = Nothing Then
             parameters &= "-tbr=" & tbrounding.Text & " "
+        End If
+
+        If tbsegments.IsChecked = True Then
+            parameters &= "-tbsg=1 "
         End If
 
         If Not NumericUpDown1.Text = Nothing Then
@@ -1425,7 +1513,7 @@ Class MainWindow
                 For Each argument In arguments
                     Dim val() As String = Split(argument, "=")
                     Console.WriteLine(val(0))
-                    If argument.Contains("-tbs") Then
+                    If argument.Contains("-tbs=") Then
                         If CInt(val(1)) = 0 Then
                             RadioButton1.IsChecked = True
                         End If
@@ -1448,7 +1536,7 @@ Class MainWindow
 
                     End If
 
-                    If argument.Contains("-color") Then
+                    If argument.Contains("-color=") Then
                         Dim colorval As String = val(1)
                         Dim colorsep = colorval.Split(CType(";", Char()))
 
@@ -1458,70 +1546,76 @@ Class MainWindow
                         sAlpha.Value = CDbl(colorsep(3))
                     End If
 
-                    If argument.Contains("-tpop") Then
+                    If argument.Contains("-tpop=") Then
                         tpop.Value = CDbl(val(1))
                     End If
 
-                    If argument.Contains("-tbr") Then
+                    If argument.Contains("-tbr=") Then
                         tbrounding.Text = val(1)
                     End If
 
-                    If argument.Contains("-tsop") Then
+                    If argument.Contains("-tbsg=") Then
+                        If val(1) = "1" Then
+                            tbsegments.IsChecked = True
+                        End If
+                    End If
+
+                    If argument.Contains("-tsop=") Then
                         tsop.Value = CDbl(val(1))
                     End If
 
-                    If argument.Contains("-ptbo") Then
+                    If argument.Contains("-ptbo=") Then
                         NumericUpDown1.Text = val(1)
                     End If
-                    If argument.Contains("-stbo") Then
+                    If argument.Contains("-stbo=") Then
                         NumericUpDown2.Text = val(1)
                     End If
-                    If argument.Contains("-cpo") Then
+                    If argument.Contains("-cpo=") Then
                         If val(1) = "1" Then
                             CheckBox2.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-cso") Then
+                    If argument.Contains("-cso=") Then
                         If val(1) = "1" Then
                             CheckBox3.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-as") Then
+                    If argument.Contains("-as=") Then
                         ComboBox1.SelectedItem = val(1)
 
                     End If
-                    If argument.Contains("-asp") Then
+                    If argument.Contains("-asp=") Then
                         NumericUpDown4.Text = val(1)
                     End If
-                    If argument.Contains("-sr") Then
+                    If argument.Contains("-sr=") Then
                         NumericUpDown7.Text = val(1)
                     End If
-                    If argument.Contains("-sr2") Then
+                    If argument.Contains("-sr2=") Then
                         NumericUpDown7_Copy.Text = val(1)
                     End If
-                    If argument.Contains("-sr3") Then
+                    If argument.Contains("-sr3=") Then
                         NumericUpDown7_Copy1.Text = val(1)
                     End If
-                    If argument.Contains("-lr") Then
+                    If argument.Contains("-lr=") Then
                         NumericUpDown3.Text = val(1)
                     End If
-                    If argument.Contains("-cib") Then
+                    If argument.Contains("-cib=") Then
                         If val(1) = "1" Then
                             CheckBox1.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-obas") Then
+                    If argument.Contains("-obas=") Then
                         ComboBox2.SelectedItem = val(1)
                     End If
-                    If argument.Contains("-oblr") Then
+                    If argument.Contains("-oblr=") Then
                         NumericUpDown5.Text = val(1)
                     End If
-                    If argument.Contains("-ftotc") Then
+                    If argument.Contains("-ftotc=") Then
                         If val(1) = "1" Then
                             CheckBox4.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-rzbt") Then
+                    If argument.Contains("-rzbt=") Then
                         If val(1) = "1" Then
                             CheckBox4_Copy.IsChecked = True
                         End If
@@ -1529,42 +1623,42 @@ Class MainWindow
                             CheckBox4_Copy.IsChecked = False
                         End If
                     End If
-                    If argument.Contains("-dtbsowm") Then
+                    If argument.Contains("-dtbsowm=") Then
                         If val(1) = "1" Then
                             Checkbox10.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-cfsa") Then
+                    If argument.Contains("-cfsa=") Then
                         If val(1) = "1" Then
                             Checkbox9.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-dct") Then
+                    If argument.Contains("-dct=") Then
                         If val(1) = "1" Then
                             CheckBox11.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hps") Then
+                    If argument.Contains("-hps=") Then
                         If val(1) = "1" Then
                             Checkbox12.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hss") Then
+                    If argument.Contains("-hss=") Then
                         If val(1) = "1" Then
                             Checkbox13.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hpt") Then
+                    If argument.Contains("-hpt=") Then
                         If val(1) = "1" Then
                             Checkbox14.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-hst") Then
+                    If argument.Contains("-hst=") Then
                         If val(1) = "1" Then
                             Checkbox15.IsChecked = True
                         End If
                     End If
-                    If argument.Contains("-sti") Then
+                    If argument.Contains("-sti=") Then
                         If val(1) = "1" Then
                             Checkbox16.IsChecked = True
                         End If
@@ -1683,6 +1777,10 @@ Class MainWindow
 
         If Not tbrounding.Text = Nothing Then
             parameters &= "-tbr=" & tbrounding.Text & " "
+        End If
+
+        If tbsegments.IsChecked = True Then
+            parameters &= "-tbsg=1 "
         End If
 
         If Not NumericUpDown4.Text = Nothing Then
@@ -2177,6 +2275,10 @@ Class MainWindow
 
         If Not tbrounding.Text = Nothing Then
             parameters &= "-tbr=" & tbrounding.Text & " "
+        End If
+
+        If tbsegments.IsChecked = True Then
+            parameters &= "-tbsg=1 "
         End If
 
         If Not ComboBox2.SelectedItem Is Nothing Then
