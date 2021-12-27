@@ -15,6 +15,7 @@ Public Class TaskbarAnimate
             End If
 
 
+
             If Settings.RevertZeroBeyondTray = 1 Then
                 'Prevent moving beyond Tray area.
                 Dim TrayPos2 As Win32.RECT

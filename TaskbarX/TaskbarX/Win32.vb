@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Runtime.InteropServices
+Imports System.Text
 
 Public Class Win32
 
@@ -48,6 +49,10 @@ Public Class Win32
     Shared Function SetWindowRgn(ByVal hWnd As IntPtr, ByVal hRgn As IntPtr, ByVal bRedraw As Boolean) As Integer
     End Function
 
+    <DllImport("user32.dll")>
+    Shared Function GetWindowRgn(ByVal hWnd As IntPtr, ByVal hRgn As IntPtr) As Integer
+    End Function
+
     <DllImport("gdi32.dll")>
     Public Shared Function CreateRoundRectRgn(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByVal w As Integer, ByVal h As Integer) As IntPtr
     End Function
@@ -55,6 +60,7 @@ Public Class Win32
     <DllImport("gdi32.dll")>
     Public Shared Function CreateRectRgn(ByVal nLeftRect As Integer, ByVal nTopRect As Integer, ByVal nRightRect As Integer, ByVal nBottomRect As Integer) As IntPtr
     End Function
+
 
     <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
     Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
@@ -296,5 +302,100 @@ Public Class Win32
     Public Shared HWND_BROADCAST As IntPtr = New IntPtr(65535)
     Public Shared WM_SETTINGCHANGE As UInteger = 26
     Public Shared SMTO_ABORTIFHUNG As Integer = 2
+
+
+
+    Public Shared TOPMOST_FLAGS As UInt32 = &H2 Or &H1
+    Public Shared ReadOnly HWND_TOPMOST As IntPtr = New IntPtr(-1)
+
+
+
+    Public Shared Sub ShowStartMenu()
+        ''  Dim shell = FindWindow("Windows.UI.Core.CoreWindow", Nothing)
+
+
+        '' Const keyControl As Byte = &H11
+        '' Const keyEscape As Byte = &H1B
+        '' keybd_event(keyControl, 0, 0, UIntPtr.Zero)
+        '' keybd_event(keyEscape, 0, 0, UIntPtr.Zero)
+        '' Const KEYEVENTF_KEYUP As UInteger = &H2
+        '' keybd_event(keyControl, 0, KEYEVENTF_KEYUP, UIntPtr.Zero)
+        ''keybd_event(keyEscape, 0, KEYEVENTF_KEYUP, UIntPtr.Zero)
+
+        '' keybd_event(CByte(Keys.LWin), 0, &H0, CType(0, UIntPtr)) : Application.DoEvents() 'Press the Left Win key
+        ''keybd_event(CByte(Keys.LWin), 0, &H0, CType(0, UIntPtr)) : Application.DoEvents() 'Press the Left Win key
+
+        '' Dim tt As New RECT
+        '' GetWindowRect(shell, tt)
+
+        '' MsgBox(tt.Top)
+
+
+
+
+
+
+        ''  Dim sClassName As New StringBuilder("", 256)
+        ''  GetClassName(GetActiveWindow(), sClassName, 256)
+
+
+        ''  If Not sClassName.ToString.Contains("Application") Then
+
+        keybd_event(CByte(Keys.LWin), 0, &H0, CType(0, UIntPtr)) 'Press the Left Win key
+            keybd_event(CByte(Keys.LWin), 0, &H2, CType(0, UIntPtr)) 'Press the Left Win key
+       '' End If
+
+        ''  SetFocus(shell)
+
+
+        '' keybd_event(CByte(Keys.LWin), 0, &H2, CType(0, UIntPtr)) : Application.DoEvents() 'Press the Left Win key
+        '' keybd_event(CByte(Keys.LWin), 0, &H2, CType(0, UIntPtr)) : Application.DoEvents() 'Press the Left Win key
+
+        '' PostMessage(shell, &H112, CType(&HF131, IntPtr), CType(&H1, IntPtr))
+
+        ''PostMessage(shell, wm_s, CType(&H1, IntPtr), CType(&H10001, IntPtr))
+
+        '' PostMessage(shell, &H400 + 465, CType(&H1, IntPtr), CType(&H10001, IntPtr))
+        '' PostMessage(shell, &H400 + 443, CType(&H1, IntPtr), CType(0, IntPtr))
+        '' PostMessage(shell, &H400 + 377, CType(&H0, IntPtr), CType(0, IntPtr))
+
+
+
+        '' keybd_event(CByte(Keys.LWin), 0, &H2, CType(0, UIntPtr)) 'Press the Left Win key
+
+    End Sub
+
+    <DllImport("user32.dll")>
+    Public Shared Sub keybd_event(ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As UInteger, ByVal dwExtraInfo As UIntPtr)
+
+    End Sub
+
+    Private Declare Function SetFocus Lib "user32.dll" (ByVal hwnd As IntPtr) As IntPtr
+
+    <DllImport("user32.dll")>
+    Public Shared Function GetWindowText(ByVal hwnd As IntPtr, ByVal lpString As System.Text.StringBuilder, ByVal cch As Integer) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", SetLastError:=True)>
+    Private Shared Function GetActiveWindow() As IntPtr
+    End Function
+
+    <DllImport("user32.dll", EntryPoint:="GetWindowLong")>
+    Private Shared Function GetWindowLongPtr(ByVal hWnd As HandleRef, <MarshalAs(UnmanagedType.I4)> nIndex As WindowLongFlags) As IntPtr
+    End Function
+
+
+    Public Enum WindowLongFlags As Integer
+        GWL_EXSTYLE = -20
+        GWLP_HINSTANCE = -6
+        GWLP_HWNDPARENT = -8
+        GWL_ID = -12
+        GWL_STYLE = -16
+        GWL_USERDATA = -21
+        GWL_WNDPROC = -4
+        DWLP_USER = &H8
+        DWLP_MSGRESULT = &H0
+        DWLP_DLGPROC = &H4
+    End Enum
 
 End Class

@@ -361,6 +361,8 @@ Public Class TaskbarCenter
 
 
 
+
+
                 Try
 
                     Dim results As String = Nothing
@@ -421,6 +423,8 @@ Public Class TaskbarCenter
                     Dim i As Integer = 0
 
                     For Each TaskList In TaskObjects
+
+
 
                         Dim children() As Accessibility.IAccessible = MSAA.GetAccessibleChildren(CType(TaskList, IAccessible))
 
@@ -650,6 +654,8 @@ Public Class TaskbarCenter
 
     Public Shared Sub PositionCalculator()
 
+
+
         Try
             'Calculate the new positions and pass them through to the animator
 
@@ -728,6 +734,9 @@ Public Class TaskbarCenter
 
                 Dim TrayWndHandle = Win32.GetParent(Win32.GetParent(CType(TaskList, IntPtr)))
 
+
+
+
                 Dim TrayWndClassName As New StringBuilder("", 256)
                 Call Win32.GetClassName(TrayWndHandle, TrayWndClassName, 256)
 
@@ -781,9 +790,7 @@ Public Class TaskbarCenter
 
 
 
-                If Not Settings.TaskbarRounding = 0 Then
-                    Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(0, 0, TrayWndPos.width, TrayWndPos.height, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
-                End If
+
 
 
 
@@ -831,6 +838,61 @@ Public Class TaskbarCenter
                 Else
                     Position = Math.Abs(CInt(CInt((TrayWndWidth / 2) - (TaskbarWidth / 2) - TaskbarLeft))) + Settings.SecondaryTaskbarOffset
                 End If
+
+
+
+
+                If Settings.TaskbarSegments = 1 Then
+                    If Orientation = "H" Then
+                        Dim ttseg As New Win32.RECT
+                        Win32.GetClientRect(CType(TaskList, IntPtr), ttseg)
+                        If Not Settings.TaskbarRounding = 0 Then
+                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+                        Else
+                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1), True)
+                        End If
+
+                    Else
+                        Dim ttseg As New Win32.RECT
+                        Win32.GetClientRect(CType(TaskList, IntPtr), ttseg)
+
+                        If Not Settings.TaskbarRounding = 0 Then
+                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(ttseg.Left, TaskbarLeft + Position + 4, ttseg.Right, TaskbarLeft + Position + TaskbarWidth - 2, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+                        Else
+                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(ttseg.Left, TaskbarLeft + Position + 4, ttseg.Right, TaskbarLeft + Position + TaskbarWidth - 2), True)
+                        End If
+
+                    End If
+                Else
+                    If Not Settings.TaskbarRounding = 0 Then
+                        Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(0, 0, TrayWndPos.width, TrayWndPos.height, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+
+                    End If
+                End If
+
+
+
+                '' Dim sb = Win32.FindWindowEx(TrayWndHandle, Nothing, "Start", Nothing)
+                ''  Dim sbrect As New Win32.RECT
+                ''  Win32.GetClientRect(CType(sb, IntPtr), sbrect)
+                ''  Win32.SetWindowPos(sb, IntPtr.Zero, TaskbarLeft + Position + 4 + (sbrect.Left - sbrect.Right), 0, 0, 0, Win32.SWP_NOSIZE Or Win32.SWP_ASYNCWINDOWPOS Or Win32.SWP_NOACTIVATE Or Win32.SWP_NOZORDER Or Win32.SWP_NOSENDCHANGING)
+                ''  Win32.SendMessage(TrayWndHandle, Win32.WM_DWMCOMPOSITIONCHANGED, True, 0)
+
+
+                If Settings.TaskbarSegments = 1 Then
+                    If Not Settings.TaskbarStyle = 0 Then
+                        '' Win32.SendMessage(TrayWndHandle, Win32.WM_THEMECHANGED, True, 0)
+                        ''Win32.SendMessage(TrayWndHandle, Win32.WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
+                        Win32.SendMessage(TrayWndHandle, Win32.WM_DWMCOMPOSITIONCHANGED, True, 0)
+                    End If
+                End If
+
+
+
+                ''  Win32.SetWindowPos(TrayWndHandle, Win32.HWND_TOPMOST, 0, 0, 0, 0, Win32.TOPMOST_FLAGS)
+
+
+
 
                 'Trigger the animator
                 If SystemInformation.PowerStatus.PowerLineStatus = PowerLineStatus.Offline Then

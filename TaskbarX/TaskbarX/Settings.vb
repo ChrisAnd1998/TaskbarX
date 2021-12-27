@@ -36,6 +36,7 @@ Public Class Settings
     Public Shared TotalSecondaryOpacity As Integer
     Public Shared RevertZeroBeyondTray As Integer
     Public Shared TaskbarRounding As Integer
+    Public Shared TaskbarSegments As Integer
 
     Public Shared UseUIA As Integer
 

@@ -209,6 +209,9 @@ Public Class TaskbarStyle
                 Dim trayptr As IntPtr = CType(tray.ToString, IntPtr)
                 Win32.SetWindowCompositionAttribute(CType(trayptr, IntPtr), data)
 
+
+
+
                 '' Dim tt As New ListBox
                 '' Dim TrayPos2 As Win32.RECT
                 '' Win32.GetWindowRect(tray, TrayPos2)

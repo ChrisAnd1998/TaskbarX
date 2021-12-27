@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+
 Imports System.Text
 Imports System.Threading
 
@@ -11,17 +12,6 @@ Public Class Main
     Public Shared Sub Main()
         Try
 
-
-
-            'Kill every other running instance of TaskbarX
-            Try
-                For Each prog As Process In Process.GetProcessesByName("TaskbarX")
-                    If Not prog.Id = Process.GetCurrentProcess.Id Then
-                        prog.Kill()
-                    End If
-                Next
-            Catch
-            End Try
 
             'Set default settings
             Settings.TaskbarStyle = 0
@@ -39,18 +29,22 @@ Public Class Main
             Settings.OnBatteryLoopRefreshRate = 400
             Settings.RevertZeroBeyondTray = 1
             Settings.TaskbarRounding = 0
+            Settings.TaskbarSegments = 0
+
+            Dim stopgiven As Boolean = False
 
             'Read the arguments for the settings
             Dim arguments() As String = Environment.GetCommandLineArgs
             For Each argument In arguments
                 Dim val() As String = Split(argument, "=")
                 If argument.Contains("-stop") Then
-                    noty.Visible = False
-                    TaskbarCenter.RevertToZero()
-                    ResetTaskbarStyle()
+                    stopgiven = True
+                End If
+                If argument.Contains("-showstartmenu") Then
+                    Win32.ShowStartMenu()
                     End
                 End If
-                If argument.Contains("-console") Then
+                If argument.Contains("-console=") Then
                     Win32.AllocConsole()
                     Settings.ConsoleEnabled = 1
                 End If
@@ -58,7 +52,7 @@ Public Class Main
                     Settings.TaskbarStyle = CInt(val(1))
                 End If
 
-                If argument.Contains("-color") Then
+                If argument.Contains("-color=") Then
                     Dim colorval As String = val(1)
                     Dim colorsep = colorval.Split(CType(";", Char()))
 
@@ -152,7 +146,20 @@ Public Class Main
                 If argument.Contains("-tbr=") Then
                     Settings.TaskbarRounding = CInt(val(1))
                 End If
+                If argument.Contains("-tbsg=") Then
+                    Settings.TaskbarSegments = CInt(val(1))
+                End If
             Next
+
+            'Kill every other running instance of TaskbarX
+            Try
+                For Each prog As Process In Process.GetProcessesByName("TaskbarX")
+                    If Not prog.Id = Process.GetCurrentProcess.Id Then
+                        prog.Kill()
+                    End If
+                Next
+            Catch
+            End Try
 
             'If animation speed is lower than 1 then make it 1. Otherwise it will give an error.
             If Settings.AnimationSpeed <= 1 Then
@@ -182,6 +189,16 @@ Public Class Main
                 '  Win32.PostMessage(Shell_TrayWnd, CUInt(&H111), CType(424, IntPtr), CType(vbNullString, IntPtr))
             Loop Until Not Handle = Nothing
 
+
+            If stopgiven = True Then
+                noty.Visible = False
+                TaskbarCenter.RevertToZero()
+                ResetTaskbarStyle()
+                End
+            End If
+
+
+
             If Settings.ShowTrayIcon = 1 Then
                 TrayIconBuster.TrayIconBuster.RemovePhantomIcons()
             End If
@@ -191,6 +208,13 @@ Public Class Main
 
             'Reset the taskbar style...
             ResetTaskbarStyle()
+
+
+
+
+
+
+
 
             If Settings.ShowTrayIcon = 1 Then
 
@@ -203,6 +227,8 @@ Public Class Main
             End If
 
             AddHandler noty.MouseClick, AddressOf MnuRef_Click
+
+
 
             'Start the TaskbarCenterer
             If Not Settings.DontCenterTaskbar = 1 Then
@@ -272,6 +298,37 @@ Public Class Main
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
+
+        Dim maintaskbarfound As Boolean = False
+        Dim sectaskbarfound As Boolean = False
+
+        For Each Taskbar In windowHandles
+            Dim sClassName As New StringBuilder("", 256)
+            Call Win32.GetClassName(CType(Taskbar, IntPtr), sClassName, 256)
+            If sClassName.ToString = "Shell_TrayWnd" Then
+                maintaskbarfound = True
+            End If
+            If sClassName.ToString = "Shell_SecondaryTrayWnd" Then
+                sectaskbarfound = True
+            End If
+            Console.WriteLine("=" & maintaskbarfound)
+        Next
+
+        If maintaskbarfound = False Then
+            Try
+                windowHandles.Add(Win32.FindWindow("Shell_TrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+        If sectaskbarfound = False Then
+            Try
+                windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
+            Catch
+            End Try
+        End If
+
+
         Return ActiveWindows
     End Function
 
@@ -287,7 +344,12 @@ Public Class Main
     Public Shared windowHandles As ArrayList = New ArrayList()
 
     Public Shared Sub ResetTaskbarStyle()
+
+
+
         GetActiveWindows()
+
+
 
         Dim trays As New ArrayList
         For Each trayWnd As IntPtr In windowHandles
@@ -297,23 +359,31 @@ Public Class Main
 
         For Each tray As IntPtr In trays
             Dim trayptr As IntPtr = tray
+
+
             Win32.SendMessage(trayptr, Win32.WM_THEMECHANGED, True, 0)
             Win32.SendMessage(trayptr, Win32.WM_DWMCOLORIZATIONCOLORCHANGED, True, 0)
             Win32.SendMessage(trayptr, Win32.WM_DWMCOMPOSITIONCHANGED, True, 0)
 
 
 
-
-
             Dim tt As New Win32.RECT
             Win32.GetClientRect(trayptr, tt)
+
+
+
             ''Win32.SetWindowRgn(CType(trayptr, IntPtr), Win32.CreateRoundRectRgn(-1, -1, tt.Right + 1, tt.Bottom - tt.Top + 1, -1, -1), True)
             Win32.SetWindowRgn(CType(trayptr, IntPtr), Win32.CreateRectRgn(tt.Left, tt.Top, tt.Right, tt.Bottom), True)
 
 
 
 
+
+
+
         Next
+
+
     End Sub
 
     Public Shared Sub RestartExplorer()
@@ -328,6 +398,13 @@ Public Class Main
         GC.Collect()
         Return Win32.SetProcessWorkingSetSize(Diagnostics.Process.GetCurrentProcess.Handle, -1, -1)
     End Function
+
+
+
+
+
+
+
 
 #End Region
 
