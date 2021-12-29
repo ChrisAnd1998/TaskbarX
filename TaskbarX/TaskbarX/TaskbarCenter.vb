@@ -86,14 +86,17 @@ Public Class TaskbarCenter
         End If
 
         If sectaskbarfound = False Then
-            Try
-                windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
-            Catch
-            End Try
+            If Screen.AllScreens.Count >= 2 Then
+                ''MsgBox(Screen.AllScreens.Count)
+                Try
+                    windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
+                Catch
+                End Try
+            End If
         End If
 
 
-        Return ActiveWindows
+            Return ActiveWindows
     End Function
 
     Public Shared Function Enumerator(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean

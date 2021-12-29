@@ -322,10 +322,13 @@ Public Class Main
         End If
 
         If sectaskbarfound = False Then
-            Try
-                windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
-            Catch
-            End Try
+            If Screen.AllScreens.Count >= 2 Then
+                ''MsgBox(Screen.AllScreens.Count)
+                Try
+                    windowHandles.Add(Win32.FindWindow("Shell_SecondaryTrayWnd", Nothing))
+                Catch
+                End Try
+            End If
         End If
 
 

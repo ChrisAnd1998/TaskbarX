@@ -311,7 +311,7 @@ Public Class Win32
 
 
     Public Shared Sub ShowStartMenu()
-        ''  Dim shell = FindWindow("Windows.UI.Core.CoreWindow", Nothing)
+        Dim shell = FindWindow("Shell_TrayWnd", Nothing)
 
 
         '' Const keyControl As Byte = &H11
@@ -330,20 +330,33 @@ Public Class Win32
 
         '' MsgBox(tt.Top)
 
-
-
+        ''SHOWS DESKTOP
+        ''SendMessage(shell, &H400 + 377, CBool(CType(&H1, IntPtr)), CInt(CType(0, IntPtr)))
 
 
 
         ''  Dim sClassName As New StringBuilder("", 256)
         ''  GetClassName(GetActiveWindow(), sClassName, 256)
 
+        '' PostMessage(shell, &H400 + 465, CType(&H1, IntPtr), CType(&H10001, IntPtr))
+        '' PostMessage(shell, &H127, CType(&H30001, IntPtr), CType(0, IntPtr))
+        ''SendMessage(shell, &H400 + 377, CBool(CType(&H100, IntPtr)), CInt(CType(1, IntPtr)))
 
-        ''  If Not sClassName.ToString.Contains("Application") Then
-
+        ''PostMessage(shell, &H400 + 243, CType(shell, IntPtr), CType(0, IntPtr))
+        ''SetFocus(shell)
         keybd_event(CByte(Keys.LWin), 0, &H0, CType(0, UIntPtr)) 'Press the Left Win key
-            keybd_event(CByte(Keys.LWin), 0, &H2, CType(0, UIntPtr)) 'Press the Left Win key
-       '' End If
+
+
+        keybd_event(CByte(Keys.LWin), 0, &H2, CType(0, UIntPtr)) 'Press the Left Win key
+        ''  SetFocus(shell)
+
+
+
+
+
+
+
+        '' End If
 
         ''  SetFocus(shell)
 
