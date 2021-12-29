@@ -26,6 +26,8 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 - Change taskbar style to Transparent, Blur and Acrylic
 - Change taskbar color and transparency
 - Hide Start button and more...
+- Taskbar segments
+- Custom start button
   
   
 &nbsp;
