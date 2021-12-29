@@ -252,7 +252,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,310,0,0" TextWrapping="Wrap" Text="E-mail: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.5.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.6.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />

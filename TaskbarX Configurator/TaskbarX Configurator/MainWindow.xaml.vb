@@ -8,6 +8,7 @@ Imports System.Runtime.InteropServices
 Imports System.Security.Principal
 Imports System.Text
 Imports System.Threading
+
 Imports Microsoft.Win32.TaskScheduler
 Imports ModernWpf.Controls
 
@@ -117,6 +118,8 @@ Class MainWindow
     Private Shared Function GetClassName(ByVal hWnd As System.IntPtr, ByVal lpClassName As System.Text.StringBuilder, ByVal nMaxCount As Integer) As Integer
     End Function
 
+
+
     Public Shared Function GetActiveWindows() As ObjectModel.Collection(Of IntPtr)
         windowHandles.Clear()
         EnumWindows(AddressOf Enumerator, 0)
@@ -144,10 +147,17 @@ Class MainWindow
         End If
 
         If sectaskbarfound = False Then
+
             Try
-                windowHandles.Add(FindWindow("Shell_SecondaryTrayWnd", Nothing))
+                If Not FindWindow("Shell_SecondaryTrayWnd", Nothing) = CType(0, IntPtr) Then
+                    If Not FindWindow("Shell_SecondaryTrayWnd", Nothing) = Nothing Then
+                        windowHandles.Add(FindWindow("Shell_SecondaryTrayWnd", Nothing))
+                    End If
+                End If
+
             Catch
             End Try
+
         End If
 
 

@@ -154,6 +154,7 @@
     <Reference Include="System.IO.Compression">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <Private>False</Private>
     </Reference>
