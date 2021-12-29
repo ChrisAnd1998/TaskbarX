@@ -41,12 +41,14 @@ Do you want to install Windows 11 but you really like the taskbar of windows 10?
   
 ## Start icon file
 
-![start](https://user-images.githubusercontent.com/50437199/147479778-efed8dce-058e-408e-89f8-18b1bd4ecbf8.png) ![startdark](https://user-images.githubusercontent.com/50437199/147481351-0d90c00a-be6d-4ac7-bd76-d1557bd539a1.png)![startlight](https://user-images.githubusercontent.com/50437199/147481364-68a55a47-f527-4add-8ada-9f9a2a560b18.png)
+![start](https://user-images.githubusercontent.com/50437199/147479778-efed8dce-058e-408e-89f8-18b1bd4ecbf8.png) ![startdark](https://user-images.githubusercontent.com/50437199/147481351-0d90c00a-be6d-4ac7-bd76-d1557bd539a1.png)![startlight](https://user-images.githubusercontent.com/50437199/147481364-68a55a47-f527-4add-8ada-9f9a2a560b18.png)![startcolor](https://user-images.githubusercontent.com/50437199/147634252-ad73062f-6409-45d8-8a10-1362da4e226b.png)
+
 
 Looking for a start icon file?  
 **Start icon:** [start.ico](https://github.com/ChrisAnd1998/TaskbarX/releases/download/1.7.5.0/start.ico)  
 **Start dark icon:** [startdark.ico](https://github.com/ChrisAnd1998/TaskbarX/releases/download/1.7.5.0/startdark.ico)  
 **Start light icon:** [startlight.ico](https://github.com/ChrisAnd1998/TaskbarX/releases/download/1.7.5.0/startlight.ico)  
+**Start color icon:** [startcolor.ico](https://github.com/ChrisAnd1998/TaskbarX/releases/download/1.7.5.0/startcolor.ico)  
 
   &nbsp;
   
