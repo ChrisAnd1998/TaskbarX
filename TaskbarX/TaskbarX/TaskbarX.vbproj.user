@@ -24,8 +24,7 @@
     <StartArguments>-skipresolution=1920 -taskbarstyle=1</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>-tbsg=1</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <StartArguments>-skipresolution=1920 -taskbarstyle=1</StartArguments>

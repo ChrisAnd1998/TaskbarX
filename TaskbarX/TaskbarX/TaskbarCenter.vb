@@ -844,15 +844,56 @@ Public Class TaskbarCenter
 
 
 
+                '' If My.Computer.Info.OSFullName.Contains("Windows 11") Then
+
+                '' Else
+
+                ''  End If
+
+
+
+
+
+
+
 
                 If Settings.TaskbarSegments = 1 Then
                     If Orientation = "H" Then
+
+
                         Dim ttseg As New Win32.RECT
                         Win32.GetClientRect(CType(TaskList, IntPtr), ttseg)
+
+
+                        Dim trayseg As New Win32.RECT
+                        Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing), trayseg)
+
+
+                        Dim startseg As New Win32.RECT
+                        Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "Start", Nothing), startseg)
+
+
+
+
                         If Not Settings.TaskbarRounding = 0 Then
                             Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
                         Else
-                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1), True)
+
+                            Dim Tasklist_rgn As IntPtr = Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1)
+                            Dim NotifyTray_rgn As IntPtr = Win32.CreateRectRgn(TrayNotifyPos.left, 0, TrayNotifyPos.left + TrayNotifyPos.width, TrayNotifyPos.top + TrayNotifyPos.height)
+                            Dim Start_rgn As IntPtr = Win32.CreateRectRgn(startseg.Left, 0, startseg.Right, startseg.Bottom)
+
+
+                            Dim Totalreg As IntPtr = Win32.CreateRectRgn(0, 0, 0, 0)
+                            Win32.CombineRgn(Totalreg, Tasklist_rgn, NotifyTray_rgn, 2)
+
+                            Win32.CombineRgn(Totalreg, Totalreg, Start_rgn, 2)
+
+                            '' Console.WriteLine(NotifyTray_rgn.ToString & "hii")
+
+                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Totalreg, True)
+
+                            ''Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1), True)
                         End If
 
                     Else

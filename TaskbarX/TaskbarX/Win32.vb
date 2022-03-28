@@ -139,6 +139,14 @@ Public Class Win32
     <DllImport("user32.dll")>
     Public Shared Function RedrawWindow(hWnd As IntPtr, lprcUpdate As IntPtr, hrgnUpdate As IntPtr, flags As RedrawWindowFlags) As Boolean
     End Function
+
+    <DllImport("gdi32.dll")>
+    Public Shared Function CombineRgn(ByVal hrgnDest As IntPtr,
+   ByVal hrgnSrc1 As IntPtr, ByVal hrgnSrc2 As IntPtr,
+   ByVal fnCombineMode As Integer) As Integer
+    End Function
+
+
     Enum DWMWINDOWATTRIBUTE As UInteger
         NCRenderingEnabled = 1
         NCRenderingPolicy
