@@ -421,7 +421,7 @@ Class MainWindow
                     ''cfg = td.Definition.Actions.ToString.Replace("cmd.exe /c start shell:AppsFolder\40210ChrisAndriessen.FalconX_y1dazs5f5wq00!TaskbarX", "")
                     cfg = td.Definition.Actions.ToString.Replace("explorer.exe taskbarx:", "")
                 Else
-                    cfg = td.Definition.Actions.ToString.Replace(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", "")
+                    cfg = td.Definition.Actions.ToString.Replace(Chr(34) & System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe" & Chr(34), "")
                 End If
 
                 Dim arguments() As String = cfg.Split(CType(" ", Char()))
@@ -972,7 +972,7 @@ Class MainWindow
                             td2.Actions.Add(New ExecAction("explorer.exe", "taskbarx:" & Chr(34) & parameters & Chr(34), Nothing))
                         Else
 
-                            td2.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
+                            td2.Actions.Add(New ExecAction(Chr(34) & System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe" & Chr(34), parameters, Nothing))
 
                         End If
 
@@ -1207,7 +1207,7 @@ Class MainWindow
                     Process.Start(processInfo)
                 Else
 
-                    td.Actions.Add(New ExecAction(System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe", parameters, Nothing))
+                    td.Actions.Add(New ExecAction(Chr(34) & System.AppDomain.CurrentDomain.BaseDirectory & "TaskbarX.exe" & Chr(34), parameters, Nothing))
 
                     System.Diagnostics.Process.Start("TaskbarX.exe", parameters)
 

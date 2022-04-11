@@ -193,7 +193,7 @@
                     <CheckBox ToolTip="Hide the Primary Start button." Content="Hide Primary Start button" x:Name="Checkbox12" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="252" />
                     <CheckBox ToolTip="Hide the Secondary Start button." Content="Hide Secondary Start button" HorizontalAlignment="Left" Margin="10,277,0,0" x:Name="Checkbox13" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="240" />
                     <CheckBox ToolTip="Hide the Primary Tray area with the clock." Content="Hide Primary Tray area" HorizontalAlignment="Left" Margin="10,314,0,0" x:Name="Checkbox14" VerticalAlignment="Top" Grid.ColumnSpan="2" />
-                    <CheckBox ToolTip="Show a trayicon to quickly restart and stop TaskbarX." Content="Show Tray icon" HorizontalAlignment="Left" Margin="10,388,0,0" VerticalAlignment="Top" x:Name="Checkbox16" />
+                    <CheckBox ToolTip="Show a trayicon to quickly restart and stop TaskbarX." Content="Show Tray icon" HorizontalAlignment="Left" Margin="10,388,0,0" VerticalAlignment="Top" x:Name="Checkbox16" Visibility="Hidden" />
                     <CheckBox ToolTip="Hide the Secondary Tray area with the clock." x:Name="Checkbox15" Content="Hide Secondary Tray area" HorizontalAlignment="Left" Margin="10,351,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="289" />
                     <emoji:TextBlock  Text="⚙️" Margin="442,58,10,479" FontSize="40" VerticalAlignment="Center" Grid.Column="1" Height="57" />
                 </Grid>
@@ -252,7 +252,7 @@
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,310,0,0" TextWrapping="Wrap" Text="E-mail: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,347,0,0" TextWrapping="Wrap" Text="Reddit: " VerticalAlignment="Top" Width="129" Height="32" Grid.ColumnSpan="2" />
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="10,245,0,0" TextWrapping="Wrap" Text="Bug Report: " VerticalAlignment="Top" Width="124" Height="32" />
-                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.6.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
+                    <TextBox x:Name="versiontb" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,91,0,0" TextWrapping="Wrap" Text="1.7.7.0" VerticalAlignment="Top" Width="64" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,165,0,0" TextWrapping="Wrap" Text="https://chrisandriessen.nl/taskbarx" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,128,0,0" TextWrapping="Wrap" Text="Chris Andriessen" VerticalAlignment="Top" Width="447" Grid.Column="1" />
                     <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="0,202,0,0" TextWrapping="Wrap" Text="https://github.com/ChrisAnd1998/TaskbarX" VerticalAlignment="Top" Width="447" Grid.Column="1" />
