@@ -129,7 +129,8 @@ Public Class Main
                     Settings.HideSecondaryNotifyWnd = CInt(val(1))
                 End If
                 If argument.Contains("-sti=") Then
-                    Settings.ShowTrayIcon = CInt(val(1))
+                    ''Settings.ShowTrayIcon = CInt(val(1))
+                    Settings.ShowTrayIcon = CInt(0)
                 End If
                 If argument.Contains("-tbsom=") Then
                     Settings.TaskbarStyleOnMax = CInt(val(1))

@@ -860,51 +860,102 @@ Public Class TaskbarCenter
                 If Settings.TaskbarSegments = 1 Then
                     If Orientation = "H" Then
 
-
                         Dim ttseg As New Win32.RECT
                         Win32.GetClientRect(CType(TaskList, IntPtr), ttseg)
-
-
                         Dim trayseg As New Win32.RECT
                         Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing), trayseg)
+                        Dim clockseg As New Win32.RECT
+                        Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "ClockButton", Nothing), clockseg)
 
 
                         Dim startseg As New Win32.RECT
                         Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "Start", Nothing), startseg)
+                        ''Dim searchseg As New Win32.RECT
+                        ''Win32.GetWindowRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayButton", "Type here to search"), searchseg)
+                        ''Dim cortanaseg As New Win32.RECT
+                        ''Win32.GetWindowRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayButton", "Talk to Cortana"), cortanaseg)
+                        ''Dim taskviewseg As New Win32.RECT
+                        ''Win32.GetWindowRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayButton", "Task View"), taskviewseg)
+
+                        ''If Not Settings.TaskbarRounding = 0 Then
+                        ''Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+                        ''Else
+
+                        Dim Tasklist_rgn As IntPtr = Win32.CreateRoundRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1, Settings.TaskbarRounding, Settings.TaskbarRounding)
+                        Dim NotifyTray_rgn As IntPtr = Win32.CreateRoundRectRgn(TrayNotifyPos.left, 0, TrayNotifyPos.left + TrayNotifyPos.width, TrayNotifyPos.top + TrayNotifyPos.height, Settings.TaskbarRounding, Settings.TaskbarRounding)
+                        Dim Start_rgn As IntPtr = Win32.CreateRoundRectRgn(startseg.Left, 0, startseg.Right, startseg.Bottom, Settings.TaskbarRounding, Settings.TaskbarRounding)
+                        ''Dim Search_rgn As IntPtr = Win32.CreateRectRgn(searchseg.Left, 0, searchseg.Right, searchseg.Bottom)
+                        ''Dim Cortana_rgn As IntPtr = Win32.CreateRectRgn(cortanaseg.Left, 0, cortanaseg.Right, cortanaseg.Bottom)
+                        ''Dim TaskView_rgn As IntPtr = Win32.CreateRectRgn(taskviewseg.Left, 0, taskviewseg.Right, taskviewseg.Bottom)
+                        Dim Clock_rgn As IntPtr = Win32.CreateRoundRectRgn(clockseg.Left, 0, clockseg.Right, clockseg.Bottom, Settings.TaskbarRounding, Settings.TaskbarRounding)
 
 
+                        Dim Totalreg As IntPtr = Win32.CreateRoundRectRgn(0, 0, 0, 0, 0, 0)
+                        Win32.CombineRgn(Totalreg, Tasklist_rgn, NotifyTray_rgn, 2)
 
-
-                        If Not Settings.TaskbarRounding = 0 Then
-                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
-                        Else
-
-                            Dim Tasklist_rgn As IntPtr = Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1)
-                            Dim NotifyTray_rgn As IntPtr = Win32.CreateRectRgn(TrayNotifyPos.left, 0, TrayNotifyPos.left + TrayNotifyPos.width, TrayNotifyPos.top + TrayNotifyPos.height)
-                            Dim Start_rgn As IntPtr = Win32.CreateRectRgn(startseg.Left, 0, startseg.Right, startseg.Bottom)
-
-
-                            Dim Totalreg As IntPtr = Win32.CreateRectRgn(0, 0, 0, 0)
-                            Win32.CombineRgn(Totalreg, Tasklist_rgn, NotifyTray_rgn, 2)
-
+                        If TrayWndClassName.ToString = "Shell_TrayWnd" Then
                             Win32.CombineRgn(Totalreg, Totalreg, Start_rgn, 2)
-
-                            '' Console.WriteLine(NotifyTray_rgn.ToString & "hii")
-
-                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Totalreg, True)
-
-                            ''Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1), True)
                         End If
+
+                        ''Win32.CombineRgn(Totalreg, Totalreg, Search_rgn, 2)
+                        ''Win32.CombineRgn(Totalreg, Totalreg, Cortana_rgn, 2)
+                        ''Win32.CombineRgn(Totalreg, Totalreg, TaskView_rgn, 2)
+                        '' Win32.CombineRgn(Totalreg, Totalreg, Clock_rgn, 2)
+
+
+
+                        Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Totalreg, True)
+
+                        ''Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1), True)
+                        ' End If
 
                     Else
                         Dim ttseg As New Win32.RECT
                         Win32.GetClientRect(CType(TaskList, IntPtr), ttseg)
+                        Dim trayseg As New Win32.RECT
+                        Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayNotifyWnd", Nothing), trayseg)
+                        Dim clockseg As New Win32.RECT
+                        Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "ClockButton", Nothing), clockseg)
 
-                        If Not Settings.TaskbarRounding = 0 Then
-                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(ttseg.Left, TaskbarLeft + Position + 4, ttseg.Right, TaskbarLeft + Position + TaskbarWidth - 2, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
-                        Else
-                            Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(ttseg.Left, TaskbarLeft + Position + 4, ttseg.Right, TaskbarLeft + Position + TaskbarWidth - 2), True)
-                        End If
+
+                        Dim startseg As New Win32.RECT
+                        Win32.GetClientRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "Start", Nothing), startseg)
+                        ''Dim searchseg As New Win32.RECT
+                        ''Win32.GetWindowRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayButton", "Type here to search"), searchseg)
+                        ''Dim cortanaseg As New Win32.RECT
+                        ''Win32.GetWindowRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayButton", "Talk to Cortana"), cortanaseg)
+                        ''Dim taskviewseg As New Win32.RECT
+                        ''Win32.GetWindowRect(Win32.FindWindowEx(TrayWndHandle, CType(0, IntPtr), "TrayButton", "Task View"), taskviewseg)
+
+                        ''If Not Settings.TaskbarRounding = 0 Then
+                        ''Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRoundRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1, Settings.TaskbarRounding, Settings.TaskbarRounding), True)
+                        ''Else
+
+                        Dim Tasklist_rgn As IntPtr = Win32.CreateRoundRectRgn(ttseg.Left, TaskbarLeft + Position + 4, ttseg.Right, TaskbarLeft + Position + TaskbarWidth - 2, Settings.TaskbarRounding, Settings.TaskbarRounding)
+                        '' Dim NotifyTray_rgn As IntPtr = Win32.CreateRoundRectRgn(trayseg.Left, trayseg.Top, trayseg.Right, trayseg.Bottom, Settings.TaskbarRounding, Settings.TaskbarRounding)
+                        ''  Dim Start_rgn As IntPtr = Win32.CreateRoundRectRgn(startseg.Left, 0, startseg.Right, startseg.Bottom, Settings.TaskbarRounding, Settings.TaskbarRounding)
+                        ''Dim Search_rgn As IntPtr = Win32.CreateRectRgn(searchseg.Left, 0, searchseg.Right, searchseg.Bottom)
+                        ''Dim Cortana_rgn As IntPtr = Win32.CreateRectRgn(cortanaseg.Left, 0, cortanaseg.Right, cortanaseg.Bottom)
+                        ''Dim TaskView_rgn As IntPtr = Win32.CreateRectRgn(taskviewseg.Left, 0, taskviewseg.Right, taskviewseg.Bottom)
+                        ''  Dim Clock_rgn As IntPtr = Win32.CreateRoundRectRgn(clockseg.Left, 0, clockseg.Right, clockseg.Bottom, Settings.TaskbarRounding, Settings.TaskbarRounding)
+
+
+                        Dim Totalreg As IntPtr = Win32.CreateRoundRectRgn(0, 0, 0, 0, 0, 0)
+                        Win32.CombineRgn(Totalreg, Tasklist_rgn, Tasklist_rgn, 2)
+                        ''  Win32.CombineRgn(Totalreg, Totalreg, Start_rgn, 2)
+                        ''Win32.CombineRgn(Totalreg, Totalreg, Search_rgn, 2)
+                        ''Win32.CombineRgn(Totalreg, Totalreg, Cortana_rgn, 2)
+                        ''Win32.CombineRgn(Totalreg, Totalreg, TaskView_rgn, 2)
+                        '' Win32.CombineRgn(Totalreg, Totalreg, Clock_rgn, 2)
+
+
+
+                        Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Totalreg, True)
+
+                        ''Win32.SetWindowRgn(CType(TrayWndHandle, IntPtr), Win32.CreateRectRgn(TaskbarLeft + Position + 4, ttseg.Top, TaskbarLeft + Position + TaskbarWidth - 2, ttseg.Bottom + 1), True)
+                        ' End If
+
+
 
                     End If
                 Else
