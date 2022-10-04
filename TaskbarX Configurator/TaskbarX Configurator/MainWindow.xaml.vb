@@ -4,6 +4,7 @@ Imports System.Drawing
 Imports System.IO
 Imports System.Net
 Imports System.Reflection
+Imports System.Runtime
 Imports System.Runtime.InteropServices
 Imports System.Security.Principal
 Imports System.Text
@@ -30,7 +31,9 @@ Class MainWindow
     Private Shared Function FindWindowByClass(ByVal lpClassName As String, ByVal zero As IntPtr) As IntPtr
     End Function
 
-
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function FindWindowEx(ByVal parentHandle As IntPtr, ByVal childAfter As IntPtr, ByVal lclassName As String, ByVal windowTitle As String) As IntPtr
+    End Function
 
     Public Declare Function GetCursorPos Lib "user32" (ByRef lpPoint As PointAPI) As Boolean
 
@@ -237,8 +240,6 @@ Class MainWindow
             Me.Background = mySolidColorBrush2
             ListBox1.Background = mySolidColorBrush
         End If
-
-
 
 
         Dim identity = WindowsIdentity.GetCurrent()
@@ -615,6 +616,14 @@ Class MainWindow
         End Try
 
 
+
+
+        '' Dim Win11Taskbar = FindWindowEx(FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr)), CType(0, IntPtr), "Windows.UI.Composition.DesktopWindowContentBridge", Nothing)
+        '' If Not Win11Taskbar = CType(0, IntPtr) Then
+
+        ''ListBox1.Items.RemoveAt(1)
+
+        '' End If
 
     End Sub
 
