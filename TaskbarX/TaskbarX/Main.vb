@@ -191,6 +191,13 @@ Public Class Main
             Loop Until Not Handle = Nothing
 
 
+            Dim Win11Taskbar = Win32.FindWindowEx(Win32.FindWindowByClass("Shell_TrayWnd", CType(0, IntPtr)), CType(0, IntPtr), "Windows.UI.Composition.DesktopWindowContentBridge", Nothing)
+            If Not Win11Taskbar = CType(0, IntPtr) Then
+                'Windows 11 Taskbar present
+                Settings.DontCenterTaskbar = CInt(Val(1))
+            End If
+
+
             If stopgiven = True Then
                 noty.Visible = False
                 TaskbarCenter.RevertToZero()

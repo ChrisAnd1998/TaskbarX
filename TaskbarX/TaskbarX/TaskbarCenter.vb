@@ -344,7 +344,7 @@ Public Class TaskbarCenter
                 End If
 
                 If MSTaskListWClass = Nothing Then
-                    MessageBox.Show("TaskbarX: Could not find the handle of the taskbar. Your current OS may not be supported.")
+                    MessageBox.Show("TaskbarX: Could not find the handle of the taskbar. Your current version or build of Windows may not be supported.")
                     End
                 End If
 
