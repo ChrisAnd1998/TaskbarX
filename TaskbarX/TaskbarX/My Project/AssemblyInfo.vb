@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Center taskbar icons.")>
 <Assembly: AssemblyCompany("Chris Andriessen")>
 <Assembly: AssemblyProduct("TaskbarX")>
-<Assembly: AssemblyCopyright("Copyright © Chris Andriessen 2021")>
+<Assembly: AssemblyCopyright("Copyright © Chris Andriessen 2022")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.7.7.0")>
-<Assembly: AssemblyFileVersion("1.7.7.0")>
+<Assembly: AssemblyVersion("1.7.8.0")>
+<Assembly: AssemblyFileVersion("1.7.8.0")>
