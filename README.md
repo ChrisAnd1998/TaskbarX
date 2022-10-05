@@ -116,7 +116,7 @@ _**-stop** will stop TaskbarX, puts all icons back to the left and resets the ta
 
 ## Frequently Asked Questions
 
-**What versions of Windows does TaskbarX support?** TaskbarX only supports Windows 10. Version 1709 and lower will have issues with the "taskbar styling" option but, the centering will work fine. Windows 7 does not work and is not supported. It could be working on Windows 8 but, is not officially tested and is also not supported.  
+**What versions of Windows does TaskbarX support?** TaskbarX only supports Windows 10 ([and Windows 11 by using Windows 10 taskbar](#how-to-use-taskbarx-with-windows-11)). Version 1709 and lower will have issues with the "taskbar styling" option but, the centering will work fine. Windows 7 does not work and is not supported. It could be working on Windows 8 but, is not officially tested and is also not supported.  
 
 
 
