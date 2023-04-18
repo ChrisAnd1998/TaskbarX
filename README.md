@@ -37,6 +37,9 @@ TaskbarX has been in development since 6 may 2018. Also known as FalconX and Fal
 ## How to use TaskbarX with Windows 11?
  
 Do you want to install Windows 11 but you really like the taskbar of windows 10? Then you can actualy patch the Windows 11 Explorer to get back the old taskbar. Doing this will make TaskbarX functional again in Windows 11. https://github.com/valinet/ExplorerPatcher
+
+NOTE (for Windows 11 users):
+TaskbarX is build for Windows 10. On Windows 11 TaskbarX can only be used to change the background style of the taskbar until Windows 11 version number 10.0.22621.1265 Feb 2023. If you have a higher version than Windows 11 10.0.22621.1265 Feb 2023 TaskbarX will not work.
   
   &nbsp;
 
